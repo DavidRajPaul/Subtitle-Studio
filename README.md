@@ -1,6 +1,6 @@
 # Subtitle Studio
 
-**Status:** Planning — Phase 0 not started  
+**Status:** Phase 0 implemented — verification pending (owner review)  
 **Product:** Local-first subtitle editor  
 **Initial target:** Desktop browser, with a responsive interface that can be reviewed and used on phones
 
@@ -12,7 +12,7 @@ The repository documentation describes the product and planned architecture; do 
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Not started |
+| 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Implemented — verification pending |
 | 1 | MP4 import, FFprobe metadata, preview | Not started |
 | 2 | TXT parsing and timing engine | Not started |
 | 3 | Subtitle editor, timeline, styles and preview | Not started |
@@ -38,13 +38,26 @@ The repository documentation describes the product and planned architecture; do 
 - The editor is desktop-first, but the UX must be responsive and usable on phones. The phone layout uses one column and bottom sheets rather than compressing desktop panels.
 - MCP is not required at runtime for transcription or rendering.
 
+## Running locally (Phase 0)
+
+Prerequisites: Node.js 22+, pnpm 10+, Python 3.11+, [uv](https://docs.astral.sh/uv/), and FFmpeg/FFprobe on `PATH`.
+
+```bash
+pnpm --dir frontend install        # frontend dependencies
+uv sync --directory backend        # backend dependencies
+pnpm backend                       # API on http://127.0.0.1:8000 (GET /api/health)
+pnpm frontend                      # UI on http://127.0.0.1:5173 (proxies /api)
+pnpm lint && pnpm typecheck && pnpm test
+```
+
+Optional environment variables: `SUBTITLE_STUDIO_FFMPEG` and `SUBTITLE_STUDIO_FFPROBE` (binary paths), `SUBTITLE_STUDIO_PORT`. The backend binds to `127.0.0.1` only.
+
 ## Documentation
 
 ### Product and architecture
-- [Product specification](docs/PRODUCT_SPEC.md)
-- [System architecture](docs/ARCHITECTURE.md)
-- [Technical architecture](docs/TECHNICAL_ARCHITECTURE.md)
+- Product specification, system architecture and technical architecture: **not yet written.** Their requirements currently live in this README, [CLAUDE.md](CLAUDE.md) and the UX documents below. See [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md) for the open decision.
 - [End-to-end implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Implementation status (handover note)](docs/IMPLEMENTATION_STATUS.md)
 
 ### UX and visual design
 - [UX strategy and principles](docs/UX_STRATEGY.md)
