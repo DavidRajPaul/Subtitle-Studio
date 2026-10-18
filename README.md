@@ -1,6 +1,6 @@
 # Subtitle Studio
 
-**Status:** Phase 0 implemented — verification pending (owner review)  
+**Status:** Phase 1 verified — awaiting owner review  
 **Product:** Local-first subtitle editor  
 **Initial target:** Desktop browser, with a responsive interface that can be reviewed and used on phones
 
@@ -12,8 +12,8 @@ The repository documentation describes the product and planned architecture; do 
 
 | Phase | Scope | Status |
 |---|---|---|
-| 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Implemented — verification pending |
-| 1 | MP4 import, FFprobe metadata, preview | Not started |
+| 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Accepted (owner approved Phase 1) |
+| 1 | MP4 import, FFprobe metadata, preview | Verified — awaiting owner review |
 | 2 | TXT parsing and timing engine | Not started |
 | 3 | Subtitle editor, timeline, styles and preview | Not started |
 | 4 | Local speech transcription | Not started |
@@ -50,7 +50,7 @@ pnpm frontend                      # UI on http://127.0.0.1:5173 (proxies /api)
 pnpm lint && pnpm typecheck && pnpm test
 ```
 
-Optional environment variables: `SUBTITLE_STUDIO_FFMPEG` and `SUBTITLE_STUDIO_FFPROBE` (binary paths), `SUBTITLE_STUDIO_PORT`. The backend binds to `127.0.0.1` only.
+Optional environment variables: `SUBTITLE_STUDIO_FFMPEG` and `SUBTITLE_STUDIO_FFPROBE` (binary paths), `SUBTITLE_STUDIO_PORT`, `SUBTITLE_STUDIO_DATA_DIR` (app-owned working copies; default `./data`, gitignored). The backend binds to `127.0.0.1` only.
 
 ## Documentation
 
@@ -79,7 +79,7 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 
 ## MVP checklist
 
-- [ ] Import MP4 and inspect metadata.
+- [x] Import MP4 and inspect metadata (Phase 1, awaiting owner review).
 - [ ] Transcribe dialogue locally from embedded audio or supplied MP3.
 - [ ] Generate subtitles from TXT for silent video.
 - [ ] Equal, readable-duration, fit-to-video and manual timing modes.
