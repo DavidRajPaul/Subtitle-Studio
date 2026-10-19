@@ -18,6 +18,8 @@ Build the app as a **static web app on GitHub Pages** whose processing runs **in
 | Projects + video copies | JSON files + media folder | IndexedDB in the browser (`src/engine/db.ts`, `src/api/projects.ts`); same version-1 document and rules (`src/engine/projectSchema.ts`) |
 | Speech recognition | faster-whisper (backend) | Whisper in the browser: transformers.js + ONNX Runtime WebAssembly in a Web Worker (`src/engine/whisper.worker.ts`, `speechEngine.ts`); models downloaded once from Hugging Face into the browser cache; ONNX Runtime files served from this site (stage 2) |
 | Export (SRT, burn-in) | FFmpeg (planned) | **Later stage:** SRT generated in the browser; MP4 burn-in with FFmpeg compiled to WebAssembly |
+| Subtitle drawing | CSS overlay (preview only) | One canvas renderer (`src/engine/render/`) for the preview and, next, the exported video: fonts, colours, stroke, shadow, boxes, spacing, wrapping and animations |
+| Fonts | System fonts | 54 bundled OFL/Apache fonts (12 Tamil) loaded on demand, plus fonts the user adds (kept in the browser) |
 | Offline | n/a | Service worker caches the app after the first visit; installable to the home screen |
 
 ## Consequences

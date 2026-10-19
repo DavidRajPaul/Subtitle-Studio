@@ -58,6 +58,8 @@ const mp4 = () => new File([new Uint8Array([1, 2, 3])], "clip.mp4", { type: "vid
 const revokeObjectURL = vi.fn();
 
 beforeEach(() => {
+  // These tests cover Editor mode; Easy mode (the default) has its own tests.
+  window.localStorage.setItem("subtitle-studio.mode", "editor");
   vi.mocked(inspectMp4).mockReset();
   revokeObjectURL.mockReset();
   vi.stubGlobal(

@@ -4,10 +4,11 @@
  */
 
 const DB_NAME = "subtitle-studio";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 export const PROJECTS = "projects";
 export const MEDIA = "media";
-type StoreName = typeof PROJECTS | typeof MEDIA;
+export const FONTS = "fonts";
+type StoreName = typeof PROJECTS | typeof MEDIA | typeof FONTS;
 
 export interface MediaRecord {
   id: string;
@@ -42,6 +43,8 @@ export function openDb(): Promise<IDBDatabase> {
       const db = req.result;
       if (!db.objectStoreNames.contains(PROJECTS)) db.createObjectStore(PROJECTS, { keyPath: "id" });
       if (!db.objectStoreNames.contains(MEDIA)) db.createObjectStore(MEDIA, { keyPath: "id" });
+      // Version 2: fonts the user adds.
+      if (!db.objectStoreNames.contains(FONTS)) db.createObjectStore(FONTS, { keyPath: "id" });
     };
     req.onsuccess = () => {
       const db = req.result;

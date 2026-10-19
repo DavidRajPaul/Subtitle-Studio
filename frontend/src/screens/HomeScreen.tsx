@@ -21,7 +21,7 @@ function formatWhen(iso: string | null): string {
   return Number.isNaN(date.getTime()) ? "" : date.toLocaleString();
 }
 
-function RecentProjects({ onOpen }: { onOpen: (id: string) => void }) {
+export function RecentProjects({ onOpen }: { onOpen: (id: string) => void }) {
   const [state, setState] = useState<ListState>({ kind: "loading" });
   const [attempt, setAttempt] = useState(0);
   const [toDelete, setToDelete] = useState<ProjectSummary | null>(null);

@@ -102,6 +102,8 @@ const pickTxt = (name = "script.txt") => {
 };
 
 beforeEach(() => {
+  // These tests cover Editor mode; Easy mode (the default) has its own tests.
+  window.localStorage.setItem("subtitle-studio.mode", "editor");
   parseFailure = null;
   vi.mocked(parseText).mockReset();
   vi.mocked(generateTiming).mockReset();

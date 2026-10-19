@@ -33,3 +33,5 @@ tmp/
 
 # Copied from onnxruntime-web at build time (see frontend/scripts/copy-ort.mjs)
 frontend/public/ort/
+# Copied from @fontsource packages at build time (see frontend/scripts/build-fonts.mjs)
+frontend/public/fonts/

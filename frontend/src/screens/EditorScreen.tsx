@@ -3,7 +3,6 @@ import { messageOf, newId } from "../api/http";
 import { importMedia, loadMediaUrl } from "../api/media";
 import {
   getProject,
-  saveProject,
   validateCues,
   type LoadedProject,
   type Project,
@@ -14,12 +13,13 @@ import { generateTiming, type TimingIssue } from "../api/subtitles";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { CueEditor, type BulkScope, type TimingEdit } from "../components/CueEditor";
 import { CueList } from "../components/CueList";
-import { SaveStatus, type SaveState } from "../components/SaveStatus";
+import { SaveStatus } from "../components/SaveStatus";
 import { Sheet } from "../components/Sheet";
-import { StylePanel } from "../components/StylePanel";
-import { SubtitleOverlay } from "../components/SubtitleOverlay";
+import { StyleStudio } from "../components/style/StyleStudio";
+import { SubtitleCanvas } from "../components/SubtitleCanvas";
 import { Timeline } from "../components/Timeline";
 import { VideoPreview, type VideoPreviewHandle } from "../components/VideoPreview";
+import { useAutosave } from "../hooks/useAutosave";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import {
   addCue,
@@ -34,74 +34,6 @@ import {
 } from "../lib/cueEdit";
 import { formatTimecode } from "../lib/timecode";
 import { activeCues } from "../lib/timeline";
-
-const SAVE_DELAY_MS = 700;
-
-/** Autosave: debounced, always visible, and flushable before leaving. */
-function useAutosave(initial: Project) {
-  const latest = useRef<Project>(initial);
-  const version = useRef(0);
-  const savedVersion = useRef(0);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [status, setStatus] = useState<SaveState>({ kind: "saved" });
-
-  const saveNow = useCallback(async (): Promise<boolean> => {
-    const v = version.current;
-    if (v === savedVersion.current) {
-      setStatus({ kind: "saved" });
-      return true;
-    }
-    setStatus({ kind: "saving" });
-    try {
-      await saveProject(latest.current);
-      savedVersion.current = Math.max(savedVersion.current, v);
-      if (version.current === v) setStatus({ kind: "saved" });
-      return true;
-    } catch (error) {
-      setStatus({
-        kind: "error",
-        message: messageOf(error, "The project could not be saved."),
-      });
-      return false;
-    }
-  }, []);
-
-  const markChanged = useCallback(
-    (project: Project) => {
-      latest.current = project;
-      version.current += 1;
-      setStatus({ kind: "saving" });
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        void saveNow();
-      }, SAVE_DELAY_MS);
-    },
-    [saveNow],
-  );
-
-  const flush = useCallback(async (): Promise<boolean> => {
-    if (timer.current) {
-      clearTimeout(timer.current);
-      timer.current = null;
-    }
-    return saveNow();
-  }, [saveNow]);
-
-  // Leaving the screen with a save still waiting: send it now (best effort).
-  useEffect(
-    () => () => {
-      if (timer.current) {
-        clearTimeout(timer.current);
-        timer.current = null;
-        void saveNow();
-      }
-    },
-    [saveNow],
-  );
-
-  return { latest, status, markChanged, flush, retry: saveNow };
-}
 
 /** Validates the current cues with the same engine that generated them (debounced). */
 function useIssues(project: Project): TimingIssue[] {
@@ -369,7 +301,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
       onRegenerate={onRegenerate}
     />
   );
-  const stylePanel = <StylePanel style={style} onChange={setStyle} />;
+  const stylePanel = <StyleStudio style={style} onChange={setStyle} />;
 
   return (
     <div className={wide ? "editor editor--wide" : "editor"}>
@@ -453,7 +385,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
               onTimeChange={setCurrentMs}
               onPlayingChange={setPlaying}
               renderOverlay={(size) => (
-                <SubtitleOverlay cues={cues} tMs={currentMs} style={style} size={size} />
+                <SubtitleCanvas cues={cues} tMs={currentMs} style={style} size={size} />
               )}
             />
             {relinkNote && (

@@ -1,0 +1,1988 @@
+[
+ {
+  "id": "noto-sans-tamil",
+  "family": "Noto Sans Tamil",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "noto-sans-tamil/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "noto-sans-tamil/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "noto-sans-tamil/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "noto-sans-tamil/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "noto-sans-tamil/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "noto-sans-tamil/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "mukta-malar",
+  "family": "Mukta Malar",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "mukta-malar/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "mukta-malar/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "mukta-malar/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "mukta-malar/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "mukta-malar/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "mukta-malar/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "catamaran",
+  "family": "Catamaran",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "catamaran/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "catamaran/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "catamaran/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "catamaran/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "catamaran/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "catamaran/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "hind-madurai",
+  "family": "Hind Madurai",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "hind-madurai/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "hind-madurai/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "hind-madurai/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "hind-madurai/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "hind-madurai/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "hind-madurai/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "baloo-thambi-2",
+  "family": "Baloo Thambi 2",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "baloo-thambi-2/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "baloo-thambi-2/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "baloo-thambi-2/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "baloo-thambi-2/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "baloo-thambi-2/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "baloo-thambi-2/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "anek-tamil",
+  "family": "Anek Tamil",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "anek-tamil/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "anek-tamil/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "anek-tamil/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "anek-tamil/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "anek-tamil/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "anek-tamil/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "arima",
+  "family": "Arima",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "arima/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "arima/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "arima/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "arima/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "arima/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "arima/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "meera-inimai",
+  "family": "Meera Inimai",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "meera-inimai/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "meera-inimai/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "pavanam",
+  "family": "Pavanam",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "pavanam/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "pavanam/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "pavanam/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "kavivanar",
+  "family": "Kavivanar",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "kavivanar/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "kavivanar/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "kavivanar/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "noto-serif-tamil",
+  "family": "Noto Serif Tamil",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "noto-serif-tamil/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "noto-serif-tamil/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "noto-serif-tamil/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "tamil",
+    "file": "noto-serif-tamil/tamil-700.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "noto-serif-tamil/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "noto-serif-tamil/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "tiro-tamil",
+  "family": "Tiro Tamil",
+  "group": "Tamil",
+  "scripts": [
+   "latin",
+   "tamil"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "tamil",
+    "file": "tiro-tamil/tamil-400.woff2",
+    "unicodeRange": "U+0964-0965,U+0B82-0BFA,U+200C-200D,U+20B9,U+25CC"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "tiro-tamil/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "tiro-tamil/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "noto-sans-devanagari",
+  "family": "Noto Sans Devanagari",
+  "group": "Sans",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "noto-sans-devanagari/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "noto-sans-devanagari/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "noto-sans-devanagari/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "noto-sans-devanagari/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "noto-sans-devanagari/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "noto-sans-devanagari/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "mukta",
+  "family": "Mukta",
+  "group": "Sans",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "mukta/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "mukta/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "mukta/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "mukta/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "mukta/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "mukta/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "hind",
+  "family": "Hind",
+  "group": "Sans",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "hind/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "hind/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "hind/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "hind/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "hind/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "hind/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "inter",
+  "family": "Inter",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "inter/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "inter/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "inter/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "inter/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "poppins",
+  "family": "Poppins",
+  "group": "Sans",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "poppins/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "poppins/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "poppins/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "poppins/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "poppins/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "poppins/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "montserrat",
+  "family": "Montserrat",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "montserrat/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "montserrat/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "montserrat/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "montserrat/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "roboto",
+  "family": "Roboto",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "roboto/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "roboto/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "roboto/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "roboto/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "open-sans",
+  "family": "Open Sans",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "open-sans/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "open-sans/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "open-sans/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "open-sans/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "lato",
+  "family": "Lato",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "lato/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "lato/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "lato/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "lato/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "nunito",
+  "family": "Nunito",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "nunito/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "nunito/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "nunito/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "nunito/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "raleway",
+  "family": "Raleway",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "raleway/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "raleway/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "raleway/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "raleway/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "noto-sans",
+  "family": "Noto Sans",
+  "group": "Sans",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "noto-sans/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "noto-sans/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "noto-sans/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "noto-sans/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "noto-sans/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "noto-sans/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "bricolage-grotesque",
+  "family": "Bricolage Grotesque",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "bricolage-grotesque/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "bricolage-grotesque/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "bricolage-grotesque/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "bricolage-grotesque/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "oswald",
+  "family": "Oswald",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "oswald/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "oswald/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "oswald/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "oswald/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "bebas-neue",
+  "family": "Bebas Neue",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "bebas-neue/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "bebas-neue/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "anton",
+  "family": "Anton",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "anton/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "anton/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "archivo-black",
+  "family": "Archivo Black",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "archivo-black/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "archivo-black/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "bangers",
+  "family": "Bangers",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "bangers/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "bangers/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "luckiest-guy",
+  "family": "Luckiest Guy",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "Apache-2.0",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "luckiest-guy/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "luckiest-guy/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "lilita-one",
+  "family": "Lilita One",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "lilita-one/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "lilita-one/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "titan-one",
+  "family": "Titan One",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "titan-one/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "titan-one/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "fredoka",
+  "family": "Fredoka",
+  "group": "Sans",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "fredoka/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "fredoka/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "fredoka/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "fredoka/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "baloo-2",
+  "family": "Baloo 2",
+  "group": "Display",
+  "scripts": [
+   "latin",
+   "devanagari"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "devanagari",
+    "file": "baloo-2/devanagari-400.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "baloo-2/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "baloo-2/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "devanagari",
+    "file": "baloo-2/devanagari-700.woff2",
+    "unicodeRange": "U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "baloo-2/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "baloo-2/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "righteous",
+  "family": "Righteous",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "righteous/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "righteous/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "bungee",
+  "family": "Bungee",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "bungee/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "bungee/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "black-ops-one",
+  "family": "Black Ops One",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "black-ops-one/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "black-ops-one/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "monoton",
+  "family": "Monoton",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "monoton/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "monoton/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "permanent-marker",
+  "family": "Permanent Marker",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "Apache-2.0",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "permanent-marker/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "lobster",
+  "family": "Lobster",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "lobster/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "lobster/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "pacifico",
+  "family": "Pacifico",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "pacifico/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "pacifico/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "kaushan-script",
+  "family": "Kaushan Script",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "kaushan-script/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "kaushan-script/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "dancing-script",
+  "family": "Dancing Script",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "dancing-script/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "dancing-script/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "dancing-script/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "dancing-script/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "great-vibes",
+  "family": "Great Vibes",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "great-vibes/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "great-vibes/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "satisfy",
+  "family": "Satisfy",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "Apache-2.0",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "satisfy/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "caveat",
+  "family": "Caveat",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "caveat/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "caveat/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "caveat/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "caveat/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "sacramento",
+  "family": "Sacramento",
+  "group": "Script",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "sacramento/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "sacramento/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "playfair-display",
+  "family": "Playfair Display",
+  "group": "Serif",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "playfair-display/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "playfair-display/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "playfair-display/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "playfair-display/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "merriweather",
+  "family": "Merriweather",
+  "group": "Serif",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "merriweather/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "merriweather/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "merriweather/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "merriweather/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "lora",
+  "family": "Lora",
+  "group": "Serif",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "lora/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "lora/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "lora/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "lora/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "abril-fatface",
+  "family": "Abril Fatface",
+  "group": "Display",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "abril-fatface/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "abril-fatface/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "dm-serif-display",
+  "family": "DM Serif Display",
+  "group": "Serif",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "dm-serif-display/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "dm-serif-display/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ },
+ {
+  "id": "space-mono",
+  "family": "Space Mono",
+  "group": "Mono",
+  "scripts": [
+   "latin"
+  ],
+  "weights": [
+   400,
+   700
+  ],
+  "license": "OFL-1.1",
+  "faces": [
+   {
+    "weight": 400,
+    "subset": "latin-ext",
+    "file": "space-mono/latin-ext-400.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 400,
+    "subset": "latin",
+    "file": "space-mono/latin-400.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   },
+   {
+    "weight": 700,
+    "subset": "latin-ext",
+    "file": "space-mono/latin-ext-700.woff2",
+    "unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
+   },
+   {
+    "weight": 700,
+    "subset": "latin",
+    "file": "space-mono/latin-700.woff2",
+    "unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+   }
+  ]
+ }
+]

@@ -6,12 +6,12 @@ import {
   validateVideoFile,
   type ImportedMedia,
 } from "../api/media";
-import { newId } from "../api/http";
-import { saveProject, type LoadedProject } from "../api/projects";
+import type { LoadedProject } from "../api/projects";
+import { createProject, type NewProjectContent } from "../lib/newProject";
 import { DEFAULT_STYLE } from "../lib/style";
 import { SpeechSetup } from "../components/SpeechSetup";
 import { DEFAULT_SETTINGS } from "../engine/timing";
-import { TextTimingSetup, type TextTimingResult } from "../components/TextTimingSetup";
+import { TextTimingSetup } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
 import { WORKFLOW_LABELS, type Workflow } from "../types";
@@ -22,11 +22,6 @@ interface Props {
   onBack: () => void;
   onOpenProject: (project: LoadedProject) => void;
 }
-
-/** What a workflow hands over to become a project: cues plus how they were timed. */
-type NewContent = Pick<TextTimingResult, "mode" | "segmentation" | "settings"> & {
-  cues: { id: string; text: string; start_ms: number; end_ms: number }[];
-};
 
 type VideoState =
   | { kind: "empty" }
@@ -98,34 +93,8 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
     setVideo({ kind: "empty" });
   };
 
-  /** Saves the first version of the project before the editor opens, so nothing is lost. */
-  const createProject = async (media: ImportedMedia, result: NewContent): Promise<void> => {
-    const m = media.metadata;
-    const project: LoadedProject = {
-      version: 1,
-      id: newId(),
-      name: media.filename.replace(/\.mp4$/i, "") || "Untitled project",
-      workflow,
-      media: {
-        id: media.id,
-        filename: media.filename,
-        duration_ms: m.duration_ms,
-        width: m.width,
-        height: m.height,
-        has_audio: m.has_audio,
-      },
-      cues: result.cues.map((c) => ({
-        id: c.id,
-        text: c.text,
-        start_ms: c.start_ms,
-        end_ms: c.end_ms,
-      })),
-      style: DEFAULT_STYLE,
-      timing: { mode: result.mode, segmentation: result.segmentation, settings: result.settings },
-      media_available: true,
-    };
-    await saveProject(project);
-    onOpenProject(project);
+  const createAndOpen = async (media: ImportedMedia, result: NewProjectContent): Promise<void> => {
+    onOpenProject(await createProject(media, workflow, result, DEFAULT_STYLE));
   };
 
   const errorId = `${fieldId}-error`;
@@ -259,7 +228,7 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
       {video.kind === "ready" && meta && workflow === "text" && (
         <TextTimingSetup
           durationMs={meta.duration_ms}
-          onOpenEditor={(result) => createProject(video.media, result)}
+          onOpenEditor={(result) => createAndOpen(video.media, result)}
         />
       )}
 
@@ -272,7 +241,7 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
             onChangeWorkflow("text");
           }}
           onOpenEditor={(result) =>
-            createProject(video.media, {
+            createAndOpen(video.media, {
               cues: result.cues,
               // Times came from the recogniser, so every subtitle is treated as explicitly timed.
               mode: "manual",

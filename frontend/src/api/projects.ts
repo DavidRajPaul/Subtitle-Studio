@@ -14,23 +14,58 @@ export interface BackgroundStyle {
   enabled: boolean;
   color: string;
   opacity: number;
+  /** Space around the text, px at the 1080 reference. */
+  padding_px: number;
+  radius_px: number;
 }
 
-/** One global style. font_size is in pixels for a 1080-pixel-tall video and is scaled. */
+export type InAnimation = "none" | "fade" | "scale" | "spin" | "slide" | "reveal" | "gradient";
+export type LoopAnimation = "none" | "pulse" | "bounce" | "float" | "shake" | "wobble";
+export type CaptionAnimation = "none" | "highlight" | "pop" | "word";
+
+export interface AnimationStyle {
+  in: InAnimation;
+  out: InAnimation;
+  loop: LoopAnimation;
+  caption: CaptionAnimation;
+  in_ms: number;
+  out_ms: number;
+  /** Colour of the spoken word in Highlight and Pop captions. */
+  highlight_color: string;
+}
+
+/**
+ * One global style. Sizes are pixels for a 1080-pixel-tall frame and scale with the video.
+ * The same object drives the preview and (next stage) the exported video.
+ */
 export interface SubtitleStyle {
+  /** A font from the library (its id), "custom:<id>" for an added font, or sans/serif/mono. */
   font_family: string;
   font_size: number;
   text_color: string;
+  text_opacity: number;
   bold: boolean;
   italic: boolean;
+  text_case: "none" | "upper";
   outline_color: string;
   outline_px: number;
+  outline_opacity: number;
   shadow: boolean;
+  shadow_color: string;
+  shadow_opacity: number;
+  shadow_blur_px: number;
+  shadow_offset_px: number;
   background: BackgroundStyle;
   position: "top" | "middle" | "bottom";
   align: "left" | "center" | "right";
   safe_margin_pct: number;
   vertical_offset_px: number;
+  /** Widest a line may be, as a share of the frame width. */
+  max_width_pct: number;
+  letter_spacing_px: number;
+  /** Extra space between lines, in percent of the font size. */
+  line_spacing_pct: number;
+  animation: AnimationStyle;
 }
 
 export interface ProjectCue {
