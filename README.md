@@ -1,6 +1,6 @@
 # Subtitle Studio
 
-**Status:** Phase 1 verified — awaiting owner review  
+**Status:** Phase 2 verified — awaiting owner review  
 **Product:** Local-first subtitle editor  
 **Initial target:** Desktop browser, with a responsive interface that can be reviewed and used on phones
 
@@ -13,8 +13,8 @@ The repository documentation describes the product and planned architecture; do 
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Accepted (owner approved Phase 1) |
-| 1 | MP4 import, FFprobe metadata, preview | Verified — awaiting owner review |
-| 2 | TXT parsing and timing engine | Not started |
+| 1 | MP4 import, FFprobe metadata, preview | Accepted (owner approved Phase 2) |
+| 2 | TXT parsing and timing engine | Verified — awaiting owner review |
 | 3 | Subtitle editor, timeline, styles and preview | Not started |
 | 4 | Local speech transcription | Not started |
 | 5 | SRT and burned-in MP4 export | Not started |
@@ -81,7 +81,7 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 
 - [x] Import MP4 and inspect metadata (Phase 1, awaiting owner review).
 - [ ] Transcribe dialogue locally from embedded audio or supplied MP3.
-- [ ] Generate subtitles from TXT for silent video.
+- [x] Generate subtitles from TXT for silent video (Phase 2, awaiting owner review; editing and export come later).
 - [ ] Equal, readable-duration, fit-to-video and manual timing modes.
 - [ ] Edit text, start/end/duration, font and placement.
 - [ ] Preview and timeline reflect edits.

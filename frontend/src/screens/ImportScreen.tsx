@@ -6,6 +6,7 @@ import {
   validateVideoFile,
   type ImportedMedia,
 } from "../api/media";
+import { TextTimingSetup } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
 import { WORKFLOW_LABELS, type Workflow } from "../types";
@@ -230,13 +231,14 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack }: Props) {
         />
       )}
 
-      {video.kind === "ready" && (
+      {video.kind === "ready" && meta && workflow === "text" && (
+        <TextTimingSetup durationMs={meta.duration_ms} />
+      )}
+
+      {video.kind === "ready" && workflow === "speech" && (
         <p className="panel panel--info">
-          Next step:{" "}
-          {workflow === "speech"
-            ? "transcription and the optional MP3 are not built yet (Phase 4)."
-            : "TXT import and timing are not built yet (Phase 2)."}{" "}
-          Your video is ready for them.
+          Next step: transcription and the optional MP3 are not built yet (a later phase). Your
+          video is ready for them.
         </p>
       )}
     </>
