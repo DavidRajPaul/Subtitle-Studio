@@ -172,6 +172,12 @@ describe("Editor", () => {
     expect(backend.puts).toHaveLength(0);
   });
 
+  it("warns that regenerating loses the timing that came from speech", () => {
+    renderEditor(project({ workflow: "speech", timing: { ...project().timing, mode: "manual" } }));
+    fireEvent.click(screen.getByRole("button", { name: "Regenerate timing…" }));
+    expect(screen.getByRole("dialog")).toHaveTextContent("timed from the speech");
+  });
+
   it("regenerates timing only after confirmation and keeps the text", async () => {
     renderEditor();
     fireEvent.click(screen.getByRole("button", { name: "Regenerate timing…" }));

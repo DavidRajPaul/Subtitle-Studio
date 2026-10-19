@@ -11,6 +11,7 @@ Subtitle Studio needs Python and FFmpeg, so it cannot run on GitHub Pages (stati
 3. Set its visibility to **Public** (long-press or right-click the row → *Port Visibility* → *Public*). Until you do, only you can open the link.
 4. Copy the address of that row (it looks like `https://<name>-5173.app.github.dev`) and send it to your tester.
 5. Open the address yourself first: you should see **Hosted test** in the top bar and the hosted-test notice.
+6. For speech tests, open **Settings → Speech models** and download a model before sharing (Base is quick; **Small** is better for Tamil). The Codespace downloads it from Hugging Face; testers then don't wait. Expect transcription on a 2-core Codespace to take roughly as long as the clip with Base, longer with Small.
 
 Good to know:
 - A Codespace **stops after about 30 minutes of inactivity**. Reopen it from https://github.com/codespaces; the app restarts by itself and the address stays the same. Check the port is still **Public** after a restart.
@@ -23,7 +24,9 @@ Good to know:
 
 > Hi! This is an early test of Subtitle Studio, a tool that turns a script into timed subtitles for a video. Open **<the link>** (press *Continue* if GitHub shows a warning page). Please use a **short MP4 clip (under 50 MB, ideally under a minute)** and a **plain-text script saved as UTF-8**, and nothing private: the files are processed on a temporary cloud computer, and other testers using the same link could see your project.
 >
-> Try this: **Create subtitles from text** → choose the MP4 and the TXT → **Open in editor**. Tap a subtitle, change its Start time by typing, change the style, drag a block on the timeline, then go back to **Projects** and reopen it. Tell me anything that was confusing, slow, hard to tap, or looked wrong (a screenshot helps), and which phone/browser you used.
+> To try speech: **Transcribe speech** → choose an MP4 with someone talking (or a silent MP4 plus an MP3) → pick the spoken language → **Transcribe** → **Open in editor**, then fix any wrong words.
+>
+> To try text: **Create subtitles from text** → choose the MP4 and the TXT → **Open in editor**. Tap a subtitle, change its Start time by typing, change the style, drag a block on the timeline, then go back to **Projects** and reopen it. Tell me anything that was confusing, slow, hard to tap, or looked wrong (a screenshot helps), and which phone/browser you used.
 
 ## What this does not verify
 

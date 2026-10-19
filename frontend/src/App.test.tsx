@@ -11,6 +11,27 @@ vi.mock("./api/projects", async (importOriginal) => ({
   listProjects: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock("./api/speech", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./api/speech")>()),
+  getSpeechInfo: vi.fn().mockResolvedValue({
+    engine: { available: true, version: "1.2.1", detail: null },
+    cache_dir: "/data/models",
+    default_model: "base",
+    models: [
+      {
+        name: "base",
+        label: "Base",
+        approx_size_mb: 145,
+        description: "Fast.",
+        installed: true,
+        size_on_disk_bytes: 1,
+        download_job_id: null,
+      },
+    ],
+    languages: [],
+  }),
+}));
+
 const okHealth: HealthResponse = {
   status: "ok",
   version: "0.1.0",

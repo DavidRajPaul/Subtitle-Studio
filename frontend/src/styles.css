@@ -426,3 +426,14 @@ details[open] > .summary-button::after { transform: rotate(180deg); }
 .sheet__head { display: flex; align-items: center; justify-content: space-between; padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--color-border); }
 .sheet__head h2 { margin: 0; font-size: 1.125rem; }
 .sheet__body { overflow-y: auto; padding: var(--space-4); overscroll-behavior: contain; }
+
+/* ---- Phase 4: speech ---- */
+.job-progress { display: grid; gap: var(--space-2); justify-items: start; }
+.job-progress p { margin: 0; }
+.job-progress__bar { width: 100%; height: 12px; accent-color: var(--color-accent); }
+.model-missing { margin-top: var(--space-3); }
+.model-missing p { margin-top: 0; }
+.model-download { display: grid; gap: var(--space-2); justify-items: start; }
+.model-row { gap: var(--space-3); }
+.model-row__desc { margin: var(--space-1) 0 0; font-size: 14px; }
+select.text-input { padding-right: var(--space-6); }

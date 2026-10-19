@@ -1,6 +1,6 @@
 # Subtitle Studio
 
-**Status:** Phase 3 verified — awaiting owner review  
+**Status:** Phase 4 verified (with a stand-in recogniser) — awaiting owner review  
 **Product:** Local-first subtitle editor  
 **Initial target:** Desktop browser, with a responsive interface that can be reviewed and used on phones
 
@@ -15,8 +15,8 @@ The repository documentation describes the product and planned architecture; do 
 | 0 | Foundation, frontend/backend skeleton, diagnostics, tests | Accepted (owner approved Phase 1) |
 | 1 | MP4 import, FFprobe metadata, preview | Accepted (owner approved Phase 2) |
 | 2 | TXT parsing and timing engine | Accepted (owner approved Phase 3) |
-| 3 | Subtitle editor, timeline, styles and preview | Verified — awaiting owner review |
-| 4 | Local speech transcription | Not started |
+| 3 | Subtitle editor, timeline, styles and preview | Accepted (owner approved Phase 4) |
+| 4 | Local speech transcription | Verified with a stand-in recogniser — real model run awaiting owner test |
 | 5 | SRT and burned-in MP4 export | Not started |
 | 6 | Hardening and MVP acceptance | Not started |
 | 7 | Optional post-MVP improvements | Deferred |
@@ -84,11 +84,11 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 ## MVP checklist
 
 - [x] Import MP4 and inspect metadata (Phase 1, awaiting owner review).
-- [ ] Transcribe dialogue locally from embedded audio or supplied MP3.
+- [x] Transcribe dialogue locally from embedded audio or supplied MP3 (Phase 4, awaiting owner test with a real model).
 - [x] Generate subtitles from TXT for silent video (Phase 2, awaiting owner review; editing and export come later).
 - [x] Equal, readable-duration, fit-to-video and manual timing modes (Phases 2–3).
-- [x] Edit text, start/end/duration, font and placement (Phase 3, awaiting owner review).
-- [x] Preview and timeline reflect edits (Phase 3, awaiting owner review).
+- [x] Edit text, start/end/duration, font and placement (Phase 3).
+- [x] Preview and timeline reflect edits (Phase 3).
 - [ ] Export UTF-8 SRT.
 - [ ] Burn subtitles into a separate MP4.
 - [ ] Validate output; source remains untouched.
@@ -98,3 +98,5 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 ## License
 
 Not yet selected. Review application, dependency, FFmpeg build, model and font licenses before distribution.
+
+Third-party licences reviewed so far (Phase 4): faster-whisper (MIT), CTranslate2 (MIT), PyAV (BSD-3-Clause; its wheels bundle FFmpeg libraries, to be checked in Phase 6), onnxruntime (MIT, used for voice-activity detection), huggingface_hub and tokenizers (Apache-2.0), NumPy (BSD-3-Clause and others), tqdm (MPL-2.0 and MIT). Speech models: Systran's faster-whisper conversions of OpenAI Whisper (MIT); downloaded by the user on demand, never bundled in the repository.

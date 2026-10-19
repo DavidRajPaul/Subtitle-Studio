@@ -22,6 +22,8 @@ interface Props {
   onBulk: (scope: BulkScope, from: number, to: number, durationMs: number) => string | null;
   onDelete: () => void;
   currentMode: TimingMode;
+  /** Subtitles were timed from speech recognition: regenerating loses the match to the voice. */
+  fromSpeech?: boolean;
   onRegenerate: (mode: Exclude<TimingMode, "manual">) => Promise<string | null>;
 }
 
@@ -43,6 +45,7 @@ export function CueEditor({
   onBulk,
   onDelete,
   currentMode,
+  fromSpeech = false,
   onRegenerate,
 }: Props) {
   const id = useId();
@@ -325,7 +328,15 @@ export function CueEditor({
         >
           <p>
             This sets a new start and end for all {cueCount} subtitles.{" "}
-            <strong>Any timing you set by hand will be lost.</strong> Your text and style are not
+            <strong>Any timing you set by hand will be lost.</strong>
+            {fromSpeech && (
+              <>
+                {" "}
+                <strong>
+                  These subtitles were timed from the speech; new timing will not follow the voice.
+                </strong>
+              </>
+            )} Your text and style are not
             changed, and there is no undo yet.
           </p>
           <fieldset className="choice-group choice-group--tight">

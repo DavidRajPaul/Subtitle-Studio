@@ -340,6 +340,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
       onBulk={onBulk}
       onDelete={deleteSelected}
       currentMode={project.timing.mode}
+      fromSpeech={project.workflow === "speech"}
       onRegenerate={onRegenerate}
     />
   );

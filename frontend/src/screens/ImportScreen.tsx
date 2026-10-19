@@ -9,6 +9,8 @@ import {
 import { newId } from "../api/http";
 import { saveProject, type LoadedProject } from "../api/projects";
 import { DEFAULT_STYLE } from "../lib/style";
+import { SpeechSetup } from "../components/SpeechSetup";
+import { DEFAULT_DRAFT, parseSettings } from "../lib/timingSettings";
 import { TextTimingSetup, type TextTimingResult } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
@@ -20,6 +22,17 @@ interface Props {
   onBack: () => void;
   onOpenProject: (project: LoadedProject) => void;
 }
+
+/** What a workflow hands over to become a project: cues plus how they were timed. */
+type NewContent = Pick<TextTimingResult, "mode" | "segmentation" | "settings"> & {
+  cues: { id: string; text: string; start_ms: number; end_ms: number }[];
+};
+
+const defaultSettings = () => {
+  const parsed = parseSettings(DEFAULT_DRAFT);
+  if (!parsed.ok) throw new Error("default timing settings are invalid");
+  return parsed.settings;
+};
 
 type VideoState =
   | { kind: "empty" }
@@ -92,7 +105,7 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
   };
 
   /** Saves the first version of the project before the editor opens, so nothing is lost. */
-  const createProject = async (media: ImportedMedia, result: TextTimingResult): Promise<void> => {
+  const createProject = async (media: ImportedMedia, result: NewContent): Promise<void> => {
     const m = media.metadata;
     const project: LoadedProject = {
       version: 1,
@@ -239,24 +252,6 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
         )}
       </section>
 
-      {video.kind === "ready" && meta && workflow === "speech" && !meta.has_audio && (
-        <section className="panel panel--warn" aria-label="No audio">
-          <p>
-            This video has no audio, so there is no speech to transcribe. You can add a separate
-            MP3 (coming in a later phase) or create subtitles from a text file instead.
-          </p>
-          <button
-            type="button"
-            className="button"
-            onClick={() => {
-              onChangeWorkflow("text");
-            }}
-          >
-            Use a text file instead
-          </button>
-        </section>
-      )}
-
       {video.kind === "ready" && meta && (
         <VideoPreview
           src={video.url}
@@ -274,11 +269,24 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
         />
       )}
 
-      {video.kind === "ready" && workflow === "speech" && (
-        <p className="panel panel--info">
-          Next step: transcription and the optional MP3 are not built yet (a later phase). Your
-          video is ready for them.
-        </p>
+      {video.kind === "ready" && meta && workflow === "speech" && (
+        <SpeechSetup
+          mediaId={video.media.id}
+          videoHasAudio={meta.has_audio}
+          videoDurationMs={meta.duration_ms}
+          onSwitchToText={() => {
+            onChangeWorkflow("text");
+          }}
+          onOpenEditor={(result) =>
+            createProject(video.media, {
+              cues: result.cues,
+              // Times came from the recogniser, so every subtitle is treated as explicitly timed.
+              mode: "manual",
+              segmentation: "line",
+              settings: defaultSettings(),
+            })
+          }
+        />
       )}
     </>
   );

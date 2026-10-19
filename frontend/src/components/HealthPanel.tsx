@@ -52,7 +52,7 @@ export function HealthPanel() {
         <h2 id="diagnostics-heading">Diagnostics</h2>
         <p role="alert">Could not reach the local backend. {state.message}</p>
         <p>
-          Start it with <code>npm run backend</code> from the project root, then retry.
+          Start it with <code>pnpm backend</code> from the project root, then retry.
         </p>
         <button type="button" className="button" onClick={retry}>
           Retry check
