@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { messageOf } from "../api/http";
 import { deleteProject, listProjects, type ProjectSummary } from "../api/projects";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { HOSTED_NOTICE_BODY, isHostedTest } from "../lib/hosted";
 import type { Workflow } from "../types";
 
 interface Props {
@@ -164,9 +165,15 @@ export function HomeScreen({ onStart, onOpen }: Props) {
   return (
     <>
       <h1>Create a subtitle project</h1>
-      <p className="muted">
-        Video, audio and text stay on this device. Nothing is uploaded to the internet.
-      </p>
+      {isHostedTest() ? (
+        <p className="panel panel--warn" role="note">
+          <strong>Hosted test:</strong> {HOSTED_NOTICE_BODY}
+        </p>
+      ) : (
+        <p className="muted">
+          Video, audio and text stay on this device. Nothing is uploaded to the internet.
+        </p>
+      )}
       <div className="workflow-list">
         <article className="workflow-card" aria-labelledby="wf-speech">
           <h2 id="wf-speech">Transcribe speech</h2>

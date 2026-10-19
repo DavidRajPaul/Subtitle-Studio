@@ -6,11 +6,20 @@ import { defineConfig } from "vite";
 // browser never makes cross-origin requests during development.
 const BACKEND_URL = process.env.SUBTITLE_STUDIO_BACKEND ?? "http://127.0.0.1:8000";
 
+// Local default is loopback only. The hosted-test Codespace sets SUBTITLE_STUDIO_FRONTEND_HOST so
+// GitHub's port forwarder can reach the UI; the backend itself always stays on 127.0.0.1.
+const FRONTEND_HOST = process.env.SUBTITLE_STUDIO_FRONTEND_HOST ?? "127.0.0.1";
+
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "127.0.0.1",
+    host: FRONTEND_HOST,
     port: 5173,
+    // Vite rejects unknown Host headers; allow only GitHub Codespaces' forwarded addresses.
+    allowedHosts: [".app.github.dev"],
+    // Nobody edits code in the hosted test, and a hot-reload socket through GitHub's forwarder
+    // can cause reload loops, so it is switched off there.
+    hmr: process.env.SUBTITLE_STUDIO_FRONTEND_HOST ? false : undefined,
     proxy: {
       "/api": { target: BACKEND_URL, changeOrigin: false },
     },

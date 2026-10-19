@@ -4,6 +4,7 @@ import type { LoadedProject } from "./api/projects";
 import { EditorScreen } from "./screens/EditorScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { ImportScreen } from "./screens/ImportScreen";
+import { isHostedTest } from "./lib/hosted";
 import type { Workflow } from "./types";
 
 type View =
@@ -24,7 +25,7 @@ export function App() {
         <button type="button" className="top-bar__brand link-button" onClick={goHome}>
           Subtitle Studio
         </button>
-        <span className="top-bar__mode">Local processing</span>
+        <span className="top-bar__mode">{isHostedTest() ? "Hosted test" : "Local processing"}</span>
         <button
           type="button"
           className="button button--secondary"

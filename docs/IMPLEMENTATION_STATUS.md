@@ -25,6 +25,7 @@ Phases 0, 1 and 2 were accepted by the owner's approvals to proceed.
 - **Regenerate timing…** always asks first, states that hand-set timing will be lost, lets you pick Equal / Readable / Fit, keeps text and style. Cancelling changes nothing. (Undo does not exist yet and the dialog says so.)
 - **Missing video:** if a project's working copy is gone, the subtitles stay editable and a banner offers **Choose the video again** (with a warning if the new video's length differs).
 - **Layouts:** on a phone, one column with a bottom bar (**+ Add**, **Edit subtitle**, **Style**) opening bottom sheets that leave the picture visible above them; at ≥ 1000 px the editor has the video/timeline/list on the left and a Subtitle/Style panel on the right.
+- **Hosted test (GitHub Codespaces):** `.devcontainer/` installs and starts the app; the owner makes port 5173 public and shares the link (steps and a tester message in `docs/HOSTED_TEST.md`). When opened on `*.app.github.dev` the UI says "Hosted test" and warns that files are processed on a temporary cloud computer and projects are visible to anyone with the link, instead of "stays on this device". Local use is unchanged.
 - **Export** is visible but disabled, with an explanation (arrives in Phase 5).
 
 Backend additions: `GET/PUT/DELETE /api/projects[/{id}]`, `GET /api/media/{id}/file` (HTTP Range supported for seeking), `POST /api/timing/validate`. A saved project protects its video copy from the import screen's cleanup; deleting a project removes the copy only if no other project uses it.
@@ -40,9 +41,10 @@ Backend additions: `GET/PUT/DELETE /api/projects[/{id}]`, `GET /api/media/{id}/f
 |---|---|---|
 | Lint (both) | `pnpm lint` | Pass |
 | Types (both) | `pnpm typecheck` | Pass (mypy strict, tsc) |
-| Tests (both) | `pnpm test` | Pass — backend 69, frontend 86 (1 known Starlette deprecation warning) |
+| Tests (both) | `pnpm test` | Pass — backend 69, frontend 90 (1 known Starlette deprecation warning) |
 | Frontend build | `pnpm --dir frontend build` | Pass |
 | Dependency audit | `pnpm --dir frontend audit` | No known vulnerabilities |
+| Hosted-test setup | `bash .devcontainer/setup.sh` then `start.sh` on this machine; Host-header check; Playwright with a `*.app.github.dev` hostname | Pass locally (UI 200, `/api` proxied, unknown host rejected 403, hosted wording shown, editor opened) |
 | Browser round-trip | Playwright + headless Chromium vs the real backend, 1400×900 and 390×844 touch | Pass |
 
 Browser round-trip (both sizes): imported a clip and a Tamil + English script, opened the editor (8 subtitles), typed Start `00:00:01.000` (End moved to `00:00:02.059`, duration kept 1.059 s, status *Saved*), changed style to Top, dragged a timeline block (moved ~40 px, saved), went back, **reloaded the page**, reopened the project from Home: every subtitle's time and text identical and the video loaded; deleted the project (confirmation shown) and the list was empty. No console errors, no sideways scrolling at 390 px. Screenshots inspected; this surfaced and fixed a phone overflow and sheets that hid the picture.
@@ -51,7 +53,7 @@ Browser round-trip (both sizes): imported a clip and a Tamil + English script, o
 - **No real phone test** (phone width emulated). Touch dragging on the timeline is only tested with a mouse; please try it on your phone.
 - The test Chromium cannot decode H.264, so playback was verified with a VP9 MP4 only; H.264 playback depends on your browser (Chrome/Edge/Safari support it).
 - Screen reader and full keyboard-only walkthrough not done (labels, focus return, Escape, Tab trapping are implemented and unit-tested).
-- Hosted-test setup (below) is **not verified in a real Codespace**.
+- The hosted-test setup is **not verified in a real Codespace** (container build, port forwarding/Public visibility and large uploads through GitHub's proxy are untested).
 
 ## Decisions made (reversible)
 
@@ -61,6 +63,7 @@ Browser round-trip (both sizes): imported a clip and a Tamil + English script, o
 4. The preview streams the project's **backend working copy**, so a project reopens after a reload; the original file you picked is never modified.
 5. **One global style** (per-cue style is out of scope).
 6. **Manual mode** in the editor means "every time was set by hand"; the project's recorded mode stays the last generated mode until you regenerate.
+7. **Hosted test conflicts with "media stays local" (CLAUDE.md) — flagged for your confirmation.** It is opt-in, run by you, limited to a Codespace you control and delete, disclosed in the UI, and does not change local use. No telemetry, accounts or cloud ASR were added. Tell me if you would rather not offer it.
 
 ## Known limitations and unresolved decisions
 
@@ -77,7 +80,7 @@ Prerequisites: owner approval, and your feedback on the editor from a phone. Pha
 
 ## Owner review checklist (phone-friendly)
 
-1. Start the app (README) or use a hosted-test link if one was shared with you.
+1. Start the app (README), or follow `docs/HOSTED_TEST.md` to get a link you can open on your phone.
 2. **Start** under "Create subtitles from text", pick an MP4 and a UTF-8 TXT, tap **Open in editor**.
 3. Tap a subtitle in the list: the video jumps to it and the text shows over the picture.
 4. Tap **Edit subtitle**, type a new Start time (for example `1.5`), press Enter: the End moves with it, **✓ Saved** appears.

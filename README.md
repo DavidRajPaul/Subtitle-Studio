@@ -38,6 +38,10 @@ The repository documentation describes the product and planned architecture; do 
 - The editor is desktop-first, but the UX must be responsive and usable on phones. The phone layout uses one column and bottom sheets rather than compressing desktop panels.
 - MCP is not required at runtime for transcription or rendering.
 
+## Try it from a link (hosted test)
+
+Testers without a development setup can use a GitHub Codespace: [Open in Codespaces](https://codespaces.new/DavidRajPaul/Subtitle-Studio). The owner starts it, makes port 5173 public and shares the forwarded address. Files are then processed on that cloud machine, which the app states. Steps, privacy notes and a message for testers are in [docs/HOSTED_TEST.md](docs/HOSTED_TEST.md).
+
 ## Running locally (Phase 0)
 
 Prerequisites: Node.js 22+, pnpm 10+, Python 3.11+, [uv](https://docs.astral.sh/uv/), and FFmpeg/FFprobe on `PATH`.

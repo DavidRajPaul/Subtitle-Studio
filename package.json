@@ -8,5 +8,6 @@
     "lint": "pnpm --dir frontend lint && uv run --directory backend ruff check . && uv run --directory backend ruff format --check .",
     "typecheck": "pnpm --dir frontend typecheck && uv run --directory backend mypy",
     "test": "pnpm --dir frontend test && uv run --directory backend pytest -q"
-  }
+  },
+  "packageManager": "pnpm@10.28.0"
 }

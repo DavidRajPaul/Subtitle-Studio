@@ -10,6 +10,7 @@ import {
   type TimingResult,
   type TimingSettings,
 } from "../api/subtitles";
+import { isHostedTest } from "../lib/hosted";
 import { formatTimecode } from "../lib/timecode";
 import { DEFAULT_DRAFT, parseSettings, type SettingsDraft } from "../lib/timingSettings";
 
@@ -222,7 +223,8 @@ export function TextTimingSetup({ durationMs, onOpenEditor }: Props) {
         {!file && (
           <>
             <p className="muted">
-              Choose a UTF-8 text file. It is read on this device only.
+              Choose a UTF-8 text file.{" "}
+              {isHostedTest() ? "It is read by the test computer." : "It is read on this device only."}
             </p>
             <button
               type="button"
