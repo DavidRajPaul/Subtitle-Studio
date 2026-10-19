@@ -12,6 +12,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "mp4box": "2.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -25,6 +26,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "fake-indexeddb": "6.2.6",
     "globals": "^15.9.0",
     "jsdom": "^25.0.0",
     "typescript": "^5.5.4",

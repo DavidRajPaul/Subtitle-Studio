@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { messageOf, newId } from "../api/http";
-import { importMedia } from "../api/media";
+import { importMedia, loadMediaUrl } from "../api/media";
 import {
   getProject,
-  mediaFileUrl,
   saveProject,
   validateCues,
   type LoadedProject,
@@ -164,6 +163,32 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
     update((p) => ({ ...p, cues: result.cues }));
     return null;
   };
+
+  // The video's working copy is read from this browser's storage when the editor opens.
+  const mediaId = project.media.id;
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!mediaOk) return;
+    let cancelled = false;
+    let url: string | null = null;
+    void loadMediaUrl(mediaId).then((loaded) => {
+      if (cancelled) {
+        if (loaded) URL.revokeObjectURL(loaded);
+        return;
+      }
+      if (!loaded) {
+        setMediaOk(false);
+        return;
+      }
+      url = loaded;
+      setVideoUrl(loaded);
+    });
+    return () => {
+      cancelled = true;
+      if (url) URL.revokeObjectURL(url);
+      setVideoUrl(null);
+    };
+  }, [mediaId, mediaOk]);
 
   const issues = useIssues(project);
   const issuesByCue = useMemo(() => {
@@ -412,11 +437,15 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
               </p>
             )}
           </section>
+        ) : !videoUrl ? (
+          <p role="status" aria-busy="true" className="panel">
+            Loading the video…
+          </p>
         ) : (
           <>
             <VideoPreview
               ref={previewRef}
-              src={mediaFileUrl(media.id)}
+              src={videoUrl}
               durationMs={durationMs}
               label={`Preview of ${media.filename}`}
               width={media.width}

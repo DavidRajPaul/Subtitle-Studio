@@ -10,7 +10,11 @@ const BACKEND_URL = process.env.SUBTITLE_STUDIO_BACKEND ?? "http://127.0.0.1:800
 // GitHub's port forwarder can reach the UI; the backend itself always stays on 127.0.0.1.
 const FRONTEND_HOST = process.env.SUBTITLE_STUDIO_FRONTEND_HOST ?? "127.0.0.1";
 
+// GitHub Pages serves the app from /<repository>/; the deploy workflow sets this.
+const BASE = process.env.SUBTITLE_STUDIO_BASE ?? "/";
+
 export default defineConfig({
+  base: BASE,
   plugins: [react()],
   server: {
     host: FRONTEND_HOST,

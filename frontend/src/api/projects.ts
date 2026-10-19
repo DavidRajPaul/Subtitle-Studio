@@ -1,5 +1,13 @@
-import { send } from "./http";
-import type { Segmentation, TimingIssue, TimingMode, TimingSettings } from "./subtitles";
+/**
+ * Projects, saved in this browser (IndexedDB) on this device. Each saved project also keeps a
+ * working copy of its video here, so it can be reopened later. Nothing is uploaded.
+ */
+import { ApiError } from "./http";
+import { forgetPending, pendingMedia } from "./media";
+import { deleteOne, getAll, getAllKeys, getOne, MEDIA, PROJECTS, putOne } from "../engine/db";
+import { checkProject, ProjectSchemaError } from "../engine/projectSchema";
+import { validateCues as engineValidate, type TimingIssue } from "../engine/timing";
+import type { Segmentation, TimingMode, TimingSettings } from "./subtitles";
 import type { Workflow } from "../types";
 
 export interface BackgroundStyle {
@@ -68,44 +76,160 @@ export interface ProjectSummary {
   cue_count: number;
 }
 
-const json = (body: unknown): RequestInit => ({
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(body),
-});
+const unavailable = () =>
+  new ApiError(
+    "storage_unavailable",
+    "This browser is not allowing Subtitle Studio to save. Turn off private browsing, or try another browser.",
+  );
 
-export async function listProjects(signal?: AbortSignal): Promise<ProjectSummary[]> {
-  const body = await send<{ projects?: unknown }>("/api/projects", { signal });
-  return Array.isArray(body.projects) ? (body.projects as ProjectSummary[]) : [];
+function storageError(error: unknown, fallback: string): ApiError {
+  if (error instanceof ApiError) return error;
+  if (error instanceof DOMException && error.name === "QuotaExceededError") {
+    return new ApiError(
+      "storage_full",
+      "There is not enough free space on this device to save. Delete old projects or free some space, then try again.",
+    );
+  }
+  if (error instanceof Error && /IndexedDB/.test(error.message)) return unavailable();
+  return new ApiError("storage_failed", fallback);
 }
 
-export function getProject(id: string, signal?: AbortSignal): Promise<LoadedProject> {
-  return send<LoadedProject>(`/api/projects/${encodeURIComponent(id)}`, { signal });
+let persistAsked = false;
+/** Asks the browser not to clear projects when space runs low (best effort). */
+function askToPersist(): void {
+  if (persistAsked) return;
+  persistAsked = true;
+  try {
+    void navigator.storage.persist().catch(() => undefined);
+  } catch {
+    // Not offered by this browser.
+  }
+}
+
+async function loadRaw(id: string): Promise<unknown> {
+  try {
+    return await getOne<unknown>(PROJECTS, id);
+  } catch (error) {
+    throw storageError(error, "Saved projects could not be read.");
+  }
+}
+
+export async function listProjects(signal?: AbortSignal): Promise<ProjectSummary[]> {
+  let raws: unknown[];
+  let mediaIds: Set<string>;
+  try {
+    raws = await getAll<unknown>(PROJECTS);
+    mediaIds = new Set(await getAllKeys(MEDIA));
+  } catch (error) {
+    throw storageError(error, "Saved projects could not be read.");
+  }
+  signal?.throwIfAborted();
+  const docs: Project[] = [];
+  for (const raw of raws) {
+    try {
+      docs.push(checkProject(raw));
+    } catch {
+      // A damaged entry is skipped, never deleted.
+    }
+  }
+  docs.sort((a, b) =>
+    (b.updated_at ?? "").localeCompare(a.updated_at ?? "") || b.id.localeCompare(a.id),
+  );
+  return docs.map((d) => ({
+    id: d.id,
+    name: d.name,
+    workflow: d.workflow,
+    updated_at: d.updated_at ?? null,
+    media_filename: d.media.filename,
+    media_available: mediaIds.has(d.media.id) || pendingMedia(d.media.id) !== undefined,
+    cue_count: d.cues.length,
+  }));
+}
+
+export async function getProject(id: string, signal?: AbortSignal): Promise<LoadedProject> {
+  const raw = await loadRaw(id);
+  signal?.throwIfAborted();
+  if (raw === undefined) throw new ApiError("not_found", "That project could not be found.");
+  let doc: Project;
+  try {
+    doc = checkProject(raw);
+  } catch {
+    throw new ApiError(
+      "unreadable",
+      "This project could not be read. It may be damaged or from a newer version of Subtitle Studio. It was left untouched.",
+    );
+  }
+  let available = pendingMedia(doc.media.id) !== undefined;
+  if (!available) {
+    try {
+      available = (await getOne(MEDIA, doc.media.id)) !== undefined;
+    } catch {
+      available = false;
+    }
+  }
+  return { ...doc, media_available: available };
 }
 
 export async function saveProject(project: Project): Promise<void> {
-  // media_available is a read-only hint from the server and is never part of the saved file.
-  const doc: Record<string, unknown> = { ...project };
-  delete doc.media_available;
-  await send(`/api/projects/${encodeURIComponent(project.id)}`, { method: "PUT", ...json(doc) });
+  // media_available is a hint for the screen and never part of the saved document.
+  const raw: Record<string, unknown> = { ...project };
+  delete raw.media_available;
+  let doc: Project;
+  try {
+    doc = checkProject(raw);
+  } catch (error) {
+    const what = error instanceof ProjectSchemaError ? ` (${error.message})` : "";
+    throw new ApiError("invalid_project", `The project has a value that is not allowed${what}.`);
+  }
+  try {
+    const file = pendingMedia(doc.media.id);
+    if (file) {
+      // First save with this video: keep a working copy so the project reopens later.
+      await putOne(MEDIA, {
+        id: doc.media.id,
+        filename: file.name,
+        type: file.type || "video/mp4",
+        size: file.size,
+        blob: new Blob([file], { type: file.type || "video/mp4" }),
+      });
+      forgetPending(doc.media.id);
+    }
+    const previous = await getOne<{ created_at?: string | null }>(PROJECTS, doc.id);
+    const now = new Date().toISOString().replace(/\.\d{3}Z$/, "+00:00");
+    await putOne(PROJECTS, {
+      ...doc,
+      created_at: previous?.created_at ?? doc.created_at ?? now,
+      updated_at: now,
+    });
+  } catch (error) {
+    throw storageError(error, "The project could not be saved in this browser.");
+  }
+  askToPersist();
 }
 
 export async function deleteProject(id: string): Promise<void> {
-  await send(`/api/projects/${encodeURIComponent(id)}`, { method: "DELETE" });
+  const raw = await loadRaw(id);
+  if (raw === undefined) throw new ApiError("not_found", "That project could not be found.");
+  try {
+    await deleteOne(PROJECTS, id);
+    const mediaId = (raw as { media?: { id?: unknown } }).media?.id;
+    if (typeof mediaId === "string") {
+      const stillUsed = (await getAll<{ media?: { id?: unknown } }>(PROJECTS)).some(
+        (p) => p.media?.id === mediaId,
+      );
+      if (!stillUsed) await deleteOne(MEDIA, mediaId);
+    }
+  } catch (error) {
+    throw storageError(error, "The project could not be deleted.");
+  }
 }
 
-export async function validateCues(
+export function validateCues(
   cues: ProjectCue[],
   durationMs: number,
   settings: TimingSettings,
   signal?: AbortSignal,
 ): Promise<TimingIssue[]> {
-  const body = await send<{ issues: TimingIssue[] }>("/api/timing/validate", {
-    method: "POST",
-    signal,
-    ...json({ cues, duration_ms: durationMs, settings }),
-  });
-  return body.issues;
+  if (signal?.aborted) return Promise.reject(new DOMException("Aborted", "AbortError"));
+  return Promise.resolve(engineValidate(cues, durationMs, settings));
 }
-
-export const mediaFileUrl = (mediaId: string): string =>
-  `/api/media/${encodeURIComponent(mediaId)}/file`;

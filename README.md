@@ -1,6 +1,6 @@
 # Subtitle Studio
 
-**Status:** Phase 4 verified (with a stand-in recogniser) — awaiting owner review  
+**Status:** Browser-only web app, stage 1 (text workflow on GitHub Pages) — awaiting owner review  
 **Product:** Local-first subtitle editor  
 **Initial target:** Desktop browser, with a responsive interface that can be reviewed and used on phones
 
@@ -16,7 +16,7 @@ The repository documentation describes the product and planned architecture; do 
 | 1 | MP4 import, FFprobe metadata, preview | Accepted (owner approved Phase 2) |
 | 2 | TXT parsing and timing engine | Accepted (owner approved Phase 3) |
 | 3 | Subtitle editor, timeline, styles and preview | Accepted (owner approved Phase 4) |
-| 4 | Local speech transcription | Verified with a stand-in recogniser — real model run awaiting owner test |
+| 4 | Local speech transcription | Built for the Python backend; moving into the browser (next stage, see ADR-001) |
 | 5 | SRT and burned-in MP4 export | Not started |
 | 6 | Hardening and MVP acceptance | Not started |
 | 7 | Optional post-MVP improvements | Deferred |
@@ -38,20 +38,34 @@ The repository documentation describes the product and planned architecture; do 
 - The editor is desktop-first, but the UX must be responsive and usable on phones. The phone layout uses one column and bottom sheets rather than compressing desktop panels.
 - MCP is not required at runtime for transcription or rendering.
 
-## Try it from a link (hosted test)
+## Use it from a link (GitHub Pages)
+
+Subtitle Studio runs entirely in the browser: open **https://davidrajpaul.github.io/Subtitle-Studio/** on a phone, tablet or computer. Videos and text stay on that device; projects are saved in that browser. On iPhone/iPad use Safari → Share → **Add to Home Screen**; on Android, the browser menu → **Add to Home screen / Install app**. See [docs/ADR-001-browser-only-web-app.md](docs/ADR-001-browser-only-web-app.md).
+
+Publishing is automatic: every push to `main` runs `.github/workflows/pages.yml` (lint, type-check, tests, build, deploy). One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+
+Currently in the web app: the text workflow (MP4 + TXT → timing → editor → saved projects). Speech recognition and export are being moved into the browser next.
+
+## Try it from a link (hosted test, Codespaces — legacy)
 
 Testers without a development setup can use a GitHub Codespace: [Open in Codespaces](https://codespaces.new/DavidRajPaul/Subtitle-Studio). The owner starts it, makes port 5173 public and shares the forwarded address. Files are then processed on that cloud machine, which the app states. Steps, privacy notes and a message for testers are in [docs/HOSTED_TEST.md](docs/HOSTED_TEST.md).
 
-## Running locally (Phase 0)
+## Running locally
 
-Prerequisites: Node.js 22+, pnpm 10+, Python 3.11+, [uv](https://docs.astral.sh/uv/), and FFmpeg/FFprobe on `PATH`.
+The web app needs only Node.js 22+ and pnpm 10+:
 
 ```bash
-pnpm --dir frontend install        # frontend dependencies
-uv sync --directory backend        # backend dependencies
-pnpm backend                       # API on http://127.0.0.1:8000 (GET /api/health)
-pnpm frontend                      # UI on http://127.0.0.1:5173 (proxies /api)
-pnpm lint && pnpm typecheck && pnpm test
+pnpm --dir frontend install        # dependencies
+pnpm frontend                      # app on http://127.0.0.1:5173 (no backend needed)
+pnpm --dir frontend test           # includes the parity tests against the Python engine
+```
+
+The legacy Python backend (Python 3.11+, [uv](https://docs.astral.sh/uv/), FFmpeg/FFprobe) is kept for reference and for regenerating the parity fixtures (`uv run --directory backend python scripts/export_parity_fixtures.py`):
+
+```bash
+uv sync --directory backend
+pnpm backend                       # API on http://127.0.0.1:8000
+pnpm lint && pnpm typecheck && pnpm test   # both frontend and backend
 ```
 
 Optional environment variables: `SUBTITLE_STUDIO_FFMPEG` and `SUBTITLE_STUDIO_FFPROBE` (binary paths), `SUBTITLE_STUDIO_PORT`, `SUBTITLE_STUDIO_DATA_DIR` (app-owned working copies; default `./data`, gitignored). The backend binds to `127.0.0.1` only.

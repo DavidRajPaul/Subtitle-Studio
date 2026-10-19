@@ -1,3 +1,5 @@
+// Not used by the web app yet: kept for the next stage, which connects it to speech
+// recognition running in the browser (it was built for the Python backend in Phase 4).
 import { useCallback, useEffect, useState } from "react";
 import { messageOf } from "../api/http";
 import { deleteModel, getSpeechInfo, type SpeechInfo, type SpeechModel } from "../api/speech";

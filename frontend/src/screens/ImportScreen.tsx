@@ -9,8 +9,6 @@ import {
 import { newId } from "../api/http";
 import { saveProject, type LoadedProject } from "../api/projects";
 import { DEFAULT_STYLE } from "../lib/style";
-import { SpeechSetup } from "../components/SpeechSetup";
-import { DEFAULT_DRAFT, parseSettings } from "../lib/timingSettings";
 import { TextTimingSetup, type TextTimingResult } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
@@ -26,12 +24,6 @@ interface Props {
 /** What a workflow hands over to become a project: cues plus how they were timed. */
 type NewContent = Pick<TextTimingResult, "mode" | "segmentation" | "settings"> & {
   cues: { id: string; text: string; start_ms: number; end_ms: number }[];
-};
-
-const defaultSettings = () => {
-  const parsed = parseSettings(DEFAULT_DRAFT);
-  if (!parsed.ok) throw new Error("default timing settings are invalid");
-  return parsed.settings;
 };
 
 type VideoState =
@@ -270,23 +262,22 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
       )}
 
       {video.kind === "ready" && meta && workflow === "speech" && (
-        <SpeechSetup
-          mediaId={video.media.id}
-          videoHasAudio={meta.has_audio}
-          videoDurationMs={meta.duration_ms}
-          onSwitchToText={() => {
-            onChangeWorkflow("text");
-          }}
-          onOpenEditor={(result) =>
-            createProject(video.media, {
-              cues: result.cues,
-              // Times came from the recogniser, so every subtitle is treated as explicitly timed.
-              mode: "manual",
-              segmentation: "line",
-              settings: defaultSettings(),
-            })
-          }
-        />
+        <section className="panel panel--info" aria-labelledby="speech-next">
+          <h2 id="speech-next">Speech recognition is coming next</h2>
+          <p>
+            Recognising speech inside the browser is the next update. For now, create subtitles
+            from a written script: your video stays selected.
+          </p>
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              onChangeWorkflow("text");
+            }}
+          >
+            Use a text file instead
+          </button>
+        </section>
       )}
     </>
   );

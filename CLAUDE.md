@@ -1,5 +1,8 @@
 # Claude Instructions — Subtitle Studio
 
+## Architecture update (2026-10-19)
+The owner decided the app runs entirely in the browser and is published on GitHub Pages; see docs/ADR-001-browser-only-web-app.md. Processing lives in `frontend/src/engine/`. The Python backend remains for reference/parity until browser speech recognition exists; do not remove it without approval.
+
 ## Source of truth
 Read README.md, the product and architecture documents, docs/IMPLEMENTATION_PLAN.md, and the UX documents before architectural or interface changes. Flag conflicts instead of silently choosing.
 

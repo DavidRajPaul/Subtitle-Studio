@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { HealthPanel } from "./components/HealthPanel";
-import { SpeechModelsPanel } from "./components/SpeechModelsPanel";
+import { DevicePanel } from "./components/DevicePanel";
 import type { LoadedProject } from "./api/projects";
 import { EditorScreen } from "./screens/EditorScreen";
 import { HomeScreen } from "./screens/HomeScreen";
@@ -66,9 +65,8 @@ export function App() {
         )}
         {view.name === "diagnostics" && (
           <>
-            <h1>Settings and diagnostics</h1>
-            <HealthPanel />
-            <SpeechModelsPanel />
+            <h1>Settings</h1>
+            <DevicePanel />
             <button type="button" className="button button--secondary spaced" onClick={goHome}>
               ← Back to home
             </button>

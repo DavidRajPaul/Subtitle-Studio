@@ -1,13 +1,13 @@
-export interface MediaMetadata {
-  duration_ms: number;
-  width: number;
-  height: number;
-  frame_rate: number | null;
-  video_codec: string | null;
-  has_audio: boolean;
-  audio_codec: string | null;
-  container: string;
-}
+/**
+ * Video import, entirely in the browser: the file is inspected here and kept in memory until
+ * a project is saved, which stores a working copy in this browser. The original file on the
+ * device is never changed, and nothing is uploaded.
+ */
+import { newId } from "./http";
+import { getOne, MEDIA, type MediaRecord } from "../engine/db";
+import type { MediaMetadata } from "../engine/inspect";
+
+export type { MediaMetadata };
 
 export interface ImportedMedia {
   id: string;
@@ -26,7 +26,11 @@ export class MediaImportError extends Error {
   }
 }
 
-/** Client-side check before sending anything; the backend validates again. */
+export const MAX_VIDEO_BYTES = 2 * 1024 ** 3;
+
+/** Videos chosen in this session that are not saved in a project yet. */
+const pending = new Map<string, File>();
+
 export function validateVideoFile(file: File): string | null {
   if (!file.name.toLowerCase().endsWith(".mp4")) {
     return "Choose a video file ending in .mp4.";
@@ -34,46 +38,53 @@ export function validateVideoFile(file: File): string | null {
   if (file.size === 0) {
     return "This file is empty. Choose a different video.";
   }
+  if (file.size > MAX_VIDEO_BYTES) {
+    return "This video is larger than 2 GB, which is too big to keep in the browser. Choose a shorter clip.";
+  }
   return null;
 }
 
-interface ErrorBody {
-  detail?: { code?: string; message?: string };
-}
-
-/** Sends the file to the local backend (127.0.0.1) for inspection. Nothing leaves the device. */
 export async function importMedia(file: File, signal?: AbortSignal): Promise<ImportedMedia> {
-  const form = new FormData();
-  form.append("file", file, file.name);
-  let response: Response;
+  const problem = validateVideoFile(file);
+  if (problem) throw new MediaImportError("invalid_file", problem);
+  let metadata: MediaMetadata;
+  // The MP4 reader is loaded only when a video is chosen, keeping the first visit quick.
+  const { InspectError, inspectMp4 } = await import("../engine/inspect");
   try {
-    response = await fetch("/api/media", { method: "POST", body: form, signal });
+    metadata = await inspectMp4(file, signal);
   } catch (error) {
     if (signal?.aborted) throw error;
+    if (error instanceof InspectError) throw new MediaImportError(error.code, error.message);
     throw new MediaImportError(
-      "backend_unreachable",
-      "The local backend is not running, so the video could not be inspected. Start it, then try again.",
+      "unreadable",
+      "This file could not be read as a video. It may be damaged or not really an MP4.",
     );
   }
-  if (!response.ok) {
-    let body: ErrorBody = {};
-    try {
-      body = (await response.json()) as ErrorBody;
-    } catch {
-      // fall through to the generic message
-    }
-    throw new MediaImportError(
-      body.detail?.code ?? "import_failed",
-      body.detail?.message ?? "The video could not be imported. Try again or choose another file.",
-    );
-  }
-  return (await response.json()) as ImportedMedia;
+  const id = newId();
+  pending.set(id, file);
+  return { id, filename: file.name, size_bytes: file.size, metadata };
 }
 
-export async function removeMedia(id: string): Promise<void> {
+/** Forgets a chosen video that was not saved. Saved projects keep their own copy. */
+export function removeMedia(id: string): Promise<void> {
+  pending.delete(id);
+  return Promise.resolve();
+}
+
+/** The not-yet-saved file for this id, if any (used when a project is first saved). */
+export const pendingMedia = (id: string): File | undefined => pending.get(id);
+export const forgetPending = (id: string): void => {
+  pending.delete(id);
+};
+
+/** A playable URL for a project's video, or null if it is not on this device any more. */
+export async function loadMediaUrl(id: string): Promise<string | null> {
+  const file = pending.get(id);
+  if (file) return URL.createObjectURL(file);
   try {
-    await fetch(`/api/media/${encodeURIComponent(id)}`, { method: "DELETE" });
+    const record = await getOne<MediaRecord>(MEDIA, id);
+    return record ? URL.createObjectURL(record.blob) : null;
   } catch {
-    // Best effort: the working copy is app-owned and can be cleaned later.
+    return null;
   }
 }

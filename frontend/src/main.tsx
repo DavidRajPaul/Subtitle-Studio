@@ -13,3 +13,12 @@ createRoot(container).render(
     <App />
   </StrictMode>,
 );
+
+// Lets the app open without a connection once visited (only in the published build).
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
+      // Offline use is a convenience; the app works without it.
+    });
+  });
+}

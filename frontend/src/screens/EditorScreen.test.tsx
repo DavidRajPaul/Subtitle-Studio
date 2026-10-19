@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { LoadedProject } from "../api/projects";
+import { ApiError } from "../api/http";
+import { saveProject, type LoadedProject } from "../api/projects";
 import { DEFAULT_STYLE } from "../lib/style";
 import { EditorScreen } from "./EditorScreen";
 
@@ -35,49 +36,31 @@ function project(overrides: Partial<LoadedProject> = {}): LoadedProject {
   };
 }
 
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
-
 interface Backend {
   puts: LoadedProject[];
-  generateCalls: number;
   failSaves: boolean;
-  issues: { code: string; message: string; cue_number: number | null }[];
 }
 
+vi.mock("../api/projects", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../api/projects")>()),
+  saveProject: vi.fn(),
+}));
+
+vi.mock("../api/media", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../api/media")>()),
+  loadMediaUrl: vi.fn(() => Promise.resolve("blob:clip")),
+}));
+
 function installBackend(): Backend {
-  const state: Backend = { puts: [], generateCalls: 0, failSaves: false, issues: [] };
-  vi.stubGlobal(
-    "fetch",
-    vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
-      const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-      const method = init?.method ?? "GET";
-      if (url.startsWith("/api/projects/") && method === "PUT") {
-        if (state.failSaves) {
-          return Promise.resolve(
-            json({ detail: { code: "write_failed", message: "Check free space." } }, 500),
-          );
-        }
-        state.puts.push(JSON.parse(init?.body as string) as LoadedProject);
-        return Promise.resolve(json({ id: PID, updated_at: "now" }));
-      }
-      if (url === "/api/timing/validate") return Promise.resolve(json({ issues: state.issues }));
-      if (url === "/api/timing/generate") {
-        state.generateCalls += 1;
-        return Promise.resolve(
-          json({
-            cues: [
-              { id: "x", index: 1, text: "ignored", start_ms: 500, end_ms: 1500 },
-              { id: "y", index: 2, text: "ignored", start_ms: 6000, end_ms: 9000 },
-            ],
-            issues: [],
-            summary: {},
-          }),
-        );
-      }
-      return Promise.reject(new TypeError(`unexpected ${method} ${url}`));
-    }),
-  );
+  const state: Backend = { puts: [], failSaves: false };
+  vi.mocked(saveProject).mockReset();
+  vi.mocked(saveProject).mockImplementation((p) => {
+    if (state.failSaves) {
+      return Promise.reject(new ApiError("storage_full", "There is not enough free space."));
+    }
+    state.puts.push(structuredClone(p) as LoadedProject);
+    return Promise.resolve();
+  });
   return state;
 }
 
@@ -101,11 +84,11 @@ const renderEditor = (p: LoadedProject = project()) =>
   render(<EditorScreen projectId={p.id} initial={p} onExit={vi.fn()} />);
 
 describe("Editor", () => {
-  it("shows the cue list and draws the active subtitle over the video", () => {
+  it("shows the cue list and draws the active subtitle over the video", async () => {
     renderEditor();
     const list = screen.getByRole("list", { name: "Subtitles" });
     expect(within(list).getAllByRole("listitem")).toHaveLength(2);
-    expect(screen.getByTestId("subtitle-overlay")).toHaveTextContent("வணக்கம்");
+    expect(await screen.findByTestId("subtitle-overlay")).toHaveTextContent("வணக்கம்");
   });
 
   it("saves numeric timing edits automatically, keeping the duration when Start changes", async () => {
@@ -118,7 +101,6 @@ describe("Editor", () => {
     }, { timeout: 3000 });
     expect(backend.puts[0].cues[0]).toMatchObject({ id: "a", start_ms: 1000, end_ms: 3000 });
     expect(backend.puts[0].cues[1]).toMatchObject({ start_ms: 3000, end_ms: 5000 });
-    expect(backend.puts[0]).not.toHaveProperty("media_available");
     expect(await screen.findByText("✓ Saved")).toBeInTheDocument();
   });
 
@@ -153,11 +135,14 @@ describe("Editor", () => {
   });
 
   it("shows validation warnings in words and does not move any subtitle", async () => {
-    backend.issues = [{ code: "overlap", message: "Overlaps subtitle 1 by 0.5 s.", cue_number: 2 }];
-    renderEditor();
+    const overlapping = project();
+    overlapping.cues[1] = { ...overlapping.cues[1], start_ms: 1500 };
+    renderEditor(overlapping);
     const list = screen.getByRole("list", { name: "Subtitles" });
-    expect(await within(list).findByText(/Overlaps subtitle 1/)).toBeInTheDocument();
-    expect(within(list).getByText("Warning:")).toBeInTheDocument();
+    expect(
+      await within(list).findByText(/starts at 00:00:01.500, before subtitle 1 ends at 00:00:02.000/),
+    ).toBeInTheDocument();
+    expect(within(list).getAllByText("Warning:").length).toBeGreaterThan(0);
     expect(backend.puts).toHaveLength(0);
   });
 
@@ -167,7 +152,6 @@ describe("Editor", () => {
     const dialog = screen.getByRole("dialog", { name: "Replace the timing of all subtitles?" });
     expect(dialog).toHaveTextContent("Any timing you set by hand will be lost");
     fireEvent.click(within(dialog).getByRole("button", { name: "Cancel" }));
-    expect(backend.generateCalls).toBe(0);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(backend.puts).toHaveLength(0);
   });
@@ -188,9 +172,10 @@ describe("Editor", () => {
     }, { timeout: 3000 });
     const saved = backend.puts[0];
     expect(saved.cues.map((c) => c.text)).toEqual(["வணக்கம்", "Second line"]);
+    // Readable duration with the defaults: both lines are short, so 1 s each with a 0.1 s gap.
     expect(saved.cues.map((c) => [c.start_ms, c.end_ms])).toEqual([
-      [500, 1500],
-      [6000, 9000],
+      [0, 1000],
+      [1100, 2100],
     ]);
   });
 

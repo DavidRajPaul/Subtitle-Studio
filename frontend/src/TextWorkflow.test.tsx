@@ -1,10 +1,13 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
-import type { GenerateRequest, TimingResult } from "./api/subtitles";
-
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+import { ApiError } from "./api/http";
+import {
+  generateTiming,
+  parseText,
+  type GenerateRequest,
+  type TimingResult,
+} from "./api/subtitles";
 
 const media = {
   id: "3f2b8c1e-0000-4000-8000-000000000001",
@@ -49,35 +52,40 @@ function timingFor(req: GenerateRequest): TimingResult {
 
 let parseFailure: { code: string; message: string } | null = null;
 
-const urlOf = (input: RequestInfo | URL): string =>
-  typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
+vi.mock("./api/projects", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./api/projects")>()),
+  listProjects: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock("./engine/inspect", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./engine/inspect")>()),
+  inspectMp4: vi.fn(() => Promise.resolve(media.metadata)),
+}));
+
+// The real text and timing engine is tested in engine/parity.test.ts against the Python
+// engine; here a predictable stand-in keeps the screen's behaviour easy to check.
+vi.mock("./api/subtitles", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./api/subtitles")>()),
+  parseText: vi.fn(),
+  generateTiming: vi.fn(),
+}));
 
 function installBackend() {
-  vi.mocked(fetch).mockImplementation((input, init) => {
-    const url = urlOf(input);
-    if (url === "/api/media") return Promise.resolve(json(media));
-    if (url === "/api/text/parse") {
-      if (parseFailure) return Promise.resolve(json({ detail: parseFailure }, 422));
-      const form = init?.body as FormData;
-      const mode = form.get("segmentation") as string;
-      const segments = mode === "sentence" ? ["One.", "Two.", "Three.", "Four."] : ["வணக்கம்", "Second", "Third"];
-      return Promise.resolve(
-        json({ filename: "script.txt", segmentation: mode, count: segments.length, segments }),
-      );
-    }
-    if (url === "/api/timing/generate") {
-      const req = JSON.parse(init?.body as string) as GenerateRequest;
-      return Promise.resolve(json(timingFor(req)));
-    }
-    return Promise.resolve(new Response(null, { status: 204 }));
+  vi.mocked(parseText).mockImplementation((_file, mode) => {
+    if (parseFailure) return Promise.reject(new ApiError(parseFailure.code, parseFailure.message));
+    const segments =
+      mode === "sentence" ? ["One.", "Two.", "Three.", "Four."] : ["வணக்கம்", "Second", "Third"];
+    return Promise.resolve({ filename: "script.txt", segmentation: mode, count: segments.length, segments });
   });
+  vi.mocked(generateTiming).mockImplementation((req) => Promise.resolve(timingFor(req)));
 }
 
 const fileInputs = () => document.querySelectorAll<HTMLInputElement>('input[type="file"]');
-const calls = (url: string) => vi.mocked(fetch).mock.calls.filter(([u]) => urlOf(u) === url);
-const lastTiming = () => {
-  const list = calls("/api/timing/generate");
-  return JSON.parse(list[list.length - 1][1]?.body as string) as GenerateRequest;
+const parseCalls = () => vi.mocked(parseText).mock.calls;
+const timingCalls = () => vi.mocked(generateTiming).mock.calls;
+const lastTiming = (): GenerateRequest => {
+  const list = timingCalls();
+  return list[list.length - 1][0];
 };
 
 async function openTextWorkflowWithVideo() {
@@ -95,7 +103,8 @@ const pickTxt = (name = "script.txt") => {
 
 beforeEach(() => {
   parseFailure = null;
-  vi.stubGlobal("fetch", vi.fn());
+  vi.mocked(parseText).mockReset();
+  vi.mocked(generateTiming).mockReset();
   vi.stubGlobal("URL", Object.assign(URL, { createObjectURL: vi.fn(() => "blob:clip"), revokeObjectURL: vi.fn() }));
   installBackend();
 });
@@ -157,8 +166,7 @@ describe("Text workflow", () => {
     await screen.findByText(/Found 3 subtitles/);
     fireEvent.click(screen.getByRole("radio", { name: /Split into sentences/ }));
     expect(await screen.findByText(/Found 4 subtitles/)).toBeInTheDocument();
-    const form = calls("/api/text/parse")[1][1]?.body as FormData;
-    expect(form.get("segmentation")).toBe("sentence");
+    expect(parseCalls()[1][1]).toBe("sentence");
   });
 
   it("lists cues with warnings as text, not only colour, and never changes them", async () => {
@@ -172,16 +180,16 @@ describe("Text workflow", () => {
     expect(screen.getByText(/Nothing was changed automatically/)).toBeInTheDocument();
   });
 
-  it("rejects a non-TXT file before contacting the backend", async () => {
+  it("rejects a non-TXT file before reading it", async () => {
     await openTextWorkflowWithVideo();
-    const before = calls("/api/text/parse").length;
+    const before = parseCalls().length;
     pickTxt("script.docx");
     expect(await screen.findByText("Choose a plain text file ending in .txt.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Choose a different file" })).toBeInTheDocument();
-    expect(calls("/api/text/parse").length).toBe(before);
+    expect(parseCalls().length).toBe(before);
   });
 
-  it("shows the backend's UTF-8 guidance beside the file with a way to replace it", async () => {
+  it("shows the UTF-8 guidance beside the file with a way to replace it", async () => {
     parseFailure = { code: "not_utf8", message: "Save it again as UTF-8." };
     await openTextWorkflowWithVideo();
     pickTxt();
@@ -196,12 +204,12 @@ describe("Text workflow", () => {
     pickTxt();
     await screen.findByText(/Found 3 subtitles/);
     await screen.findByRole("list", { name: "Generated subtitles" });
-    const before = calls("/api/timing/generate").length;
+    const before = timingCalls().length;
     fireEvent.change(screen.getByLabelText(/Minimum duration/), { target: { value: "9" } });
     expect(screen.getByText("The minimum cannot be longer than the maximum.")).toBeInTheDocument();
     expect(screen.getByText(/Fix the readability settings/)).toBeInTheDocument();
     await new Promise((r) => setTimeout(r, 350));
-    expect(calls("/api/timing/generate").length).toBe(before);
+    expect(timingCalls().length).toBe(before);
     fireEvent.change(screen.getByLabelText(/Maximum duration/), { target: { value: "10" } });
     await waitFor(() => {
       expect(lastTiming().settings.min_duration_ms).toBe(9000);
