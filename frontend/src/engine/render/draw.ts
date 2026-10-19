@@ -193,7 +193,10 @@ function paintBlock(ctx: Ctx, laid: Laid, style: SubtitleStyle, scale: number): 
 
 let scratch: HTMLCanvasElement | null = null;
 
-/** Clears the canvas and draws every subtitle active at tMs. Size is in canvas pixels. */
+/**
+ * Draws every subtitle active at tMs. Size is in canvas pixels. The preview clears first; the
+ * export draws on top of the video frame already on the canvas (`clear: false`).
+ */
 export function drawSubtitles(
   ctx: Ctx,
   width: number,
@@ -201,8 +204,9 @@ export function drawSubtitles(
   cues: ProjectCue[],
   tMs: number,
   style: SubtitleStyle,
+  options: { clear?: boolean } = {},
 ): void {
-  ctx.clearRect(0, 0, width, height);
+  if (options.clear ?? true) ctx.clearRect(0, 0, width, height);
   const scale = height / REFERENCE_HEIGHT;
   for (const cue of activeCues(cues, tMs)) {
     if (cue.text.trim() === "") continue;

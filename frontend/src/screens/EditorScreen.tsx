@@ -13,6 +13,7 @@ import { generateTiming, type TimingIssue } from "../api/subtitles";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { CueEditor, type BulkScope, type TimingEdit } from "../components/CueEditor";
 import { CueList } from "../components/CueList";
+import { ExportPanel } from "../components/ExportPanel";
 import { SaveStatus } from "../components/SaveStatus";
 import { Sheet } from "../components/Sheet";
 import { StyleStudio } from "../components/style/StyleStudio";
@@ -73,6 +74,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
   const [panel, setPanel] = useState<Panel>("subtitle");
   const [sheet, setSheet] = useState<Panel | null>(null);
   const [leaveAsk, setLeaveAsk] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const [nameDraft, setNameDraft] = useState(initial.name);
   const [relinkNote, setRelinkNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [relinkBusy, setRelinkBusy] = useState(false);
@@ -326,12 +328,18 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
           }}
         />
         <SaveStatus state={status} onRetry={() => void retry()} />
-        <button type="button" className="button" disabled aria-describedby="export-hint">
-          Export (coming soon)
+        <button
+          type="button"
+          className="button"
+          disabled={!mediaOk || project.cues.length === 0}
+          onClick={() => {
+            previewRef.current?.pause();
+            void flush();
+            setExportOpen(true);
+          }}
+        >
+          Export
         </button>
-        <span id="export-hint" className="visually-hidden">
-          Exporting SRT and video arrives in a later phase.
-        </span>
       </div>
 
       <div className="editor__main">
@@ -495,6 +503,17 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
             </Sheet>
           )}
         </>
+      )}
+
+      {exportOpen && (
+        <Sheet
+          title="Export"
+          onClose={() => {
+            setExportOpen(false);
+          }}
+        >
+          <ExportPanel project={project} />
+        </Sheet>
       )}
 
       {leaveAsk && (

@@ -3,6 +3,7 @@ import { messageOf } from "../api/http";
 import { loadMediaUrl } from "../api/media";
 import { getProject, type LoadedProject, type Project, type SubtitleStyle } from "../api/projects";
 import { SaveStatus } from "../components/SaveStatus";
+import { ExportPanel } from "../components/ExportPanel";
 import { Sheet } from "../components/Sheet";
 import { SubtitleCanvas } from "../components/SubtitleCanvas";
 import { StyleStudio } from "../components/style/StyleStudio";
@@ -33,6 +34,7 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
   timeRef.current = currentMs;
   const playingRef = useRef(false);
   const [studioOpen, setStudioOpen] = useState(false);
+  const [exportOpen, setExportOpen] = useState(false);
   const previewRef = useRef<VideoPreviewHandle>(null);
   const wide = useMediaQuery("(min-width: 1000px)");
 
@@ -194,13 +196,30 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
         <button type="button" className="button button--secondary" onClick={() => void leave(() => { onOpenInEditor(initial.id); })}>
           Edit timing in Editor mode
         </button>
-        <button type="button" className="button button--secondary" disabled aria-describedby="easy-export-hint">
+        <button
+          type="button"
+          className="button"
+          disabled={mediaMissing || project.cues.length === 0}
+          onClick={() => {
+            previewRef.current?.pause();
+            void flush();
+            setExportOpen(true);
+          }}
+        >
           Export video
         </button>
-        <p id="easy-export-hint" className="field__hint">
-          Saving the finished video comes in the next update. Your project is saved on this device.
-        </p>
       </div>
+
+      {exportOpen && (
+        <Sheet
+          title="Export"
+          onClose={() => {
+            setExportOpen(false);
+          }}
+        >
+          <ExportPanel project={project} />
+        </Sheet>
+      )}
 
       {studioOpen && !wide && (
         <Sheet

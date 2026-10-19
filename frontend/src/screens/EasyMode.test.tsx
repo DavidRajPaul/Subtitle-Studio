@@ -149,6 +149,18 @@ describe("Easy mode", () => {
     expect(screen.getByRole("button", { name: "Editor" })).toHaveAttribute("aria-pressed", "true");
   });
 
+  it("opens Export from the finished project", async () => {
+    render(<App />);
+    await chooseVideo();
+    fireEvent.click(screen.getByRole("radio", { name: /Type or paste the words/ }));
+    fireEvent.change(screen.getByLabelText("The words"), { target: { value: "One line" } });
+    fireEvent.click(screen.getByRole("button", { name: "Make subtitles" }));
+    await screen.findByRole("heading", { name: "Pick a look" }, LONG);
+    fireEvent.click(screen.getByRole("button", { name: "Export video" }));
+    expect(await screen.findByRole("dialog", { name: "Export" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Download SRT" })).toBeEnabled();
+  });
+
   it("explains a video without sound and offers the other ways", async () => {
     vi.mocked(inspectMp4).mockResolvedValue({
       duration_ms: 5000, width: 640, height: 360, frame_rate: 25, video_codec: "h264", has_audio: false, audio_codec: null, container: "mp4",

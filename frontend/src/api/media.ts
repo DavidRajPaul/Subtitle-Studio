@@ -88,3 +88,14 @@ export async function loadMediaUrl(id: string): Promise<string | null> {
     return null;
   }
 }
+
+/** The video itself (for export): the not-yet-saved file or the project's stored copy. */
+export async function loadMediaBlob(id: string): Promise<Blob | null> {
+  const file = pending.get(id);
+  if (file) return file;
+  try {
+    return (await getOne<MediaRecord>(MEDIA, id))?.blob ?? null;
+  } catch {
+    return null;
+  }
+}

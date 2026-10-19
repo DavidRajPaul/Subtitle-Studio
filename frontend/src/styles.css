@@ -520,3 +520,13 @@ select.text-input { padding-right: var(--space-6); }
 .look__name { font-size: 14px; font-weight: 600; }
 .panel > label.field__label { display: block; margin-bottom: var(--space-2); }
 .easy-typed { display: block; width: 100%; box-sizing: border-box; }
+
+/* Export */
+.export { display: grid; gap: 1rem; }
+.export__block { display: grid; gap: 0.6rem; border-top: 1px solid var(--color-border); padding-top: 0.8rem; }
+.export__block h3 { margin: 0; font-size: 1.05rem; }
+.export__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.export__actions .field__hint { flex-basis: 100%; }
+.export__warn { margin: 0; padding: 0.5rem 0.7rem; border-radius: 8px; border: 1px solid var(--color-warn); color: var(--color-warn); }
+.export__error { margin: 0; color: var(--color-error); }
+.export__preview { width: 100%; max-height: 50vh; background: #000; border-radius: 8px; }

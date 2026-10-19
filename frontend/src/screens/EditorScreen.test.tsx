@@ -196,8 +196,16 @@ describe("Editor", () => {
     expect(within(screen.getByRole("list", { name: "Subtitles" })).getAllByRole("listitem")).toHaveLength(2);
   });
 
-  it("explains why Export is not available yet", () => {
+  it("opens Export with the video and SRT choices", async () => {
     renderEditor();
-    expect(screen.getByRole("button", { name: /Export/ })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Export" }));
+    const dialog = await screen.findByRole("dialog", { name: "Export" });
+    expect(within(dialog).getByRole("heading", { name: "Video with subtitles (MP4)" })).toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Download SRT" })).toBeEnabled();
+  });
+
+  it("keeps Export off while the video is missing", () => {
+    renderEditor(project({ media_available: false }));
+    expect(screen.getByRole("button", { name: "Export" })).toBeDisabled();
   });
 });

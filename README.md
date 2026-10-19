@@ -17,7 +17,7 @@ The repository documentation describes the product and planned architecture; do 
 | 2 | TXT parsing and timing engine | Accepted (owner approved Phase 3) |
 | 3 | Subtitle editor, timeline, styles and preview | Accepted (owner approved Phase 4) |
 | 4 | Local speech transcription | In the browser (stage 2) — awaiting owner review on real devices |
-| 5 | SRT and burned-in MP4 export | Not started |
+| 5 | SRT and burned-in MP4 export | In the browser (export stage) — awaiting owner review on real devices |
 | 6 | Hardening and MVP acceptance | Not started |
 | 7 | Optional post-MVP improvements | Deferred |
 
@@ -44,7 +44,7 @@ Subtitle Studio runs entirely in the browser: open **https://davidrajpaul.github
 
 Publishing is automatic: every push to `main` runs `.github/workflows/pages.yml` (lint, type-check, tests, build, deploy). One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-Easy mode (the default) makes subtitles in three steps: choose a video → the words (voice, typed or pasted, or a TXT file) → pick a look; Editor mode keeps full control. Also in the web app: the text workflow (MP4 + TXT → timing → editor → saved projects) and speech recognition (MP4 audio or a separate MP3 → Whisper running on the device → editor). Export (SRT, burned-in MP4) moves into the browser next.
+Easy mode (the default) makes subtitles in three steps: choose a video → the words (voice, typed or pasted, or a TXT file) → pick a look; Editor mode keeps full control. Also in the web app: the text workflow (MP4 + TXT → timing → editor → saved projects) and speech recognition (MP4 audio or a separate MP3 → Whisper running on the device → editor). Export works in the browser too: an SRT file, or a new MP4 with the subtitles drawn into the picture (the original is never changed).
 
 ## Try it from a link (hosted test, Codespaces — legacy)
 
@@ -103,9 +103,9 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 - [x] Equal, readable-duration, fit-to-video and manual timing modes (Phases 2–3).
 - [x] Edit text, start/end/duration, font and placement (Phase 3).
 - [x] Preview and timeline reflect edits (Phase 3).
-- [ ] Export UTF-8 SRT.
-- [ ] Burn subtitles into a separate MP4.
-- [ ] Validate output; source remains untouched.
+- [x] Export UTF-8 SRT (export stage, awaiting owner review).
+- [x] Burn subtitles into a separate MP4 (export stage; H.264 where the device can encode it).
+- [x] Validate output; source remains untouched (the new file is re-opened and checked before it is offered).
 - [ ] Test progress, errors, cancellation and project save/reopen.
 - [ ] Review core flows on a phone and desktop viewport.
 
@@ -113,4 +113,4 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 
 Not yet selected. Review application, dependency, FFmpeg build, model and font licenses before distribution.
 
-Web app: 54 bundled fonts under the SIL Open Font License or Apache-2.0 (list in [docs/FONTS.md](docs/FONTS.md)), transformers.js (Apache-2.0), ONNX Runtime Web (MIT), mp4box.js (BSD-3-Clause); speech models are OpenAI Whisper (MIT) in the Xenova/whisper-* conversions, downloaded by the user on demand from Hugging Face and never bundled. Legacy backend, reviewed in Phase 4: faster-whisper (MIT), CTranslate2 (MIT), PyAV (BSD-3-Clause; its wheels bundle FFmpeg libraries, to be checked in Phase 6), onnxruntime (MIT, used for voice-activity detection), huggingface_hub and tokenizers (Apache-2.0), NumPy (BSD-3-Clause and others), tqdm (MPL-2.0 and MIT). Speech models: Systran's faster-whisper conversions of OpenAI Whisper (MIT); downloaded by the user on demand, never bundled in the repository.
+Web app: 54 bundled fonts under the SIL Open Font License or Apache-2.0 (list in [docs/FONTS.md](docs/FONTS.md)), transformers.js (Apache-2.0), ONNX Runtime Web (MIT), mp4box.js (BSD-3-Clause), mediabunny (MPL-2.0, used unmodified from npm; its source is at https://github.com/Vanilagy/mediabunny); speech models are OpenAI Whisper (MIT) in the Xenova/whisper-* conversions, downloaded by the user on demand from Hugging Face and never bundled. Legacy backend, reviewed in Phase 4: faster-whisper (MIT), CTranslate2 (MIT), PyAV (BSD-3-Clause; its wheels bundle FFmpeg libraries, to be checked in Phase 6), onnxruntime (MIT, used for voice-activity detection), huggingface_hub and tokenizers (Apache-2.0), NumPy (BSD-3-Clause and others), tqdm (MPL-2.0 and MIT). Speech models: Systran's faster-whisper conversions of OpenAI Whisper (MIT); downloaded by the user on demand, never bundled in the repository.
