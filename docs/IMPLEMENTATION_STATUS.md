@@ -4,7 +4,7 @@
 
 ## Current work
 
-**Browser-only web app — Stage 1: text workflow on GitHub Pages.** Built and verified; **awaiting owner review and one GitHub setting** (below).
+**Browser-only web app — Stage 1: text workflow on GitHub Pages.** Built, verified and **live at https://davidrajpaul.github.io/Subtitle-Studio/** (Pages enabled by the owner; the workflow's build and deploy jobs passed on GitHub). Awaiting owner review on real devices.
 Decision record: [ADR-001](ADR-001-browser-only-web-app.md). The owner chose this on 2026-10-19 so the main user (Android tablet, iPhone, sometimes a laptop) only has to open a link.
 
 Plan of stages (each stops for review):
@@ -51,7 +51,7 @@ Phase 4 (speech with the Python backend) was built and is kept in the repository
 
 **Not run / limitations of testing:**
 - **Not tested on a real iPhone, Android tablet or in Safari.** Chromium only. Safari behaviour (storage limits, Add to Home Screen, file pickers) needs your check.
-- The GitHub Actions workflow has not run yet (it needs the Pages setting below). Action versions used: checkout v4, pnpm/action-setup v4, setup-node v4, configure-pages v5, upload-pages-artifact v3, deploy-pages v4.
+- The GitHub Actions workflow ran on GitHub: lint, type-check, tests, build and deploy all passed (run 39197585318, attempt 2). Action versions used: checkout v4, pnpm/action-setup v4, setup-node v4, configure-pages v5, upload-pages-artifact v3, deploy-pages v4.
 - The test browser cannot decode H.264, so playback was tested with a VP9 MP4; phones play H.264 natively.
 
 ## Decisions made (reversible)
@@ -70,9 +70,7 @@ Phase 4 (speech with the Python backend) was built and is kept in the repository
 
 ## What I need from you
 
-1. On your phone: **github.com → Subtitle-Studio → Settings → Pages → Build and deployment → Source: GitHub Actions.**
-2. Then **Actions → "Publish web app to GitHub Pages" → Run workflow** (or tell me and I will re-run it).
-3. Open **https://davidrajpaul.github.io/Subtitle-Studio/** on the iPhone and the tablet, add it to the Home Screen, and try the checklist below.
+Open **https://davidrajpaul.github.io/Subtitle-Studio/** on the iPhone (Safari) and the Android tablet, add it to the Home Screen, and try the checklist below.
 
 ## Owner review checklist (phone-friendly)
 
