@@ -6,7 +6,10 @@ import {
   validateVideoFile,
   type ImportedMedia,
 } from "../api/media";
-import { TextTimingSetup } from "../components/TextTimingSetup";
+import { newId } from "../api/http";
+import { saveProject, type LoadedProject } from "../api/projects";
+import { DEFAULT_STYLE } from "../lib/style";
+import { TextTimingSetup, type TextTimingResult } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
 import { WORKFLOW_LABELS, type Workflow } from "../types";
@@ -15,6 +18,7 @@ interface Props {
   workflow: Workflow;
   onChangeWorkflow: (workflow: Workflow) => void;
   onBack: () => void;
+  onOpenProject: (project: LoadedProject) => void;
 }
 
 type VideoState =
@@ -29,7 +33,7 @@ function formatSize(bytes: number): string {
   return `${String(Math.max(1, Math.round(bytes / 1024)))} KB`;
 }
 
-export function ImportScreen({ workflow, onChangeWorkflow, onBack }: Props) {
+export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject }: Props) {
   const [video, setVideo] = useState<VideoState>({ kind: "empty" });
   const inputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -85,6 +89,36 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack }: Props) {
 
   const remove = () => {
     setVideo({ kind: "empty" });
+  };
+
+  /** Saves the first version of the project before the editor opens, so nothing is lost. */
+  const createProject = async (media: ImportedMedia, result: TextTimingResult): Promise<void> => {
+    const m = media.metadata;
+    const project: LoadedProject = {
+      version: 1,
+      id: newId(),
+      name: media.filename.replace(/\.mp4$/i, "") || "Untitled project",
+      workflow,
+      media: {
+        id: media.id,
+        filename: media.filename,
+        duration_ms: m.duration_ms,
+        width: m.width,
+        height: m.height,
+        has_audio: m.has_audio,
+      },
+      cues: result.cues.map((c) => ({
+        id: c.id,
+        text: c.text,
+        start_ms: c.start_ms,
+        end_ms: c.end_ms,
+      })),
+      style: DEFAULT_STYLE,
+      timing: { mode: result.mode, segmentation: result.segmentation, settings: result.settings },
+      media_available: true,
+    };
+    await saveProject(project);
+    onOpenProject(project);
   };
 
   const errorId = `${fieldId}-error`;
@@ -228,11 +262,16 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack }: Props) {
           src={video.url}
           durationMs={meta.duration_ms}
           label={`Preview of ${video.media.filename}`}
+          width={meta.width}
+          height={meta.height}
         />
       )}
 
       {video.kind === "ready" && meta && workflow === "text" && (
-        <TextTimingSetup durationMs={meta.duration_ms} />
+        <TextTimingSetup
+          durationMs={meta.duration_ms}
+          onOpenEditor={(result) => createProject(video.media, result)}
+        />
       )}
 
       {video.kind === "ready" && workflow === "speech" && (

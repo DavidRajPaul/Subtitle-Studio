@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { HealthPanel } from "./components/HealthPanel";
+import type { LoadedProject } from "./api/projects";
+import { EditorScreen } from "./screens/EditorScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { ImportScreen } from "./screens/ImportScreen";
 import type { Workflow } from "./types";
 
-type View = { name: "home" } | { name: "import"; workflow: Workflow } | { name: "diagnostics" };
+type View =
+  | { name: "home" }
+  | { name: "import"; workflow: Workflow }
+  | { name: "editor"; projectId: string; initial: LoadedProject | null }
+  | { name: "diagnostics" };
 
 export function App() {
   const [view, setView] = useState<View>({ name: "home" });
@@ -36,6 +42,9 @@ export function App() {
             onStart={(workflow) => {
               setView({ name: "import", workflow });
             }}
+            onOpen={(projectId) => {
+              setView({ name: "editor", projectId, initial: null });
+            }}
           />
         )}
         {view.name === "import" && (
@@ -45,7 +54,13 @@ export function App() {
               setView({ name: "import", workflow });
             }}
             onBack={goHome}
+            onOpenProject={(initial) => {
+              setView({ name: "editor", projectId: initial.id, initial });
+            }}
           />
+        )}
+        {view.name === "editor" && (
+          <EditorScreen projectId={view.projectId} initial={view.initial} onExit={goHome} />
         )}
         {view.name === "diagnostics" && (
           <>

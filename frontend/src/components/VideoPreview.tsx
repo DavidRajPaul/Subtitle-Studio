@@ -1,32 +1,115 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type CSSProperties,
+  type FormEvent,
+  type ReactNode,
+} from "react";
+import type { StageSize } from "../lib/style";
 import { formatTimecode, parseTimecode } from "../lib/timecode";
+
+export interface VideoPreviewHandle {
+  seekTo: (ms: number) => void;
+}
 
 interface Props {
   src: string;
   durationMs: number;
   label: string;
+  /** Pixel size of the video, used to size the stage so overlays line up with the picture. */
+  width?: number;
+  height?: number;
+  onTimeChange?: (ms: number) => void;
+  onPlayingChange?: (playing: boolean) => void;
+  /** Draws on top of the picture (subtitles). Receives the stage size in CSS pixels. */
+  renderOverlay?: (size: StageSize) => ReactNode;
 }
 
-export function VideoPreview({ src, durationMs, label }: Props) {
+export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(function VideoPreview(
+  { src, durationMs, label, width, height, onTimeChange, onPlayingChange, renderOverlay },
+  ref,
+) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
   const [currentMs, setCurrentMs] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [seekText, setSeekText] = useState("");
   const [seekError, setSeekError] = useState<string | null>(null);
+  const [size, setSize] = useState<StageSize>({ w: 640, h: 360 });
+
+  const timeCallback = useRef(onTimeChange);
+  timeCallback.current = onTimeChange;
+  const playingCallback = useRef(onPlayingChange);
+  playingCallback.current = onPlayingChange;
+
+  const reportTime = useCallback((ms: number) => {
+    setCurrentMs(ms);
+    timeCallback.current?.(ms);
+  }, []);
+
+  const setPlayingState = useCallback((value: boolean) => {
+    setPlaying(value);
+    playingCallback.current?.(value);
+  }, []);
 
   useEffect(() => {
-    setCurrentMs(0);
-    setPlaying(false);
+    reportTime(0);
+    setPlayingState(false);
     setPlaybackError(null);
-  }, [src]);
+  }, [src, reportTime, setPlayingState]);
 
-  const seekTo = (ms: number) => {
-    const clamped = Math.min(Math.max(0, ms), durationMs);
-    const video = videoRef.current;
-    if (video) video.currentTime = clamped / 1000;
-    setCurrentMs(clamped);
-  };
+  // Keep the overlay scaled to the picture as the window or sheet changes size.
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      if (r.height > 0 && r.width > 0) setSize({ w: r.width, h: r.height });
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  // While playing, follow the video frame by frame (timeupdate alone is too coarse for subtitles).
+  useEffect(() => {
+    if (!playing) return;
+    let raf = 0;
+    let last = 0;
+    const tick = (now: number) => {
+      const video = videoRef.current;
+      if (video && now - last >= 33) {
+        last = now;
+        reportTime(Math.round(video.currentTime * 1000));
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(raf);
+    };
+  }, [playing, reportTime]);
+
+  const seekTo = useCallback(
+    (ms: number) => {
+      const clamped = Math.min(Math.max(0, Math.round(ms)), durationMs);
+      const video = videoRef.current;
+      if (video) video.currentTime = clamped / 1000;
+      reportTime(clamped);
+    },
+    [durationMs, reportTime],
+  );
+
+  useImperativeHandle(ref, () => ({ seekTo }), [seekTo]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -59,35 +142,45 @@ export function VideoPreview({ src, durationMs, label }: Props) {
     seekTo(parsed.ms);
   };
 
+  const ratio = width && height ? width / height : 16 / 9;
+  const stageStyle = { "--ar": String(ratio) } as CSSProperties;
+
   return (
     <section className="panel preview" aria-label="Video preview">
       <div className="preview__frame">
-        <video
-          ref={videoRef}
-          src={src}
-          className="preview__video"
-          preload="metadata"
-          playsInline
-          aria-label={label}
-          onTimeUpdate={(e) => {
-            setCurrentMs(Math.round(e.currentTarget.currentTime * 1000));
-          }}
-          onPlay={() => {
-            setPlaying(true);
-          }}
-          onPause={() => {
-            setPlaying(false);
-          }}
-          onEnded={() => {
-            setPlaying(false);
-          }}
-          onError={() => {
-            setPlaybackError(
-              "This browser cannot play this video's format. The file was inspected successfully, " +
-                "so it can still be used for export; try Chrome or Edge to preview it.",
-            );
-          }}
-        />
+        <div ref={stageRef} className="preview__stage" style={stageStyle}>
+          <video
+            ref={videoRef}
+            src={src}
+            className="preview__video"
+            preload="metadata"
+            playsInline
+            aria-label={label}
+            onTimeUpdate={(e) => {
+              if (!playing) reportTime(Math.round(e.currentTarget.currentTime * 1000));
+            }}
+            onSeeked={(e) => {
+              reportTime(Math.round(e.currentTarget.currentTime * 1000));
+            }}
+            onPlay={() => {
+              setPlayingState(true);
+            }}
+            onPause={() => {
+              setPlayingState(false);
+            }}
+            onEnded={() => {
+              setPlayingState(false);
+            }}
+            onError={() => {
+              setPlaybackError(
+                "This browser cannot play this video's format. The file was inspected " +
+                  "successfully, so it can still be used for export; try Chrome or Edge to " +
+                  "preview it.",
+              );
+            }}
+          />
+          {renderOverlay?.(size)}
+        </div>
       </div>
       {playbackError && (
         <p role="alert" className="inline-error">
@@ -157,4 +250,4 @@ export function VideoPreview({ src, durationMs, label }: Props) {
       </form>
     </section>
   );
-}
+});

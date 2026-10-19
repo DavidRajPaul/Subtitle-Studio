@@ -4,6 +4,13 @@ import { App } from "./App";
 import type { HealthResponse } from "./api/health";
 import type { ImportedMedia } from "./api/media";
 
+// Home lists saved projects; these tests are about import and diagnostics, so keep it empty and
+// out of the fetch call log.
+vi.mock("./api/projects", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./api/projects")>()),
+  listProjects: vi.fn().mockResolvedValue([]),
+}));
+
 const okHealth: HealthResponse = {
   status: "ok",
   version: "0.1.0",

@@ -1,3 +1,7 @@
+import { ApiError, send } from "./http";
+
+export { ApiError };
+
 export type Segmentation = "line" | "paragraph" | "sentence";
 export type TimingMode = "equal" | "readable" | "fit" | "manual";
 
@@ -49,47 +53,6 @@ export interface GenerateRequest {
   mode: TimingMode;
   duration_ms: number;
   settings: TimingSettings;
-}
-
-export class ApiError extends Error {
-  constructor(
-    public readonly code: string,
-    message: string,
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
-
-interface ErrorBody {
-  detail?: { code?: string; message?: string } | unknown[];
-}
-
-async function send<T>(url: string, init: RequestInit): Promise<T> {
-  let response: Response;
-  try {
-    response = await fetch(url, init);
-  } catch (error) {
-    if (init.signal?.aborted) throw error;
-    throw new ApiError(
-      "backend_unreachable",
-      "The local backend is not running. Start it, then try again.",
-    );
-  }
-  if (!response.ok) {
-    let body: ErrorBody = {};
-    try {
-      body = (await response.json()) as ErrorBody;
-    } catch {
-      // use the generic message below
-    }
-    const detail = body.detail;
-    if (detail && !Array.isArray(detail) && detail.message) {
-      throw new ApiError(detail.code ?? "request_failed", detail.message);
-    }
-    throw new ApiError("request_failed", "That request was not accepted. Check your settings.");
-  }
-  return (await response.json()) as T;
 }
 
 /** Sends the TXT file to the local backend (127.0.0.1). Nothing leaves the device. */

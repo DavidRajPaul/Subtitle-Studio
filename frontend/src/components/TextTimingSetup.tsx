@@ -8,6 +8,7 @@ import {
   type Segmentation,
   type TimingMode,
   type TimingResult,
+  type TimingSettings,
 } from "../api/subtitles";
 import { formatTimecode } from "../lib/timecode";
 import { DEFAULT_DRAFT, parseSettings, type SettingsDraft } from "../lib/timingSettings";
@@ -58,11 +59,20 @@ function describeResult(result: TimingResult): string {
   return `${count} ${range}; ${tail}.`;
 }
 
-interface Props {
-  durationMs: number;
+export interface TextTimingResult {
+  cues: TimingResult["cues"];
+  mode: TimingMode;
+  segmentation: Segmentation;
+  settings: TimingSettings;
 }
 
-export function TextTimingSetup({ durationMs }: Props) {
+interface Props {
+  durationMs: number;
+  /** Creates the project and opens the editor. Rejects with an ApiError if saving fails. */
+  onOpenEditor: (result: TextTimingResult) => Promise<void>;
+}
+
+export function TextTimingSetup({ durationMs, onOpenEditor }: Props) {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -72,6 +82,8 @@ export function TextTimingSetup({ durationMs }: Props) {
   const [draft, setDraft] = useState<SettingsDraft>(DEFAULT_DRAFT);
   const [timing, setTiming] = useState<TimingState>({ kind: "idle" });
   const [showAll, setShowAll] = useState(false);
+  const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!file) {
@@ -172,6 +184,20 @@ export function TextTimingSetup({ durationMs }: Props) {
   );
 
   const result = timing.kind === "ready" ? timing.result : null;
+  const openEditor = () => {
+    if (!result || !settingsResult.ok) return;
+    setOpening(true);
+    setOpenError(null);
+    onOpenEditor({
+      cues: result.cues,
+      mode,
+      segmentation,
+      settings: settingsResult.settings,
+    }).catch((error: unknown) => {
+      setOpenError(messageOf(error));
+      setOpening(false);
+    });
+  };
   const globalIssues = result?.issues.filter((i) => i.cue_number === null) ?? [];
   const cueWarnings = result ? result.issues.length - globalIssues.length : 0;
   const shownCues = result ? (showAll ? result.cues : result.cues.slice(0, PAGE)) : [];
@@ -295,8 +321,8 @@ export function TextTimingSetup({ durationMs }: Props) {
             ))}
             {mode === "manual" && (
               <p className="muted">
-                Manual starts from readable timing so you have something to adjust. Editing each
-                subtitle's start and duration arrives with the editor in the next phase.
+                Manual starts from readable timing so you have something to adjust. You then set
+                each subtitle's start and duration in the editor.
               </p>
             )}
           </fieldset>
@@ -392,8 +418,22 @@ export function TextTimingSetup({ durationMs }: Props) {
                     Show all {result.cues.length} subtitles
                   </button>
                 )}
+                {openError && (
+                  <p role="alert" className="inline-error">
+                    {openError}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  className="button"
+                  disabled={opening}
+                  onClick={openEditor}
+                >
+                  {opening ? "Creating the project…" : "Open in editor"}
+                </button>
                 <p className="muted">
-                  Editing text and timing, styling and export arrive in the next phases.
+                  The editor lets you change text, timing and style. Export arrives in a later
+                  phase.
                 </p>
               </>
             )}

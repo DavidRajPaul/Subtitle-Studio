@@ -192,6 +192,13 @@ class MediaStore:
             raise
         return ImportedMedia(id=media_id, filename=safe_name, size_bytes=size, metadata=metadata)
 
+    def existing_path(self, media_id: str) -> Path | None:
+        try:
+            path = self._path(media_id)
+        except ValueError:
+            return None
+        return path if path.exists() else None
+
     def remove(self, media_id: str) -> bool:
         try:
             path = self._path(media_id)
