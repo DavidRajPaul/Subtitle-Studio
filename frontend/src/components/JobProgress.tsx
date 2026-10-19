@@ -1,5 +1,3 @@
-// Not used by the web app yet: kept for the next stage, which connects it to speech
-// recognition running in the browser (it was built for the Python backend in Phase 4).
 import type { Job } from "../api/speech";
 
 interface Props {

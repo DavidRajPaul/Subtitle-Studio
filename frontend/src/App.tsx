@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DevicePanel } from "./components/DevicePanel";
+import { SpeechModelsPanel } from "./components/SpeechModelsPanel";
 import type { LoadedProject } from "./api/projects";
 import { EditorScreen } from "./screens/EditorScreen";
 import { HomeScreen } from "./screens/HomeScreen";
@@ -67,6 +68,7 @@ export function App() {
           <>
             <h1>Settings</h1>
             <DevicePanel />
+            <SpeechModelsPanel />
             <button type="button" className="button button--secondary spaced" onClick={goHome}>
               ← Back to home
             </button>

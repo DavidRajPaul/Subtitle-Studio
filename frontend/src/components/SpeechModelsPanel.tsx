@@ -1,5 +1,3 @@
-// Not used by the web app yet: kept for the next stage, which connects it to speech
-// recognition running in the browser (it was built for the Python backend in Phase 4).
 import { useCallback, useEffect, useState } from "react";
 import { messageOf } from "../api/http";
 import { deleteModel, getSpeechInfo, type SpeechInfo, type SpeechModel } from "../api/speech";
@@ -67,16 +65,16 @@ export function SpeechModelsPanel() {
     <section className="panel" aria-labelledby="speech-models-heading">
       <h2 id="speech-models-heading">Speech models</h2>
       {engine.available ? (
-        <p className="status--ok">faster-whisper {engine.version ?? ""} is installed.</p>
+        <p className="status--ok">Speech recognition can run in this browser.</p>
       ) : (
         <p className="warning">
           <span aria-hidden="true">⚠ </span>
-          <strong>Speech recognition is not installed.</strong> {engine.detail}
+          <strong>Speech recognition is not available in this browser.</strong> {engine.detail}
         </p>
       )}
       <p className="muted">
-        Models are stored in <code>{cacheDir}</code>. They are downloaded once from Hugging Face
-        (MIT licence) and then used without the internet.
+        Models are Whisper by OpenAI (MIT licence), downloaded once from Hugging Face and kept in{" "}
+        {cacheDir}. After that, recognition works without the internet.
       </p>
       <ul className="tool-list">
         {models.map((m) => (

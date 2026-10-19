@@ -1,135 +1,43 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Job, SpeechInfo, TranscriptionResult } from "../api/speech";
+import { importMedia } from "../api/media";
+import { setSpeechEngineForTests } from "../api/speech";
+import { FakeSpeechEngine } from "../test/fakeSpeechEngine";
 import { SpeechSetup } from "./SpeechSetup";
 
-const json = (body: unknown, status = 200) =>
-  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
-
-const RESULT: TranscriptionResult = {
-  language: "ta",
-  language_name: "Tamil",
-  language_probability: 0.91,
-  audio_duration_ms: 4000,
-  used_mp3: false,
-  model: "base",
-  cues: [
-    { id: "c1", text: "வணக்கம்", start_ms: 0, end_ms: 1200 },
-    { id: "c2", text: "Hello world.", start_ms: 1300, end_ms: 2500 },
-  ],
-};
-
-interface Backend {
-  installed: boolean;
-  requests: { url: string; method: string; body: unknown }[];
-  /** Successive states returned for the transcription job. */
-  transcribeStates: Partial<Job<TranscriptionResult>>[];
-  downloadStates: Partial<Job<unknown>>[];
-}
-
-let backend: Backend;
-
-function info(): SpeechInfo {
-  return {
-    engine: { available: true, version: "1.2.1", detail: null },
-    cache_dir: "/data/models",
-    default_model: "base",
-    models: [
-      {
-        name: "base",
-        label: "Base",
-        approx_size_mb: 145,
-        description: "Fast with fair accuracy.",
-        installed: backend.installed,
-        size_on_disk_bytes: backend.installed ? 150_000_000 : 0,
-        download_job_id: null,
-      },
-      {
-        name: "small",
-        label: "Small",
-        approx_size_mb: 485,
-        description: "More accurate.",
-        installed: false,
-        size_on_disk_bytes: 0,
-        download_job_id: null,
-      },
-    ],
-    languages: [
-      { code: "en", name: "English" },
-      { code: "ta", name: "Tamil" },
-    ],
-  };
-}
-
-function job(id: string, kind: string, partial: Partial<Job<unknown>>): Job<unknown> {
-  return {
-    id,
-    kind,
-    status: "running",
-    progress: null,
-    message: "Working…",
-    result: null,
-    error: null,
-    ...partial,
-  };
-}
-
-beforeEach(() => {
-  backend = {
-    installed: true,
-    requests: [],
-    transcribeStates: [
-      { status: "running", progress: 0.4, message: "Recognising speech…" },
-      { status: "succeeded", progress: 1, message: "Done.", result: RESULT },
-    ],
-    downloadStates: [{ status: "succeeded", progress: 1, result: { name: "base" } }],
-  };
-  vi.stubGlobal(
-    "fetch",
-    vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
-      const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
-      const method = init?.method ?? "GET";
-      const body = typeof init?.body === "string" ? (JSON.parse(init.body) as unknown) : null;
-      backend.requests.push({ url, method, body });
-      if (url === "/api/speech/models") return Promise.resolve(json(info()));
-      if (url === "/api/speech/models/base/download") {
-        return Promise.resolve(json({ job_id: "dl" }, 202));
-      }
-      if (url === "/api/speech/transcribe") return Promise.resolve(json({ job_id: "tr" }, 202));
-      if (url === "/api/jobs/dl") {
-        const next = backend.downloadStates.shift() ?? { status: "succeeded" };
-        if (next.status === "succeeded") backend.installed = true;
-        return Promise.resolve(json(job("dl", "model_download", next)));
-      }
-      if (url === "/api/jobs/tr") {
-        const next =
-          backend.transcribeStates.length > 1
-            ? backend.transcribeStates.shift()
-            : backend.transcribeStates[0];
-        return Promise.resolve(json(job("tr", "transcription", next ?? {})));
-      }
-      if (url === "/api/jobs/tr/cancel") {
-        backend.transcribeStates = [{ status: "cancelled", message: "Cancelled." }];
-        return Promise.resolve(json(job("tr", "transcription", { message: "Cancelling…" })));
-      }
-      if (url === "/api/audio" && method === "POST") {
-        return Promise.resolve(
-          json({
-            id: "a1",
-            filename: "voice.mp3",
-            size_bytes: 10,
-            metadata: { duration_ms: 3000, codec: "mp3" },
-          }),
-        );
-      }
-      if (url.startsWith("/api/audio/")) return Promise.resolve(new Response(null, { status: 204 }));
-      return Promise.reject(new TypeError(`unexpected ${method} ${url}`));
+vi.mock("../engine/inspect", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../engine/inspect")>()),
+  inspectMp4: vi.fn(() =>
+    Promise.resolve({
+      duration_ms: 4000,
+      width: 64,
+      height: 48,
+      frame_rate: 25,
+      video_codec: "h264",
+      has_audio: true,
+      audio_codec: "aac",
+      container: "mp4",
     }),
-  );
+  ),
+}));
+
+vi.mock("../engine/audioDecode", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../engine/audioDecode")>()),
+  readAudioDuration: vi.fn(() => Promise.resolve(3000)),
+}));
+
+let fake: FakeSpeechEngine;
+let mediaId: string;
+
+beforeEach(async () => {
+  fake = new FakeSpeechEngine();
+  setSpeechEngineForTests(fake);
+  const media = await importMedia(new File([new Uint8Array([1, 2, 3])], "clip.mp4", { type: "video/mp4" }));
+  mediaId = media.id;
 });
 
 afterEach(() => {
-  vi.unstubAllGlobals();
+  setSpeechEngineForTests(null);
 });
 
 const setup = (props: Partial<Parameters<typeof SpeechSetup>[0]> = {}) => {
@@ -137,7 +45,7 @@ const setup = (props: Partial<Parameters<typeof SpeechSetup>[0]> = {}) => {
   const onSwitchToText = vi.fn();
   render(
     <SpeechSetup
-      mediaId="m1"
+      mediaId={mediaId}
       videoHasAudio
       videoDurationMs={4000}
       onSwitchToText={onSwitchToText}
@@ -148,94 +56,81 @@ const setup = (props: Partial<Parameters<typeof SpeechSetup>[0]> = {}) => {
   return { onOpenEditor, onSwitchToText };
 };
 
-const requestsTo = (url: string) => backend.requests.filter((r) => r.url === url);
+const LONG = { timeout: 3000 };
 
 describe("Speech workflow", () => {
+  it("says recognition happens on this device", async () => {
+    setup();
+    expect(await screen.findByText(/recognised on this device/)).toBeInTheDocument();
+    expect(screen.getByText(/audio is not sent anywhere/)).toBeInTheDocument();
+  });
+
   it("transcribes with the chosen language, shows progress, then opens the result", async () => {
+    let release: () => void = () => undefined;
+    fake.gate = new Promise<void>((r) => {
+      release = r;
+    });
     const { onOpenEditor } = setup();
-    const lang = await screen.findByLabelText("Spoken language");
-    fireEvent.change(lang, { target: { value: "ta" } });
+    fireEvent.change(await screen.findByLabelText("Spoken language"), { target: { value: "ta" } });
     expect(screen.getByText(/Small/, { selector: "strong" })).toBeInTheDocument(); // accuracy hint
     fireEvent.click(screen.getByRole("button", { name: "Transcribe" }));
     expect(await screen.findByRole("progressbar", { name: "Transcription progress" })).toBeInTheDocument();
-    expect(await screen.findByText(/Recognising speech… \(40%\)/)).toBeInTheDocument();
-    expect(
-      await screen.findByText(/recognised in Tamil/, {}, { timeout: 3000 }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/about 1 minute left \(40%\)/, {}, LONG)).toBeInTheDocument();
+    release();
+    expect(await screen.findByText(/recognised in Tamil/, {}, LONG)).toBeInTheDocument();
     expect(screen.getByText("வணக்கம்")).toBeInTheDocument();
-    expect(requestsTo("/api/speech/transcribe")[0].body).toMatchObject({
-      media_id: "m1",
-      audio_id: null,
-      language: "ta",
-      model: "base",
-    });
+    expect(fake.calls[0]).toMatchObject({ model: "base", language: "ta" });
     fireEvent.click(screen.getByRole("button", { name: "Open in editor" }));
     await waitFor(() => {
-      expect(onOpenEditor).toHaveBeenCalledWith(RESULT);
+      expect(onOpenEditor).toHaveBeenCalled();
     });
+    const calls = onOpenEditor.mock.calls as unknown as [{ cues: { text: string }[] }][];
+    expect(calls[0][0].cues.map((c) => c.text)).toEqual(["வணக்கம்", "Hello world."]);
   });
 
   it("asks for the model download first, then allows transcription", async () => {
-    backend.installed = false;
+    fake.installed.clear();
     setup();
     expect(await screen.findByText(/The Base model is not installed yet/)).toBeInTheDocument();
     expect(screen.getByText(/needs the internet/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Transcribe" })).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: /Download Base/ }));
-    await waitFor(
-      () => {
-        expect(screen.getByRole("button", { name: "Transcribe" })).toBeEnabled();
-      },
-      { timeout: 3000 },
-    );
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Transcribe" })).toBeEnabled();
+    }, LONG);
     expect(screen.queryByText(/not installed yet/)).not.toBeInTheDocument();
   });
 
   it("explains a failed download and offers to try again", async () => {
-    backend.installed = false;
-    backend.downloadStates = [
-      {
-        status: "failed",
-        error: { code: "download_failed", message: "Check the internet connection." },
-      },
-    ];
+    fake.installed.clear();
+    fake.failDownload = true;
     setup();
     fireEvent.click(await screen.findByRole("button", { name: /Download Base/ }));
-    expect(
-      await screen.findByText("Check the internet connection.", {}, { timeout: 3000 }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText("Check the internet connection.", {}, LONG)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try the download again" })).toBeInTheDocument();
   });
 
   it("can be cancelled and says nothing was changed", async () => {
-    backend.transcribeStates = [{ status: "running", progress: 0.1, message: "Recognising speech…" }];
+    fake.gate = new Promise<void>(() => undefined);
     const { onOpenEditor } = setup();
     fireEvent.click(await screen.findByRole("button", { name: "Transcribe" }));
-    fireEvent.click(await screen.findByRole("button", { name: "Cancel" }));
-    expect(
-      await screen.findByText(/Transcription cancelled. Nothing was changed./, {}, { timeout: 3000 }),
-    ).toBeInTheDocument();
-    expect(requestsTo("/api/jobs/tr/cancel")).toHaveLength(1);
+    fireEvent.click(await screen.findByRole("button", { name: "Cancel" }, LONG));
+    expect(await screen.findByText(/Transcription cancelled. Nothing was changed./, {}, LONG)).toBeInTheDocument();
     expect(onOpenEditor).not.toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Transcribe" })).toBeEnabled();
   });
 
   it("shows why a transcription failed and keeps the choices", async () => {
-    backend.transcribeStates = [
-      { status: "failed", error: { code: "no_speech", message: "No speech was recognised." } },
-    ];
+    fake.segments = [];
     setup();
-    const lang = await screen.findByLabelText("Spoken language");
-    fireEvent.change(lang, { target: { value: "en" } });
+    fireEvent.change(await screen.findByLabelText("Spoken language"), { target: { value: "en" } });
     fireEvent.click(screen.getByRole("button", { name: "Transcribe" }));
-    expect(
-      await screen.findByText("No speech was recognised.", {}, { timeout: 3000 }),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/No speech was recognised/, {}, LONG)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Transcribe again" })).toBeEnabled();
     expect(screen.getByLabelText("Spoken language")).toHaveValue("en");
   });
 
-  it("needs an MP3 for a silent video and sends it with the request", async () => {
+  it("needs an MP3 for a silent video and uses it", async () => {
     const { onSwitchToText } = setup({ videoHasAudio: false });
     expect(await screen.findByText("This video has no audio.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Transcribe" })).toBeDisabled();
@@ -244,23 +139,29 @@ describe("Speech workflow", () => {
     const input = document.querySelector<HTMLInputElement>('input[type="file"]');
     if (!input) throw new Error("file input missing");
     fireEvent.change(input, {
-      target: { files: [new File([new Uint8Array([1])], "voice.mp3", { type: "audio/mpeg" })] },
+      target: { files: [new File([new Uint8Array(10)], "voice.mp3", { type: "audio/mpeg" })] },
     });
     expect(await screen.findByText(/will be used instead of the video/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Transcribe" }));
     await waitFor(() => {
-      expect(requestsTo("/api/speech/transcribe")).toHaveLength(1);
+      expect(fake.calls).toHaveLength(1);
     });
-    expect(requestsTo("/api/speech/transcribe")[0].body).toMatchObject({ audio_id: "a1" });
+    expect(fake.calls[0].size).toBe(10);
   });
 
-  it("rejects a non-MP3 before contacting the backend", async () => {
+  it("rejects a non-MP3 before reading it", async () => {
     setup({ videoHasAudio: false });
     await screen.findByText("This video has no audio.");
     const input = document.querySelector<HTMLInputElement>('input[type="file"]');
     if (!input) throw new Error("file input missing");
     fireEvent.change(input, { target: { files: [new File(["x"], "voice.wav")] } });
     expect(screen.getByRole("alert")).toHaveTextContent("ending in .mp3");
-    expect(requestsTo("/api/audio")).toHaveLength(0);
+  });
+
+  it("explains when this browser cannot run recognition", async () => {
+    fake.ok = false;
+    setup();
+    expect(await screen.findByRole("heading", { name: "Speech recognition is not available in this browser" })).toBeInTheDocument();
+    expect(screen.getByText("Not in this browser.")).toBeInTheDocument();
   });
 });

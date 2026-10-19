@@ -9,6 +9,27 @@ vi.mock("./api/projects", async (importOriginal) => ({
   listProjects: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock("./api/speech", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("./api/speech")>()),
+  getSpeechInfo: vi.fn().mockResolvedValue({
+    engine: { available: true, version: null, detail: null },
+    cache_dir: "this browser",
+    default_model: "base",
+    models: [
+      {
+        name: "base",
+        label: "Base",
+        approx_size_mb: 77,
+        description: "Fast.",
+        installed: true,
+        size_on_disk_bytes: 1,
+        download_job_id: null,
+      },
+    ],
+    languages: [],
+  }),
+}));
+
 // The MP4 reader is tested against real files in engine/inspect.test.ts.
 vi.mock("./engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./engine/inspect")>()),
@@ -109,12 +130,12 @@ describe("Import", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("could not be read as a video");
   });
 
-  it("says speech recognition is coming and offers the text workflow", async () => {
+  it("offers the text workflow when a speech video has no audio", async () => {
     vi.mocked(inspectMp4).mockResolvedValue(meta(false));
     render(<App />);
     fireEvent.click(screen.getAllByRole("button", { name: "Start" })[0]);
     pickFile(mp4());
-    expect(await screen.findByRole("heading", { name: /coming next/ })).toBeInTheDocument();
+    expect(await screen.findByText("This video has no audio.")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Use a text file instead" }));
     expect(screen.getByText("Create subtitles from text", { selector: "strong" })).toBeInTheDocument();
     // The chosen video survives the workflow switch.

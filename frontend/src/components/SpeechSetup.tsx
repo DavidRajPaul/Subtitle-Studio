@@ -1,5 +1,3 @@
-// Not used by the web app yet: kept for the next stage, which connects it to speech
-// recognition running in the browser (it was built for the Python backend in Phase 4).
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { messageOf } from "../api/http";
 import {
@@ -38,6 +36,12 @@ type Mp3State =
   | { kind: "checking"; file: File }
   | { kind: "error"; file: File; message: string }
   | { kind: "ready"; audio: ImportedAudio };
+
+/** iPhone and iPad (iPadOS reports itself as a Mac with touch). */
+function isAppleMobile(): boolean {
+  const ua = navigator.userAgent;
+  return /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+}
 
 const LANG_STORAGE = "subtitle-studio.speech.language";
 const MODEL_STORAGE = "subtitle-studio.speech.model";
@@ -153,7 +157,7 @@ export function SpeechSetup({
   if (!engine.available) {
     return (
       <section className="panel panel--error">
-        <h2>Speech recognition is not installed</h2>
+        <h2>Speech recognition is not available in this browser</h2>
         <p>{engine.detail}</p>
         <div className="button-row">
           <button type="button" className="button" onClick={reload}>
@@ -313,7 +317,7 @@ export function SpeechSetup({
         <p className="muted">
           {hosted
             ? "Speech is recognised on the test computer, not on your device."
-            : "Speech is recognised on this computer. Nothing is sent anywhere; the internet is only needed once to download a model."}
+            : "Speech is recognised on this device, inside the browser. Your audio is not sent anywhere; the internet is only needed once to download a model."}
         </p>
         <div className="field">
           <label className="field__label" htmlFor={`${id}-lang`}>
@@ -369,6 +373,13 @@ export function SpeechSetup({
             {model.label}.
           </p>
         )}
+        {isAppleMobile() && model.name === "small" && (
+          <p className="warning">
+            <span aria-hidden="true">ⓘ </span>
+            Small needs a lot of memory and may stop on an iPhone. If it does, use{" "}
+            <strong>Base</strong> on the phone, or Small on a tablet or laptop.
+          </p>
+        )}
         {!model.installed && (
           <div className="panel panel--info model-missing">
             <p>
@@ -422,8 +433,8 @@ export function SpeechSetup({
               {failure || result ? "Transcribe again" : "Transcribe"}
             </button>
             <p className="field__hint">
-              Takes roughly as long as the audio, or longer with bigger models. You can cancel at
-              any time.
+              Runs on this device, so it can take a few times the length of the audio, especially on
+              a phone or with bigger models. Keep this screen open; you can cancel at any time.
             </p>
           </>
         )}

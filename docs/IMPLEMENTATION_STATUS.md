@@ -1,84 +1,85 @@
 # Implementation Status
 
-**Last updated:** 2026-10-19 · **Branch:** `main`
+**Last updated:** 2026-10-19 · **Branch:** `main` · **Live:** https://davidrajpaul.github.io/Subtitle-Studio/
 
 ## Current work
 
-**Browser-only web app — Stage 1: text workflow on GitHub Pages.** Built, verified and **live at https://davidrajpaul.github.io/Subtitle-Studio/** (Pages enabled by the owner; the workflow's build and deploy jobs passed on GitHub). Awaiting owner review on real devices.
-Decision record: [ADR-001](ADR-001-browser-only-web-app.md). The owner chose this on 2026-10-19 so the main user (Android tablet, iPhone, sometimes a laptop) only has to open a link.
+**Browser-only web app — Stage 2: speech recognition in the browser.** Built and verified with the **real Whisper-tiny model** in Chromium; awaiting owner review on her iPhone and Android tablet.
+Decision record: [ADR-001](ADR-001-browser-only-web-app.md). Stage 1 (text workflow on Pages) was approved.
 
-Plan of stages (each stops for review):
-1. **Text workflow in the browser + publishing on Pages** ← this stage
-2. Speech recognition in the browser (Whisper, model downloaded once on the device)
-3. Export in the browser: SRT, then MP4 with burned-in subtitles
+Stages: 1. text workflow on Pages (done) · **2. speech in the browser (this stage)** · 3. export in the browser (SRT, then burned-in MP4).
 
-Phase 4 (speech with the Python backend) was built and is kept in the repository, but the web app does not use it; it becomes stage 2's starting point for the screens.
-
-## Acceptance criteria for stage 1
+## Acceptance criteria for stage 2
 
 | Criterion | Result |
 |---|---|
-| Works from a static site with no server | Pass: production build served under `/Subtitle-Studio/` made **0** server requests |
-| MP4 checked in the browser (length, size, frame rate, audio) | Pass: real-file tests, including a rotated phone video |
-| TXT reading, segmentation and the four timing modes give the same results as before | Pass: identical to the Python engine on 6 decode, 39 segmentation, 160 timing and 80 validation fixtures (cues **and** warning text) |
-| Editor, autosave, reopen after reload, delete | Pass: browser test at phone and desktop size |
-| Works offline after the first visit | Pass: reopened a saved project with the network off |
-| Installable to the home screen | Manifest, icons and service worker present; real install not tested |
-| Speech workflow explains it is not ready | Pass: "Speech recognition is coming next" with a way to use text instead |
+| Speech recognised on the device, no server | Pass: real Whisper-tiny ran in a Web Worker (transformers.js + ONNX Runtime WebAssembly); no requests to any site except the one-time model download |
+| Video's own audio, or a separate MP3 | Pass: MP4 (desktop test) and silent MP4 + MP3 (phone test) |
+| Model downloaded once, on request, with progress; failures explained | Pass: Download in Settings or in the speech screen; a failed download says what to do and keeps nothing half-installed |
+| Progress, time estimate and Cancel | Pass: "Recognising speech… less than a minute left (52%)"; Cancel says nothing was changed |
+| Works offline once the model is downloaded | Pass: re-ran recognition with the network off |
+| Result opens in the editor as editable subtitles | Pass: 11 cues, saved, editable |
 
 ## What changed
 
-- **`frontend/src/engine/`** (new): `text.ts`, `timing.ts`, `py.ts` (Python-identical rounding, whitespace and formatting), `inspect.ts` (mp4box), `db.ts` (IndexedDB), `projectSchema.ts` (version-1 document with defaults and limits), tests and fixtures.
-- **`frontend/src/api/`**: `media.ts`, `subtitles.ts`, `projects.ts` now call the engine and browser storage instead of the server (same functions, so screens barely changed). A chosen video is kept in memory and copied into browser storage when the project is first saved; the original file is never changed.
-- **Settings** now shows *This device*: whether saving works, space used, whether projects are protected from automatic clean-up (with a **Keep my projects safe** button), H.264/HEVC playback, and Home Screen advice. The old FFmpeg diagnostics panel was removed.
-- **Editor** loads the video from browser storage; "Loading the video…" while it does.
-- **Home-screen app**: `manifest.webmanifest`, icons, Apple meta tags, and `sw.js` (network first, cached copy when offline).
-- **Publishing**: `.github/workflows/pages.yml` runs lint, type-check, tests and the build on every push to `main`, then deploys to Pages.
-- **Parity**: `backend/scripts/export_parity_fixtures.py` exports the Python engine's results; `engine/parity.test.ts` checks the browser engine against them.
-- Speech-related screens from Phase 4 are kept, marked as not yet used.
-- Docs: ADR-001, README (Pages link, local run without backend), CLAUDE.md architecture note, this file.
+- **`frontend/src/engine/`** (new): `whisper.worker.ts` (runs Whisper), `speechEngine.ts` (worker, model cache, progress), `audioDecode.ts` (browser decodes MP4/MP3 audio → 16 kHz mono), `chunking.ts` (≤30 s windows cut at the quietest moment; silent windows skipped because Whisper invents text for silence), `speechCues.ts` (segments → cues, ported from Python), `speechModels.ts` (Tiny 41 MB, Base 77 MB, Small 250 MB; 24 languages).
+- **`api/speech.ts`** now runs everything in the browser with a small job list, so the Phase 4 speech screens, progress and cancel work unchanged.
+- **Speech screens** are back in the import flow and Settings, with browser wording ("recognised on this device… your audio is not sent anywhere"), an iPhone memory note for Small, and realistic timing advice.
+- **Repetition guard:** Whisper can loop ("to do the best to do the best…"); `no_repeat_ngram_size: 3` stops it (seen and fixed during testing).
+- **Engine files self-hosted:** ONNX Runtime's 14 MB WebAssembly file is copied into the site at build time (`scripts/copy-ort.mjs`) instead of loading from a third-party CDN; unused 27 MB variants are left out. Published site: about 15 MB.
+- **Offline fix (also affected stage 1):** the service worker now stores the start page and its files when it installs, and ignores `Vary` when serving them. Before this, the app opened offline only if the page had been reloaded once.
+- Docs: ADR-001, README (status, licences), this file.
 
 ## Checks run and results
 
 | Check | Command | Result |
 |---|---|---|
-| Lint | `pnpm lint` (frontend ESLint + backend ruff) | Pass |
-| Types | `pnpm typecheck` (tsc + mypy strict) | Pass |
-| Tests | `pnpm test` | Pass: frontend 119, backend 96 + 1 skipped |
-| Production build for Pages | `SUBTITLE_STUDIO_BASE=/Subtitle-Studio/ pnpm --dir frontend build` | Pass: main script 227 KB (72 KB compressed); the MP4 reader (186 KB) loads only when a video is chosen |
-| Frontend audit | `pnpm --dir frontend audit` | No known vulnerabilities (new: mp4box BSD-3-Clause; fake-indexeddb Apache-2.0, tests only) |
-| Browser test of the built site | Playwright + Chromium against `vite preview` at `/Subtitle-Studio/`, 390×844 touch and 1400×900, **no backend running** | Pass (details above) |
+| Lint | `pnpm lint` | Pass |
+| Types | `pnpm typecheck` | Pass |
+| Tests | `pnpm test` | Pass: frontend 142, backend 96 + 1 skipped |
+| Production build | `SUBTITLE_STUDIO_BASE=/Subtitle-Studio/ pnpm --dir frontend build` | Pass: main 255 KB; speech worker 558 KB and engine 14 MB load only when speech is used |
+| Audit | `pnpm --dir frontend audit` | No known vulnerabilities |
+| Real end-to-end | Playwright + Chromium on the production build, 1400×900 and 390×844 touch; real Whisper-tiny files (from an npm copy of `Xenova/whisper-tiny`, since huggingface.co is blocked in my sandbox) answered in place of Hugging Face | Pass |
+
+End-to-end details (both sizes): Download Tiny in Settings → "Installed · 42 MB"; Small (not available locally) → clear failure with "Try the download again"; Transcribe a 57.6 s English clip (10 sentences) → **19 s** on this machine → "11 subtitles recognised in English", e.g. "and welcome to the channel." / "Today, we will learn about the history of South India." / "Many of these temples still stand today." / "Please subscribe for more.", with two garbled lines; opened in the editor and saved; offline: cancel worked, and a full re-run worked; only `ort/ort-wasm-simd-threaded.wasm` was loaded; no console errors; no sideways scrolling.
+
+**Accuracy note (real model, synthetic voice):** Tiny on a robotic Tamil sample gave "வருக்கம் வராக்…" for "வணக்கம் நண்பர்களே…": not usable. For Tamil, **Small** is needed (recommended in the app); real voices are usually recognised better than synthetic ones.
 
 **Not run / limitations of testing:**
-- **Not tested on a real iPhone, Android tablet or in Safari.** Chromium only. Safari behaviour (storage limits, Add to Home Screen, file pickers) needs your check.
-- The GitHub Actions workflow ran on GitHub: lint, type-check, tests, build and deploy all passed (run 39197585318, attempt 2). Action versions used: checkout v4, pnpm/action-setup v4, setup-node v4, configure-pages v5, upload-pages-artifact v3, deploy-pages v4.
-- The test browser cannot decode H.264, so playback was tested with a VP9 MP4; phones play H.264 natively.
+- **Not tested on a real iPhone, Android tablet or in Safari.** Phones are slower than this machine (expect a few times the clip length with Base, much longer with Small), and Small may exceed an iPhone's memory.
+- Base and Small were not run (only Tiny was available offline here); their sizes were checked against Hugging Face.
+- The speech engine uses a single thread (GitHub Pages cannot enable multi-threading).
+
+## Licences (new)
+
+transformers.js (Apache-2.0), ONNX Runtime Web (MIT), @huggingface/tokenizers (Apache-2.0), @huggingface/jinja (MIT); Whisper model weights (MIT, OpenAI; Xenova conversions), downloaded by the user, never bundled.
 
 ## Decisions made (reversible)
 
-1. The engine was **ported, not rewritten**: same rules, same messages, proven by fixtures.
-2. Videos are **copied into browser storage** when a project is first saved, so it can be reopened (a 2 GB limit per video; phones may have less space).
-3. **Network-first** service worker, so updates appear immediately when online.
-4. The Python backend is **kept** until browser speech works (not removed without your approval).
+1. WebAssembly on all devices (no WebGPU yet): predictable and smaller downloads; WebGPU could speed up tablets later.
+2. 8-bit models from `Xenova/whisper-*` (the format verified end-to-end here).
+3. Default Base; Small recommended for Tamil; Medium/Large not offered (too heavy for phones).
+4. Silent windows skipped; anti-repetition setting on.
 
 ## Known limitations
 
-- Projects live in **one browser on one device**; no sync between her iPhone and tablet. (A later "export/import project file" could move them.)
-- **Safari may delete saved projects** of a website not opened for about a week, unless the app is added to the Home Screen. Settings explains this.
-- Speech recognition and export are not in the web app yet.
-- Still open from earlier: no undo; timing defaults (17 cps, 1 s, 7 s, 0.1 s) OK?; delete `docs/Test.md`?; create the architecture docs?; licence choice.
+- Speech is slow on phones; keep the screen open while it runs (a phone may pause it if the app goes to the background).
+- No word-level timing: long sentences stay as one subtitle (the editor warns if too long).
+- Projects and models live in one browser on one device.
+- Still open: no undo; timing defaults OK?; delete `docs/Test.md`?; create the architecture docs?; licence choice; **may I remove the Python backend now that speech works in the browser?**
 
 ## What I need from you
 
-Open **https://davidrajpaul.github.io/Subtitle-Studio/** on the iPhone (Safari) and the Android tablet, add it to the Home Screen, and try the checklist below.
+1. On her iPhone and tablet, open the link (from the Home Screen icon), go to **Settings → Speech models**, and download **Base** (and **Small** on the tablet).
+2. **Transcribe speech** with a short real clip (30–60 s) in English and in Tamil; note how long it takes and how good the text is.
+3. Tell me whether to remove the Python backend.
 
 ## Owner review checklist (phone-friendly)
 
-1. Open the link; tap **Start** under "Create subtitles from text"; pick an MP4 and a UTF-8 TXT.
-2. Try the timing modes; tap **Open in editor**; change a time and the style; **✓ Saved** appears.
-3. Close the browser completely, open the link again: the project is under **Your projects**.
-4. Turn on aeroplane mode and open the app from the Home Screen: it still opens and shows the project.
-5. Settings → **This device**: check "Plays MP4 (H.264): Yes" on her devices; tap **Keep my projects safe**.
-6. **Transcribe speech** says it is coming next.
+1. Settings → Speech models → Download Base: the progress shows MB; it ends with "Installed".
+2. Home → Transcribe speech → pick an MP4 with someone talking → Spoken language → Transcribe: progress with a time estimate; try Cancel once.
+3. Transcribe again → Result → Open in editor → fix a word → ✓ Saved.
+4. Aeroplane mode → transcribe again: it still works.
+5. A silent MP4 + an MP3 of the voice also works.
 
-PHASE GATE: I will not begin the next stage until you explicitly approve it. Reply "Approved. Proceed to Stage 2 (speech in the browser)" to continue, or tell me what you want changed. If I need anything from you before continuing, I will state it explicitly.
+PHASE GATE: I will not begin the next stage until you explicitly approve it. Reply "Approved. Proceed to Stage 3 (export in the browser)" to continue, or tell me what you want changed. If I need anything from you before continuing, I will state it explicitly.

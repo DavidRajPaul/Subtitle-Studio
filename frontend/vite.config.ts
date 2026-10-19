@@ -1,6 +1,17 @@
 /// <reference types="vitest/config" />
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
+
+// ONNX Runtime references other WebAssembly builds that this app never loads (it serves
+// ort/ort-wasm-simd-threaded.wasm itself); leave them out of the published site.
+const dropUnusedOrtWasm = (): Plugin => ({
+  name: "drop-unused-ort-wasm",
+  generateBundle(_options, bundle) {
+    for (const name of Object.keys(bundle)) {
+      if (/ort-wasm-simd-threaded\.(asyncify|jsep|jspi)[^/]*\.wasm$/.test(name)) Reflect.deleteProperty(bundle, name);
+    }
+  },
+});
 
 // The backend is local-only (127.0.0.1). The dev server proxies /api so the
 // browser never makes cross-origin requests during development.
@@ -15,7 +26,8 @@ const BASE = process.env.SUBTITLE_STUDIO_BASE ?? "/";
 
 export default defineConfig({
   base: BASE,
-  plugins: [react()],
+  plugins: [react(), dropUnusedOrtWasm()],
+  worker: { format: "es", plugins: () => [dropUnusedOrtWasm()] },
   server: {
     host: FRONTEND_HOST,
     port: 5173,
