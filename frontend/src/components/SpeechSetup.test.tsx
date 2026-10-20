@@ -7,7 +7,7 @@ import { SpeechSetup } from "./SpeechSetup";
 
 vi.mock("../engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../engine/inspect")>()),
-  inspectMp4: vi.fn(() =>
+  inspectVideo: vi.fn(() =>
     Promise.resolve({
       duration_ms: 4000,
       width: 64,

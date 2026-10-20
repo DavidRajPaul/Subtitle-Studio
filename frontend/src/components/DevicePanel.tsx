@@ -121,11 +121,11 @@ export function DevicePanel() {
           </span>
         </li>
         <li className="tool-list__item">
-          <span className="tool-list__name">Plays MP4 (H.264)</span>
+          <span className="tool-list__name">Plays H.264 video</span>
           <span className={info.h264 ? "status--ok" : "status--warn"}>{info.h264 ? "Yes" : "No"}</span>
         </li>
         <li className="tool-list__item">
-          <span className="tool-list__name">Plays MP4 (HEVC, newer iPhones)</span>
+          <span className="tool-list__name">Plays HEVC video (newer iPhones)</span>
           <span className={info.hevc ? "status--ok" : "muted"}>{info.hevc ? "Yes" : "No"}</span>
         </li>
       </ul>

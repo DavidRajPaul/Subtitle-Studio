@@ -177,7 +177,7 @@ export function HomeScreen({ onStart, onOpen }: Props) {
       <div className="workflow-list">
         <article className="workflow-card" aria-labelledby="wf-speech">
           <h2 id="wf-speech">Transcribe speech</h2>
-          <p>Create editable subtitles from speech in an MP4 or a separate MP3.</p>
+          <p>Create editable subtitles from speech in a video or a separate MP3.</p>
           <button
             type="button"
             className="button"

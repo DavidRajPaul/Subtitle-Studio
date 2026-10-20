@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
-import { InspectError, inspectMp4, type MediaMetadata } from "./engine/inspect";
+import { InspectError, inspectVideo, type MediaMetadata } from "./engine/inspect";
 
 // Home lists saved projects; these tests are about import and settings, so keep it empty.
 vi.mock("./api/projects", async (importOriginal) => ({
@@ -33,7 +33,7 @@ vi.mock("./api/speech", async (importOriginal) => ({
 // The MP4 reader is tested against real files in engine/inspect.test.ts.
 vi.mock("./engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./engine/inspect")>()),
-  inspectMp4: vi.fn(),
+  inspectVideo: vi.fn(),
 }));
 
 const meta = (hasAudio: boolean): MediaMetadata => ({
@@ -60,7 +60,7 @@ const revokeObjectURL = vi.fn();
 beforeEach(() => {
   // These tests cover Editor mode; Easy mode (the default) has its own tests.
   window.localStorage.setItem("subtitle-studio.mode", "editor");
-  vi.mocked(inspectMp4).mockReset();
+  vi.mocked(inspectVideo).mockReset();
   revokeObjectURL.mockReset();
   vi.stubGlobal(
     "URL",
@@ -98,7 +98,7 @@ describe("Import", () => {
   };
 
   it("reads an MP4 in the browser and shows its details and a preview", async () => {
-    vi.mocked(inspectMp4).mockResolvedValue(meta(true));
+    vi.mocked(inspectVideo).mockResolvedValue(meta(true));
     startText();
     pickFile(mp4());
     expect(await screen.findByText("00:00:12.000", { selector: "dd" })).toBeInTheDocument();
@@ -107,16 +107,23 @@ describe("Import", () => {
     expect(screen.getByLabelText("Preview of clip.mp4")).toBeInTheDocument();
   });
 
-  it("rejects non-MP4 files before reading them", () => {
+  it("accepts a MOV from an iPhone", async () => {
+    vi.mocked(inspectVideo).mockResolvedValue(meta(true));
     startText();
-    pickFile(new File(["x"], "clip.mov", { type: "video/quicktime" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("ending in .mp4");
+    pickFile(new File([new Uint8Array([1])], "IMG_0042.MOV", { type: "video/quicktime" }));
+    expect(await screen.findByLabelText("Preview of IMG_0042.MOV")).toBeInTheDocument();
+  });
+
+  it("rejects formats browsers cannot read before reading them", () => {
+    startText();
+    pickFile(new File(["x"], "clip.avi", { type: "video/x-msvideo" }));
+    expect(screen.getByRole("alert")).toHaveTextContent("AVI videos cannot be opened in a browser. Convert it to MP4");
     expect(screen.getByRole("button", { name: "Choose a different file" })).toBeInTheDocument();
-    expect(inspectMp4).not.toHaveBeenCalled();
+    expect(inspectVideo).not.toHaveBeenCalled();
   });
 
   it("shows the reason beside the file", async () => {
-    vi.mocked(inspectMp4).mockRejectedValue(
+    vi.mocked(inspectVideo).mockRejectedValue(
       new InspectError("no_video_stream", "This MP4 has no video track."),
     );
     startText();
@@ -126,14 +133,14 @@ describe("Import", () => {
   });
 
   it("explains an unreadable file", async () => {
-    vi.mocked(inspectMp4).mockRejectedValue(new TypeError("boom"));
+    vi.mocked(inspectVideo).mockRejectedValue(new TypeError("boom"));
     startText();
     pickFile(mp4());
     expect(await screen.findByRole("alert")).toHaveTextContent("could not be read as a video");
   });
 
   it("offers the text workflow when a speech video has no audio", async () => {
-    vi.mocked(inspectMp4).mockResolvedValue(meta(false));
+    vi.mocked(inspectVideo).mockResolvedValue(meta(false));
     render(<App />);
     fireEvent.click(screen.getAllByRole("button", { name: "Start" })[0]);
     pickFile(mp4());
@@ -145,7 +152,7 @@ describe("Import", () => {
   });
 
   it("validates the numeric seek field", async () => {
-    vi.mocked(inspectMp4).mockResolvedValue(meta(true));
+    vi.mocked(inspectVideo).mockResolvedValue(meta(true));
     startText();
     pickFile(mp4());
     const input = await screen.findByLabelText(/Go to time/);
@@ -162,12 +169,12 @@ describe("Import", () => {
   });
 
   it("forgets the chosen video when it is removed", async () => {
-    vi.mocked(inspectMp4).mockResolvedValue(meta(true));
+    vi.mocked(inspectVideo).mockResolvedValue(meta(true));
     startText();
     pickFile(mp4());
     await screen.findByLabelText("Preview of clip.mp4");
     fireEvent.click(screen.getByRole("button", { name: "Remove" }));
-    expect(screen.getByRole("button", { name: "Select MP4" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Select video" })).toBeInTheDocument();
     await waitFor(() => {
       expect(revokeObjectURL).toHaveBeenCalledWith("blob:clip");
     });

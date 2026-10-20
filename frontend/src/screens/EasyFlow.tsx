@@ -17,8 +17,9 @@ import { DEFAULT_SETTINGS } from "../engine/timing";
 import { useJob } from "../hooks/useJob";
 import { segmentsFromTyped, timeSegments } from "../lib/easyText";
 import { createProject } from "../lib/newProject";
-import { getLanguage, lastLook, setLanguage } from "../lib/prefs";
+import { getLanguage, lastStyle, setLanguage } from "../lib/prefs";
 import { formatTimecode } from "../lib/timecode";
+import { VIDEO_ACCEPT, VIDEO_FORMATS_LABEL } from "../lib/videoFormats";
 
 interface Props {
   onBack: () => void;
@@ -107,7 +108,7 @@ export function EasyFlow({ onBack, onCreated }: Props) {
 
   const finish = async (content: Parameters<typeof createProject>[2], workflow: "speech" | "text") => {
     if (!media) return;
-    onCreated(await createProject(media, workflow, content, lastLook().style));
+    onCreated(await createProject(media, workflow, content, await lastStyle()));
   };
 
   const finishRef = useRef(finish);
@@ -184,7 +185,7 @@ export function EasyFlow({ onBack, onCreated }: Props) {
           <input
             ref={videoInput}
             type="file"
-            accept=".mp4,video/mp4"
+            accept={VIDEO_ACCEPT}
             className="visually-hidden"
             tabIndex={-1}
             aria-hidden="true"
@@ -196,8 +197,11 @@ export function EasyFlow({ onBack, onCreated }: Props) {
           />
           {video.kind === "empty" && (
             <button type="button" className="button button--big" onClick={() => videoInput.current?.click()}>
-              Pick an MP4 video
+              Pick a video
             </button>
+          )}
+          {video.kind === "empty" && (
+            <p className="field__hint">{VIDEO_FORMATS_LABEL}. Your original file is never changed.</p>
           )}
           {video.kind === "reading" && (
             <p role="status" aria-busy="true" className="panel">

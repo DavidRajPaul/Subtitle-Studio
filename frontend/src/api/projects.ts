@@ -9,6 +9,7 @@ import { checkProject, ProjectSchemaError } from "../engine/projectSchema";
 import { validateCues as engineValidate, type TimingIssue } from "../engine/timing";
 import type { Segmentation, TimingMode, TimingSettings } from "./subtitles";
 import type { Workflow } from "../types";
+import { videoMime } from "../lib/videoFormats";
 
 export interface BackgroundStyle {
   enabled: boolean;
@@ -223,9 +224,9 @@ export async function saveProject(project: Project): Promise<void> {
       await putOne(MEDIA, {
         id: doc.media.id,
         filename: file.name,
-        type: file.type || "video/mp4",
+        type: videoMime(file),
         size: file.size,
-        blob: new Blob([file], { type: file.type || "video/mp4" }),
+        blob: new Blob([file], { type: videoMime(file) }),
       });
       forgetPending(doc.media.id);
     }

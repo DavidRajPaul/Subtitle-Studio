@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import type { SubtitleStyle } from "../../api/projects";
+import { SavePresetBar } from "./Presets";
 import { AlignTab, AnimationTab, ColorTab, FontTab, LooksTab, SizeTab, SpacingTab } from "./tabs";
 
 export type StudioTab = "looks" | "animation" | "font" | "size" | "color" | "align" | "spacing";
@@ -44,6 +45,7 @@ export function StyleStudio({ style, onChange, initialTab = "looks" }: Props) {
           </button>
         ))}
       </div>
+      <SavePresetBar style={style} />
       <div id="studio-panel" role="tabpanel" aria-labelledby={`studio-tab-${tab}`}>
         {tab === "looks" && <LooksTab style={style} onChange={onChange} />}
         {tab === "animation" && <AnimationTab style={style} onChange={onChange} />}

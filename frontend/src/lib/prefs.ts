@@ -1,4 +1,5 @@
 /** Small per-browser conveniences (remembered choices). Safe when storage is unavailable. */
+import type { SubtitleStyle } from "../api/projects";
 import { DEFAULT_LOOK, LOOKS } from "../engine/looks";
 
 export type AppMode = "easy" | "editor";
@@ -24,11 +25,28 @@ export const setMode = (mode: AppMode) => {
   write("subtitle-studio.mode", mode);
 };
 
-/** New Easy projects start with the look chosen last time. */
+/** New Easy projects start with the look (or preset) chosen last time. */
 export const lastLook = () => LOOKS.find((l) => l.id === read("subtitle-studio.look")) ?? DEFAULT_LOOK;
 export const rememberLook = (id: string) => {
   write("subtitle-studio.look", id);
 };
+export const rememberPreset = (id: string) => {
+  write("subtitle-studio.look", `preset:${id}`);
+};
+
+export async function lastStyle(): Promise<SubtitleStyle> {
+  const saved = read("subtitle-studio.look");
+  if (saved?.startsWith("preset:")) {
+    try {
+      const { getPreset } = await import("../api/presets");
+      const preset = await getPreset(saved.slice("preset:".length));
+      if (preset) return structuredClone(preset.style);
+    } catch {
+      // Fall back to the default look.
+    }
+  }
+  return lastLook().style;
+}
 
 export const getLanguage = () => read("subtitle-studio.speech.language") ?? "ta";
 export const setLanguage = (code: string) => {

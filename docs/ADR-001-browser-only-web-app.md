@@ -12,7 +12,7 @@ Build the app as a **static web app on GitHub Pages** whose processing runs **in
 
 | Concern | Before | Now (browser) |
 |---|---|---|
-| Video inspection | FFprobe (backend) | mp4box.js reads the MP4's index boxes (`src/engine/inspect.ts`) |
+| Video inspection | FFprobe (backend) | mediabunny reads MP4, MOV, M4V, 3GP, WebM and MKV (`src/engine/inspect.ts`); mp4box.js was used until the formats stage |
 | TXT decoding/segmentation | Python | TypeScript port (`src/engine/text.ts`) |
 | Timing + validation | Python | TypeScript port (`src/engine/timing.ts`), tested for identical results against fixtures exported from the Python engine (`backend/scripts/export_parity_fixtures.py`) |
 | Projects + video copies | JSON files + media folder | IndexedDB in the browser (`src/engine/db.ts`, `src/api/projects.ts`); same version-1 document and rules (`src/engine/projectSchema.ts`) |

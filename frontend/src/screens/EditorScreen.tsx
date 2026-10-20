@@ -35,6 +35,7 @@ import {
 } from "../lib/cueEdit";
 import { formatTimecode } from "../lib/timecode";
 import { activeCues } from "../lib/timeline";
+import { VIDEO_ACCEPT } from "../lib/videoFormats";
 
 /** Validates the current cues with the same engine that generated them (debounced). */
 function useIssues(project: Project): TimingIssue[] {
@@ -353,7 +354,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
             <input
               ref={relinkInput}
               type="file"
-              accept=".mp4,video/mp4"
+              accept={VIDEO_ACCEPT}
               className="visually-hidden"
               tabIndex={-1}
               aria-hidden="true"

@@ -37,7 +37,8 @@ function hex(v: unknown, what: string): string {
   return v;
 }
 
-function style(raw: unknown): SubtitleStyle {
+/** A complete, checked style (missing newer fields get defaults); throws ProjectSchemaError. */
+export function checkStyle(raw: unknown): SubtitleStyle {
   const s: Rec = { ...DEFAULT_STYLE, ...(isRec(raw) ? raw : {}) };
   const bg: Rec = { ...DEFAULT_STYLE.background, ...(isRec(s.background) ? s.background : {}) };
   const an: Rec = { ...DEFAULT_STYLE.animation, ...(isRec(s.animation) ? s.animation : {}) };
@@ -161,7 +162,7 @@ export function checkProject(raw: unknown): Project {
       has_audio: m.has_audio,
     },
     cues,
-    style: style(raw.style),
+    style: checkStyle(raw.style),
     timing: {
       mode,
       segmentation,

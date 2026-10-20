@@ -1,5 +1,5 @@
 /**
- * Decodes the audio of an MP4 or MP3 in the browser and converts it to 16 kHz mono, the format
+ * Decodes the audio of a video (MP4, MOV, WebM, MKV…) or an MP3 in the browser and converts it to 16 kHz mono, the format
  * Whisper expects. Uses the browser's own decoders (no upload). Runs on the main thread because
  * audio decoding is not available inside workers.
  */
@@ -24,10 +24,17 @@ export async function decodeToMono16k(file: Blob, signal?: AbortSignal): Promise
   try {
     decoded = await new Offline(1, 1, 44_100).decodeAudioData(bytes);
   } catch {
-    throw new ApiError(
-      "audio_unreadable",
-      "The audio in this file could not be read on this device. Try an MP3 of the same audio.",
-    );
+    // Some browsers cannot read the sound straight from MOV/MKV/WebM files; pull it out as WAV.
+    try {
+      const wav = await extractWav(file, signal);
+      decoded = await new Offline(1, 1, 44_100).decodeAudioData(wav);
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      throw new ApiError(
+        "audio_unreadable",
+        "The audio in this file could not be read on this device. Try an MP3 of the same audio.",
+      );
+    }
   }
   signal?.throwIfAborted();
   if (decoded.duration <= 0) throw new ApiError("no_audio", "No audio could be read from this file.");
@@ -69,4 +76,34 @@ export function readAudioDuration(file: Blob): Promise<number> {
     };
     audio.src = url;
   });
+}
+
+/** The file's sound as 16 kHz mono WAV, decoded with WebCodecs (fallback for odd containers). */
+async function extractWav(file: Blob, signal?: AbortSignal): Promise<ArrayBuffer> {
+  const { ALL_FORMATS, BlobSource, BufferTarget, Conversion, Input, Output, WavOutputFormat } = await import("mediabunny");
+  const input = new Input({ source: new BlobSource(file), formats: ALL_FORMATS });
+  try {
+    const output = new Output({ format: new WavOutputFormat(), target: new BufferTarget() });
+    const conversion = await Conversion.init({
+      input,
+      output,
+      tracks: "primary",
+      video: { discard: true },
+      audio: { codec: "pcm-s16", sampleRate: SAMPLE_RATE, numberOfChannels: 1 },
+    });
+    if (!conversion.isValid) throw new Error("no readable audio");
+    const stop = () => void conversion.cancel();
+    signal?.addEventListener("abort", stop);
+    try {
+      await conversion.execute();
+    } finally {
+      signal?.removeEventListener("abort", stop);
+    }
+    signal?.throwIfAborted();
+    const buffer = output.target.buffer;
+    if (!buffer) throw new Error("empty audio");
+    return buffer;
+  } finally {
+    input.dispose();
+  }
 }

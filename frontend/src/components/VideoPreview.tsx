@@ -198,9 +198,9 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
               }}
               onError={() => {
                 setPlaybackError(
-                  "This browser cannot play this video's format. The file was inspected " +
-                    "successfully, so it can still be used for export; try Chrome or Edge to " +
-                    "preview it.",
+                  "This device cannot play this video's format (for example HEVC from a newer " +
+                    "iPhone in some Android browsers), so it cannot be previewed or exported here. " +
+                    "Try Safari or Chrome on another device, or convert the video to MP4 (H.264).",
                 );
               }}
             />

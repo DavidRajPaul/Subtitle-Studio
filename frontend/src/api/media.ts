@@ -6,6 +6,7 @@
 import { newId } from "./http";
 import { getOne, MEDIA, type MediaRecord } from "../engine/db";
 import type { MediaMetadata } from "../engine/inspect";
+import { videoNameProblem } from "../lib/videoFormats";
 
 export type { MediaMetadata };
 
@@ -32,9 +33,8 @@ export const MAX_VIDEO_BYTES = 2 * 1024 ** 3;
 const pending = new Map<string, File>();
 
 export function validateVideoFile(file: File): string | null {
-  if (!file.name.toLowerCase().endsWith(".mp4")) {
-    return "Choose a video file ending in .mp4.";
-  }
+  const nameProblem = videoNameProblem(file);
+  if (nameProblem) return nameProblem;
   if (file.size === 0) {
     return "This file is empty. Choose a different video.";
   }
@@ -48,16 +48,16 @@ export async function importMedia(file: File, signal?: AbortSignal): Promise<Imp
   const problem = validateVideoFile(file);
   if (problem) throw new MediaImportError("invalid_file", problem);
   let metadata: MediaMetadata;
-  // The MP4 reader is loaded only when a video is chosen, keeping the first visit quick.
-  const { InspectError, inspectMp4 } = await import("../engine/inspect");
+  // The video reader is loaded only when a video is chosen, keeping the first visit quick.
+  const { InspectError, inspectVideo } = await import("../engine/inspect");
   try {
-    metadata = await inspectMp4(file, signal);
+    metadata = await inspectVideo(file, signal);
   } catch (error) {
     if (signal?.aborted) throw error;
     if (error instanceof InspectError) throw new MediaImportError(error.code, error.message);
     throw new MediaImportError(
       "unreadable",
-      "This file could not be read as a video. It may be damaged or not really an MP4.",
+      "This file could not be read as a video. It may be damaged. Try converting it to MP4.",
     );
   }
   const id = newId();

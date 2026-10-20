@@ -15,6 +15,7 @@ import { TextTimingSetup } from "../components/TextTimingSetup";
 import { VideoPreview } from "../components/VideoPreview";
 import { formatTimecode } from "../lib/timecode";
 import { WORKFLOW_LABELS, type Workflow } from "../types";
+import { VIDEO_ACCEPT, VIDEO_FORMATS_LABEL } from "../lib/videoFormats";
 
 interface Props {
   workflow: Workflow;
@@ -123,11 +124,11 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
       </p>
 
       <section className="panel" aria-labelledby={`${fieldId}-label`}>
-        <h2 id={`${fieldId}-label`}>Video (MP4, required)</h2>
+        <h2 id={`${fieldId}-label`}>Video (required)</h2>
         <input
           ref={inputRef}
           type="file"
-          accept=".mp4,video/mp4"
+          accept={VIDEO_ACCEPT}
           className="visually-hidden"
           tabIndex={-1}
           aria-hidden="true"
@@ -140,9 +141,9 @@ export function ImportScreen({ workflow, onChangeWorkflow, onBack, onOpenProject
 
         {video.kind === "empty" && (
           <>
-            <p className="muted">No video selected yet. Your original file is never changed.</p>
+            <p className="muted">No video selected yet ({VIDEO_FORMATS_LABEL}). Your original file is never changed.</p>
             <button type="button" className="button" onClick={choose}>
-              Select MP4
+              Select video
             </button>
           </>
         )}

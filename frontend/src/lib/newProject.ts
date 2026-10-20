@@ -3,6 +3,7 @@ import type { ImportedMedia } from "../api/media";
 import { saveProject, type LoadedProject, type SubtitleStyle } from "../api/projects";
 import type { Segmentation, TimingMode, TimingSettings } from "../api/subtitles";
 import type { Workflow } from "../types";
+import { baseName } from "./videoFormats";
 
 export interface NewProjectContent {
   cues: { id: string; text: string; start_ms: number; end_ms: number }[];
@@ -22,7 +23,7 @@ export async function createProject(
   const project: LoadedProject = {
     version: 1,
     id: newId(),
-    name: media.filename.replace(/\.mp4$/i, "") || "Untitled project",
+    name: baseName(media.filename) || "Untitled project",
     workflow,
     media: {
       id: media.id,

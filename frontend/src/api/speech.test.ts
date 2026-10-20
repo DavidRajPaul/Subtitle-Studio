@@ -17,7 +17,7 @@ import {
 
 vi.mock("../engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../engine/inspect")>()),
-  inspectMp4: vi.fn(() =>
+  inspectVideo: vi.fn(() =>
     Promise.resolve({
       duration_ms: 2500,
       width: 64,

@@ -7,6 +7,7 @@ import { ExportPanel } from "../components/ExportPanel";
 import { Sheet } from "../components/Sheet";
 import { SubtitleCanvas } from "../components/SubtitleCanvas";
 import { StyleStudio } from "../components/style/StyleStudio";
+import { SavePresetBar } from "../components/style/Presets";
 import { LooksTab } from "../components/style/tabs";
 import { VideoPreview, type VideoPreviewHandle } from "../components/VideoPreview";
 import { LOOKS } from "../engine/looks";
@@ -155,6 +156,7 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
             </button>
           )}
         </div>
+        {!wide && <SavePresetBar style={project.style} />}
         <LooksTab style={project.style} onChange={setStyle} />
       </section>
 

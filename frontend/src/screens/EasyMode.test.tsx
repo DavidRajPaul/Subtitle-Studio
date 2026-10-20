@@ -3,12 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "../App";
 import { getProject, saveProject, type LoadedProject } from "../api/projects";
 import { setSpeechEngineForTests } from "../api/speech";
-import { inspectMp4 } from "../engine/inspect";
+import { inspectVideo } from "../engine/inspect";
 import { FakeSpeechEngine } from "../test/fakeSpeechEngine";
 
 vi.mock("../engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../engine/inspect")>()),
-  inspectMp4: vi.fn(),
+  inspectVideo: vi.fn(),
 }));
 
 const saved: LoadedProject[] = [];
@@ -39,7 +39,7 @@ beforeEach(() => {
     const p = [...saved].reverse().find((x) => x.id === id);
     return p ? Promise.resolve({ ...p, media_available: true }) : Promise.reject(new Error("missing"));
   });
-  vi.mocked(inspectMp4).mockResolvedValue({
+  vi.mocked(inspectVideo).mockResolvedValue({
     duration_ms: 12_000,
     width: 1080,
     height: 1920,
@@ -61,7 +61,7 @@ afterEach(() => {
 
 async function chooseVideo() {
   fireEvent.click(screen.getByRole("button", { name: "Make subtitles" }));
-  const input = document.querySelector<HTMLInputElement>('input[type="file"][accept=".mp4,video/mp4"]');
+  const input = document.querySelector<HTMLInputElement>('input[type="file"][accept*=".mov"]');
   if (!input) throw new Error("video input missing");
   fireEvent.change(input, { target: { files: [new File([new Uint8Array([1, 2, 3])], "trip.mp4", { type: "video/mp4" })] } });
   fireEvent.click(await screen.findByRole("button", { name: "Next: the words" }));
@@ -162,7 +162,7 @@ describe("Easy mode", () => {
   });
 
   it("explains a video without sound and offers the other ways", async () => {
-    vi.mocked(inspectMp4).mockResolvedValue({
+    vi.mocked(inspectVideo).mockResolvedValue({
       duration_ms: 5000, width: 640, height: 360, frame_rate: 25, video_codec: "h264", has_audio: false, audio_codec: null, container: "mp4",
     });
     render(<App />);

@@ -15,6 +15,7 @@ import {
 } from "../../engine/fonts/fonts";
 import { COLOR_CHIPS, LOOKS, SWATCHES } from "../../engine/looks";
 import { LookThumb } from "./LookThumb";
+import { PresetList } from "./Presets";
 import { OptionTiles, RangeField, Segmented, SubTabs, SwatchRow, Toggle } from "./controls";
 
 export interface TabProps {
@@ -27,6 +28,16 @@ const same = (a: SubtitleStyle, b: SubtitleStyle) => JSON.stringify(a) === JSON.
 // ---- Looks ----------------------------------------------------------------------------------
 
 export function LooksTab({ style, onChange }: TabProps) {
+  return (
+    <div className="looks-tab">
+      <PresetList style={style} onChange={onChange} />
+      <h3 className="presets__title">Ready-made looks</h3>
+      <BuiltInLooks style={style} onChange={onChange} />
+    </div>
+  );
+}
+
+function BuiltInLooks({ style, onChange }: TabProps) {
   return (
     <div className="looks" role="radiogroup" aria-label="Looks">
       {LOOKS.map((look) => (

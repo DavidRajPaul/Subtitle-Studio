@@ -59,7 +59,7 @@ vi.mock("./api/projects", async (importOriginal) => ({
 
 vi.mock("./engine/inspect", async (importOriginal) => ({
   ...(await importOriginal<typeof import("./engine/inspect")>()),
-  inspectMp4: vi.fn(() => Promise.resolve(media.metadata)),
+  inspectVideo: vi.fn(() => Promise.resolve(media.metadata)),
 }));
 
 // The real text and timing engine is tested in engine/parity.test.ts against the Python
