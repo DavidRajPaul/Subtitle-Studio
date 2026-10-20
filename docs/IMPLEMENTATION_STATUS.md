@@ -54,6 +54,12 @@ The scenarios and the test behind each one are listed in [ACCEPTANCE.md](ACCEPTA
 | Browser suite | `E2E_CHROMIUM=/opt/pw-browsers/chromium pnpm --dir frontend e2e` | Pass: 51 passed, 3 skipped (voice ×2 without model files; keyboard test at phone size, by design) |
 | Voice test | same, with `E2E_MODEL_DIR=<whisper-tiny files>` and a 58 s speech clip | Pass (desktop): download, cancel ("nothing changed"), recognise, remove model → storage empty |
 | Clean install | fresh `git clone`, then `pnpm --dir frontend install --frozen-lockfile`, lint, typecheck, test, build, e2e | Pass: install 17 s; 219 unit tests; 51 browser checks passed, 3 skipped |
+| Publish job on GitHub | push to `main` → `.github/workflows/pages.yml` | Pass on the third try: 51 browser checks passed, 3 skipped; deployed |
+
+**What the first publish runs found (the gate worked: nothing broken went live):**
+1. `ubuntu-latest` began moving to Ubuntu 26 on 2026-10-19, and the browser install failed there before any test ran. The job is now pinned to Ubuntu 24.04.
+2. One test compared layout-dependent text that wraps differently on GitHub's machine. It now compares the subtitle times only.
+3. CI test failures now appear as annotations on the run, so they can be read without downloading logs.
 
 **Not run / limitations:**
 - **Real devices.** Not tested on a real iPhone, Android tablet or in Safari. The suite uses desktop Chromium at phone size with touch.
