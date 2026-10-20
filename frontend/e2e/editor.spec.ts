@@ -55,7 +55,9 @@ test("E1 numeric timing; overlaps are warned about, not moved; regeneration asks
   await page.getByRole("button", { name: "Open in editor" }).click();
   const list = page.getByRole("list", { name: "Subtitles" });
   await expect(list.getByRole("listitem")).toHaveCount(3);
-  const firstBefore = await list.getByRole("listitem").first().innerText();
+  const timesOf = async (i: number) => /\d\d:\d\d:\d\d\.\d{3} → \d\d:\d\d:\d\d\.\d{3}/.exec(await list.getByRole("listitem").nth(i).innerText())?.[0];
+  const firstBefore = await timesOf(0);
+  expect(firstBefore).toBeTruthy();
 
   // Select subtitle 2 and start it inside subtitle 1.
   await list.getByRole("listitem").nth(1).getByRole("button").first().click();
@@ -64,7 +66,7 @@ test("E1 numeric timing; overlaps are warned about, not moved; regeneration asks
   await start.fill("0.3");
   await start.press("Enter");
   await expect(page.getByText(/Subtitle 2 starts at 00:00:00.300, before subtitle 1 ends/).first()).toBeVisible();
-  expect(await list.getByRole("listitem").first().innerText()).toContain(firstBefore.split("\n")[1] ?? "");
+  expect(await timesOf(0)).toBe(firstBefore); // subtitle 1 was not moved
   await expect(page.getByText("✓ Saved")).toBeVisible();
 
   // Regenerating would replace the hand-set time: it asks first, and Cancel keeps it.
