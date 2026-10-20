@@ -62,13 +62,14 @@ describe("Style tools", () => {
   it("lists many fonts, filters Tamil ones, searches and picks", () => {
     render(<Harness />);
     tab("Font");
-    const list = screen.getByRole("list", { name: "Fonts" });
-    expect(within(list).getAllByRole("button").length).toBeGreaterThanOrEqual(FONT_CATALOG.length);
+    const list = screen.getByRole("radiogroup", { name: "Fonts" });
+    expect(within(list).getAllByRole("radio").length).toBeGreaterThanOrEqual(FONT_CATALOG.length);
     fireEvent.click(screen.getByRole("radio", { name: "Tamil" }));
-    expect(within(list).getAllByRole("button").length).toBe(FONT_CATALOG.filter((f) => f.group === "Tamil").length);
+    expect(within(list).getAllByRole("radio").length).toBe(FONT_CATALOG.filter((f) => f.group === "Tamil").length);
     fireEvent.change(screen.getByLabelText("Search fonts"), { target: { value: "mukta" } });
-    fireEvent.click(within(list).getByRole("button", { name: /Mukta Malar/ }));
+    fireEvent.click(within(list).getByRole("radio", { name: /Mukta Malar/ }));
     expect(last.font_family).toBe("mukta-malar");
+    expect(within(list).getByRole("radio", { name: /Mukta Malar/ })).toHaveAttribute("aria-checked", "true");
     fireEvent.click(screen.getByRole("button", { name: /Bold/ }));
     expect(last.bold).toBe(true);
   });
@@ -120,5 +121,24 @@ describe("Style tools", () => {
     fireEvent.blur(screen.getByRole("textbox", { name: /Letter spacing value/ }));
     fireEvent.click(screen.getByRole("radio", { name: "ALL CAPS" }));
     expect([last.letter_spacing_px, last.text_case]).toEqual([-2, "upper"]);
+  });
+});
+
+describe("choice groups by keyboard", () => {
+  it("are one Tab stop; arrow keys move and choose", () => {
+    render(<Harness />);
+    tab("Font");
+    const groups = screen.getByRole("radiogroup", { name: "Font group" });
+    const chips = within(groups).getAllByRole("radio");
+    expect(chips.filter((c) => c.tabIndex === 0)).toHaveLength(1);
+    expect(chips[0]).toHaveAttribute("aria-checked", "true");
+    chips[0].focus();
+    fireEvent.keyDown(chips[0], { key: "ArrowRight" });
+    expect(chips[1]).toHaveAttribute("aria-checked", "true");
+    expect(document.activeElement).toBe(chips[1]);
+    fireEvent.keyDown(chips[1], { key: "End" });
+    expect(chips.at(-1)).toHaveAttribute("aria-checked", "true");
+    fireEvent.keyDown(chips.at(-1) as HTMLElement, { key: "ArrowRight" }); // wraps round
+    expect(chips[0]).toHaveAttribute("aria-checked", "true");
   });
 });

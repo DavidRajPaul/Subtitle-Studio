@@ -434,8 +434,8 @@ export function TextTimingSetup({ durationMs, onOpenEditor }: Props) {
                   {opening ? "Creating the project…" : "Open in editor"}
                 </button>
                 <p className="muted">
-                  The editor lets you change text, timing and style. Export arrives in a later
-                  phase.
+                  The editor lets you change text, timing and style, then export an SRT file or a
+                  video with the subtitles.
                 </p>
               </>
             )}

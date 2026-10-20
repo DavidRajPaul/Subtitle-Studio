@@ -13,6 +13,7 @@ import {
 } from "../../api/presets";
 import type { SubtitleStyle } from "../../api/projects";
 import { usePresets } from "../../hooks/usePresets";
+import { useRadioGroup } from "../../hooks/useRadioGroup";
 import { rememberPreset } from "../../lib/prefs";
 import { LookThumb } from "./LookThumb";
 
@@ -220,6 +221,7 @@ function ManagePreset({ preset, presets, style, onClose }: { preset: Preset; pre
 /** "My presets": tap one to apply it to this video. */
 export function PresetList({ style, onChange }: Props) {
   const { presets, error } = usePresets();
+  const group = useRadioGroup();
   const [managing, setManaging] = useState<string | null>(null);
   if (error) return <p className="inline-error">Presets could not be loaded in this browser.</p>;
   if (presets === null) return null;
@@ -232,7 +234,7 @@ export function PresetList({ style, onChange }: Props) {
       {presets.length === 0 ? (
         <p className="field__hint">No presets yet. Style a subtitle the way you like, then tap Save as preset.</p>
       ) : (
-        <div className="looks" role="radiogroup" aria-label="My presets">
+        <div className="looks" role="radiogroup" aria-label="My presets" ref={group.ref} onKeyDown={group.onKeyDown}>
           {presets.map((p) => (
             <div key={p.id} className="preset-tile">
               <button

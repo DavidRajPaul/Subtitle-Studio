@@ -62,7 +62,7 @@ function SaveButtons({ file, primaryLabel }: { file: File; primaryLabel: string 
 }
 
 /** Export: a new MP4 with the subtitles in the picture, or an SRT file. The original is never changed. */
-export function ExportPanel({ project }: { project: Project }) {
+export function ExportPanel({ project, videoAvailable = true }: { project: Project; videoAvailable?: boolean }) {
   const [state, setState] = useState<State>({ kind: "choose" });
   const controller = useRef<AbortController | null>(null);
   const supported = exportEngine().supported();
@@ -153,7 +153,11 @@ export function ExportPanel({ project }: { project: Project }) {
                 {state.message}
               </p>
             )}
-            {supported ? (
+            {!videoAvailable ? (
+              <p className="export__error">
+                The video for this project is not on this device, so a video cannot be made. Choose it again in Editor mode. You can still save the subtitle file below.
+              </p>
+            ) : supported ? (
               <>
                 <p className="field__hint">
                   Takes about as long as the video, sometimes longer on a phone. Keep this screen open until it finishes.

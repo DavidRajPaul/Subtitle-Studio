@@ -4,7 +4,7 @@ import { resizeStart, setEnd, setStart } from "../lib/cueEdit";
 import { formatTimecode } from "../lib/timecode";
 import { assignLanes, msToPx, pxToMs, snapMs, tickStepMs } from "../lib/timeline";
 
-const LANE_HEIGHT = 34;
+const LANE_HEIGHT = 48; // blocks are 44 px tall: comfortable to tap
 const RULER_HEIGHT = 24;
 const MIN_DURATION = 10;
 

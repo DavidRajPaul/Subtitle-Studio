@@ -332,7 +332,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
         <button
           type="button"
           className="button"
-          disabled={!mediaOk || project.cues.length === 0}
+          disabled={project.cues.length === 0}
           onClick={() => {
             previewRef.current?.pause();
             void flush();
@@ -513,7 +513,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
             setExportOpen(false);
           }}
         >
-          <ExportPanel project={project} />
+          <ExportPanel project={project} videoAvailable={mediaOk} />
         </Sheet>
       )}
 
@@ -530,8 +530,8 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
           onConfirm={onExit}
         >
           <p>
-            The project could not be written to disk. If you leave now, the changes since the last
-            successful save will be lost.
+            They could not be saved on this device ({status.kind === "error" ? status.message : "unknown reason"}). If you
+            leave now, the changes since the last save will be lost.
           </p>
         </ConfirmDialog>
       )}

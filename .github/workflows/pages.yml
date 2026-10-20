@@ -36,6 +36,21 @@ jobs:
         run: pnpm --dir frontend build
         env:
           SUBTITLE_STUDIO_BASE: /${{ github.event.repository.name }}/
+      - name: Browser regression tests (phone and desktop)
+        run: |
+          pnpm --dir frontend exec playwright install --with-deps chromium
+          pnpm --dir frontend e2e
+        env:
+          SUBTITLE_STUDIO_BASE: /${{ github.event.repository.name }}/
+      - name: Keep the browser test report when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            frontend/playwright-report
+            frontend/test-results
+          retention-days: 14
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

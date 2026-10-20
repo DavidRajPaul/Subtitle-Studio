@@ -25,7 +25,10 @@
   },
   "include": [
     "src",
+    "e2e",
+    "playwright.config.ts",
     "vite.config.ts",
-    "eslint.config.js"
+    "eslint.config.js",
+    "scripts/licenses-plugin.ts"
   ]
 }

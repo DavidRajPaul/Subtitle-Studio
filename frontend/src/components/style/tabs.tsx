@@ -14,6 +14,7 @@ import {
   SYSTEM_FONTS,
 } from "../../engine/fonts/fonts";
 import { COLOR_CHIPS, LOOKS, SWATCHES } from "../../engine/looks";
+import { useRadioGroup } from "../../hooks/useRadioGroup";
 import { LookThumb } from "./LookThumb";
 import { PresetList } from "./Presets";
 import { OptionTiles, RangeField, Segmented, SubTabs, SwatchRow, Toggle } from "./controls";
@@ -38,8 +39,9 @@ export function LooksTab({ style, onChange }: TabProps) {
 }
 
 function BuiltInLooks({ style, onChange }: TabProps) {
+  const group = useRadioGroup();
   return (
-    <div className="looks" role="radiogroup" aria-label="Looks">
+    <div className="looks" role="radiogroup" aria-label="Looks" ref={group.ref} onKeyDown={group.onKeyDown}>
       {LOOKS.map((look) => (
         <button
           key={look.id}
@@ -164,8 +166,8 @@ function FontRow({ id, selected, onPick, onRemove }: { id: string; selected: boo
     };
   }, [id]);
   return (
-    <li className="font-row">
-      <button ref={ref} type="button" className="font-row__pick" aria-pressed={selected} onClick={onPick}>
+    <div className="font-row">
+      <button ref={ref} type="button" role="radio" className="font-row__pick" aria-checked={selected} onClick={onPick}>
         <span className="font-row__check" aria-hidden="true">{selected ? "✓" : ""}</span>
         <span className="font-row__name" style={{ fontFamily: previewFamily(id) }}>
           {fontLabel(id)}
@@ -176,11 +178,16 @@ function FontRow({ id, selected, onPick, onRemove }: { id: string; selected: boo
           Remove
         </button>
       )}
-    </li>
+    </div>
   );
 }
 
 export function FontTab({ style, onChange }: TabProps) {
+  const fontGroups = useRadioGroup();
+  const fontList = useRadioGroup();
+  const projectFonts = useRadioGroup();
+  const myFonts = useRadioGroup();
+  const recentGroup = useRadioGroup();
   const [query, setQuery] = useState("");
   const [group, setGroup] = useState<string>("All");
   const [custom, setCustom] = useState<{ id: string; name: string }[]>([]);
@@ -260,13 +267,13 @@ export function FontTab({ style, onChange }: TabProps) {
       {!q && (
         <>
           <h4 className="font-section">In this project</h4>
-          <ul className="font-list">
+          <div className="font-list" role="radiogroup" aria-label="Font in this project" ref={projectFonts.ref} onKeyDown={projectFonts.onKeyDown}>
             <FontRow id={style.font_family} selected onPick={() => { pick(style.font_family); }} />
-          </ul>
+          </div>
           {custom.length > 0 && (
             <>
               <h4 className="font-section">My fonts</h4>
-              <ul className="font-list">
+              <div className="font-list" role="radiogroup" aria-label="My fonts" ref={myFonts.ref} onKeyDown={myFonts.onKeyDown}>
                 {custom.map((f) => (
                   <FontRow
                     key={f.id}
@@ -279,36 +286,36 @@ export function FontTab({ style, onChange }: TabProps) {
                     }}
                   />
                 ))}
-              </ul>
+              </div>
             </>
           )}
           {recent.length > 0 && (
             <>
               <h4 className="font-section">Recently used</h4>
-              <ul className="font-list">
+              <div className="font-list" role="radiogroup" aria-label="Recently used fonts" ref={recentGroup.ref} onKeyDown={recentGroup.onKeyDown}>
                 {recent.map((id) => (
                   <FontRow key={id} id={id} selected={false} onPick={() => { pick(id); }} />
                 ))}
-              </ul>
+              </div>
             </>
           )}
         </>
       )}
-      <div className="chip-row" role="radiogroup" aria-label="Font group">
+      <div className="chip-row" role="radiogroup" aria-label="Font group" ref={fontGroups.ref} onKeyDown={fontGroups.onKeyDown}>
         {["All", ...FONT_GROUPS].map((g) => (
           <button key={g} type="button" role="radio" aria-checked={group === g} className="chip" onClick={() => { setGroup(g); }}>
             {g}
           </button>
         ))}
       </div>
-      <ul className="font-list" aria-label="Fonts">
+      <div className="font-list" role="radiogroup" aria-label="Fonts" ref={fontList.ref} onKeyDown={fontList.onKeyDown}>
         {matches.map((f) => (
           <FontRow key={f.id} id={f.id} selected={style.font_family === f.id} onPick={() => { pick(f.id); }} />
         ))}
         {(group === "All" || group === "Sans") &&
           !q &&
           SYSTEM_FONTS.map((f) => <FontRow key={f.id} id={f.id} selected={style.font_family === f.id} onPick={() => { pick(f.id); }} />)}
-      </ul>
+      </div>
       {matches.length === 0 && <p className="muted">No font matches “{query}”.</p>}
       <p className="muted studio-note">
         Free fonts from Google Fonts (Open Font License). Tamil and Hindi letters always use a

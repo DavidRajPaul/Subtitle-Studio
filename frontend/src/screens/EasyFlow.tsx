@@ -20,6 +20,7 @@ import { createProject } from "../lib/newProject";
 import { getLanguage, lastStyle, setLanguage } from "../lib/prefs";
 import { formatTimecode } from "../lib/timecode";
 import { VIDEO_ACCEPT, VIDEO_FORMATS_LABEL } from "../lib/videoFormats";
+import { useRadioGroup } from "../hooks/useRadioGroup";
 
 interface Props {
   onBack: () => void;
@@ -43,10 +44,20 @@ function chooseModel(info: SpeechInfo, language: string): string {
 
 export function EasyFlow({ onBack, onCreated }: Props) {
   const id = useId();
+  const sources = useRadioGroup();
   const videoInput = useRef<HTMLInputElement>(null);
   const txtInput = useRef<HTMLInputElement>(null);
   const [video, setVideo] = useState<Video>({ kind: "empty" });
   const [step, setStep] = useState<1 | 2>(1);
+  // Keyboard and screen-reader users continue from the new step's heading, not the top of the page.
+  const firstStep = useRef(true);
+  useEffect(() => {
+    if (firstStep.current) {
+      firstStep.current = false;
+      return;
+    }
+    document.getElementById(`${id}-${step === 1 ? "video" : "words"}`)?.focus();
+  }, [step, id]);
   const [source, setSource] = useState<Source | null>(null);
   const [typed, setTyped] = useState("");
   const [txt, setTxt] = useState<File | null>(null);
@@ -181,7 +192,7 @@ export function EasyFlow({ onBack, onCreated }: Props) {
 
       {step === 1 && (
         <section aria-labelledby={`${id}-video`}>
-          <h1 id={`${id}-video`}>Choose your video</h1>
+          <h1 id={`${id}-video`} tabIndex={-1}>Choose your video</h1>
           <input
             ref={videoInput}
             type="file"
@@ -247,8 +258,8 @@ export function EasyFlow({ onBack, onCreated }: Props) {
 
       {step === 2 && media && (
         <section aria-labelledby={`${id}-words`}>
-          <h1 id={`${id}-words`}>Where do the words come from?</h1>
-          <div className="source-cards" role="radiogroup" aria-label="Where the words come from">
+          <h1 id={`${id}-words`} tabIndex={-1}>Where do the words come from?</h1>
+          <div className="source-cards" role="radiogroup" aria-label="Where the words come from" ref={sources.ref} onKeyDown={sources.onKeyDown}>
             <button
               type="button"
               role="radio"

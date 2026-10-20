@@ -56,14 +56,25 @@ function minutesLeft(ms: number): string {
   return ` · about ${String(m)} ${m === 1 ? "minute" : "minutes"} left`;
 }
 
-export async function exportBurnedIn(options: {
+export interface ExportOptions {
   video: Blob;
   cues: ProjectCue[];
   style: SubtitleStyle;
   onProgress: (p: ExportProgress) => void;
   signal: AbortSignal;
-}): Promise<ExportResult> {
-  const { video, cues, style, onProgress, signal } = options;
+}
+
+export async function exportBurnedIn(options: ExportOptions): Promise<ExportResult> {
+  const input = new Input({ source: new BlobSource(options.video), formats: ALL_FORMATS });
+  try {
+    return await burnIn(options, input);
+  } finally {
+    input.dispose(); // release the file reader
+  }
+}
+
+async function burnIn(options: ExportOptions, input: Input): Promise<ExportResult> {
+  const { cues, style, onProgress, signal } = options;
   if (!exportSupported()) {
     throw new ApiError(
       "export_unsupported",
@@ -71,7 +82,6 @@ export async function exportBurnedIn(options: {
     );
   }
   onProgress({ fraction: null, message: "Getting ready…" });
-  const input = new Input({ source: new BlobSource(video), formats: ALL_FORMATS });
   const track = await input.getPrimaryVideoTrack();
   if (!track) throw new ApiError("no_video", "This file has no video track.");
   const hasAudio = (await input.getPrimaryAudioTrack()) !== null;
@@ -189,6 +199,14 @@ export async function exportBurnedIn(options: {
 /** Re-opens the new file and makes sure it is a complete video before calling it a success. */
 export async function checkOutput(blob: Blob, sourceDurationS: number, expectAudio: boolean): Promise<number> {
   const check = new Input({ source: new BlobSource(blob), formats: ALL_FORMATS });
+  try {
+    return await checkInput(check, sourceDurationS, expectAudio);
+  } finally {
+    check.dispose();
+  }
+}
+
+async function checkInput(check: Input, sourceDurationS: number, expectAudio: boolean): Promise<number> {
   const v = await check.getPrimaryVideoTrack();
   if (!v) throw new ApiError("export_invalid", "The new file has no video. Nothing was saved; try again.");
   if (expectAudio && !(await check.getPrimaryAudioTrack())) {

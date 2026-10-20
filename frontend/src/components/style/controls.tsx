@@ -1,4 +1,5 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
+import { useRadioGroup } from "../../hooks/useRadioGroup";
 
 /** Slider plus an editable number, so every value can be set exactly as well as by dragging. */
 export function RangeField({
@@ -164,8 +165,9 @@ export function OptionTiles<T extends string>({
   options: { value: T; label: string; icon: ReactNode }[];
   onChange: (v: T) => void;
 }) {
+  const group = useRadioGroup();
   return (
-    <div className="tiles" role="radiogroup" aria-label={label}>
+    <div className="tiles" role="radiogroup" aria-label={label} ref={group.ref} onKeyDown={group.onKeyDown}>
       {options.map((o) => (
         <button
           key={o.value}

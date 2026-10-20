@@ -6,7 +6,7 @@
 import { ApiError } from "../api/http";
 import { decodeToMono16k } from "./audioDecode";
 import { planWindows, SAMPLE_RATE } from "./chunking";
-import { fileUrl, MODEL_CACHE, MODEL_FILES, modelByName, type SpeechModelInfo } from "./speechModels";
+import { fileUrl, MODEL_CACHE, MODEL_FILES, modelByName, SPEECH_MODELS, type SpeechModelInfo } from "./speechModels";
 import type { SpeechSegment } from "./speechCues";
 import type { WorkerMessage, WorkerRequest } from "./whisper.worker";
 
@@ -101,6 +101,12 @@ export class BrowserSpeechEngine implements SpeechEngine {
     if (this.loadedRepo === repo) this.reset();
     let removed = false;
     for (const file of MODEL_FILES) removed = (await cache.delete(fileUrl(repo, file))) || removed;
+    // The speech runtime (about 12 MB) is shared by all models: drop it with the last one.
+    const stillInstalled = await Promise.all(SPEECH_MODELS.map((m) => this.isInstalled(m.name)));
+    if (!stillInstalled.some(Boolean)) {
+      const runtime = new URL(ORT_BASE, location.href).href;
+      for (const req of await cache.keys()) if (req.url.startsWith(runtime)) await cache.delete(req);
+    }
     return removed;
   }
 

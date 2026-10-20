@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { AboutPanel } from "./components/AboutPanel";
 import { DevicePanel } from "./components/DevicePanel";
 import { SpeechModelsPanel } from "./components/SpeechModelsPanel";
 import type { LoadedProject } from "./api/projects";
@@ -23,6 +24,25 @@ type View =
 export function App() {
   const [view, setView] = useState<View>({ name: "home" });
   const [mode, setModeState] = useState<AppMode>(getMode);
+  // On a new screen, keyboard and screen-reader users start at its heading (or the main area).
+  const firstView = useRef(true);
+  const screenKey = `${view.name}:${"projectId" in view ? view.projectId : ""}`;
+  useEffect(() => {
+    if (firstView.current) {
+      firstView.current = false;
+      return;
+    }
+    const timer = setTimeout(() => {
+      const main = document.getElementById("main");
+      const target = main?.querySelector<HTMLElement>("h1") ?? main;
+      if (!target || target.contains(document.activeElement)) return;
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: false });
+    }, 50);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [screenKey]);
   const goHome = () => {
     setView({ name: "home" });
   };
@@ -132,6 +152,7 @@ export function App() {
             <h1>Settings</h1>
             <DevicePanel />
             <SpeechModelsPanel />
+            <AboutPanel />
             <button type="button" className="button button--secondary spaced" onClick={goHome}>
               ← Back to home
             </button>

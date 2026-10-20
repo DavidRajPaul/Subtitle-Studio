@@ -204,8 +204,12 @@ describe("Editor", () => {
     expect(within(dialog).getByRole("button", { name: "Download SRT" })).toBeEnabled();
   });
 
-  it("keeps Export off while the video is missing", () => {
+  it("still offers the SRT when the video is missing", async () => {
     renderEditor(project({ media_available: false }));
-    expect(screen.getByRole("button", { name: "Export" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Export" }));
+    const dialog = await screen.findByRole("dialog", { name: "Export" });
+    expect(within(dialog).getByText(/video for this project is not on this device/)).toBeInTheDocument();
+    expect(within(dialog).queryByRole("button", { name: "Make video" })).not.toBeInTheDocument();
+    expect(within(dialog).getByRole("button", { name: "Download SRT" })).toBeEnabled();
   });
 });

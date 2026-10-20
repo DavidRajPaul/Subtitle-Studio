@@ -4,105 +4,88 @@
 
 ## Current work
 
-**More video formats and named style presets.** Built and checked in a real browser at phone size; awaiting review on her iPhone and Android tablet.
+**Phase 6: hardening and MVP acceptance.** Done for the browser app and verified in a real browser at phone and desktop size. Awaiting the owner's review on her iPhone and Android tablet.
 
-Requested by the owner after the export stage: "I want multiple input video format support… mov, mp4 and other popular formats. Also I want to add preset options… The preset must have a preset name… the user must be able to select from it and it must apply for his current video. The preset must include the font style, font, and all other styling options."
+Stages: 1 text on Pages ✓ · 2 speech in the browser ✓ · Easy mode + styles ✓ · export ✓ · formats + presets ✓ · **Phase 6 (this stage)** · next: Phase 7 (post-MVP), only once you choose what is worth doing.
 
-Stages: 1 text on Pages ✓ · 2 speech in the browser ✓ · Easy mode + styles ✓ · export ✓ (awaiting device review) · **formats + presets (this stage)** · next: hardening and MVP acceptance (Phase 6).
+## Acceptance criteria (Phase 6 exit: "all P0 acceptance scenarios pass")
 
-## Acceptance criteria
+The scenarios and the test behind each one are listed in [ACCEPTANCE.md](ACCEPTANCE.md).
 
-| Criterion | Result |
+| Area | Result |
 |---|---|
-| Everything built so far still works | Pass: all earlier tests kept. Changed only where MP4-only behaviour was the point (a test that refused MOV now accepts it; the picker test selector). |
-| Opens MOV, MP4, M4V, WebM, MKV and 3GP | Pass: real files of each are read in tests. MOV, MKV and WebM were taken through pick → preview → export in a browser. |
-| Formats browsers cannot read are refused with a next step | Pass: AVI, WMV, FLV and similar get "cannot be opened in a browser. Convert it to MP4 first…" |
-| Voice route works with the new formats | Pass: if the browser cannot read the sound directly, it is extracted another way. Tested by forcing that failure on an MKV: 9 subtitles. |
-| After an edit, offer to save a preset if not already saved | Pass: "This style is not a preset yet… **Save as preset**". It changes to "✓ Preset: name" when the style matches a preset. |
-| Presets have a name | Pass: required, up to 40 characters, unique (letter case ignored). A free "My style N" is suggested. |
-| Select a preset to apply it to the current video | Pass: under **My presets** at the top of Looks, in Easy mode, the Style sheet and Editor mode |
-| Preset includes the font and every other style option | Pass: the whole style is stored (font, bold/italic, size, colours and opacity, stroke, shadow and glow, box, position, alignment, width, spacing, case, animations). The browser test confirmed a font change and a colour change came back exactly. |
-| Rename, update and delete presets | Pass: **⋯** on a preset opens Rename, Replace with the current style, and Delete… (asks first). Videos already using the style keep it. |
+| P0 scenarios A–K, X (25 scenarios) | Pass: 51 browser checks at phone and desktop size, plus the voice test with real Whisper weights |
+| Failure paths | Pass: storage full, private browsing, missing video, failed and cancelled model download, a browser that can't make videos, unreadable or empty files |
+| Cancellation | Pass: video export, model download and voice recognition each say nothing was kept or changed. Leaving the page mid-export asks first. |
+| Safe clean-up | Pass: deleting a project deletes its video copy; removing the last model also removes the 12 MB speech runtime; video readers and temporary links are released |
+| Licensing | Pass: `THIRD_PARTY_LICENSES.txt` is generated from what actually ships and linked from Settings. The legacy backend's FFmpeg was checked. **The app's own licence is still your decision.** |
+| Regression | Pass: the browser suite now runs before every publish; a failure stops the deploy |
+| Clean install | Pass: a fresh clone ran the publish job's steps; details below |
+| Accessibility and touch | Pass: no serious or critical axe findings on any visited screen; every control is at least 44 px; the Easy flow works by keyboard alone |
 
 ## What changed
 
-- **Formats:**
-  - Video inspection now uses mediabunny (already used for export) instead of mp4box, which has been removed.
-  - The file pickers accept `.mp4,.mov,.m4v,.webm,.mkv,.3gp,video/*`. The `video/*` entry lets phones offer their photo library.
-  - Files are recognised by their content, not their name.
-  - Project names drop any extension. A missing file type is filled in from the extension, so the stored copy plays later.
-  - The voice route has a fallback that extracts the sound as 16 kHz WAV when the direct reader fails.
-  - The message for videos the device cannot play now says what to do and no longer claims export would still work.
-- **Presets** (`api/presets.ts`, `components/style/Presets.tsx`, `hooks/usePresets.ts`):
-  - Stored in this browser's database (new `presets` store, database version 3).
-  - Each preset is checked with the same rules as project styles. Older presets get newer options filled in; damaged ones are skipped.
-  - Matching ignores the order in which settings are stored.
-  - Choosing a preset makes it the starting look for her next Easy project. If it is deleted later, the default look is used.
+**Found and fixed by the new checks:**
+1. **Unsaved changes could be lost in Easy mode.** If saving failed (for example on a full device), **← Projects**, **Done** and **Edit timing** left the screen without warning. They now ask first ("Stay and retry" / "Leave anyway"), as Editor mode already did.
+2. **The reason for a failed save was hidden.** It was only available to screen readers; it is now shown under "Could not save".
+3. **No SRT without the video.** When a project's video was missing, Export was switched off. It now opens and offers the SRT, and explains why a video can't be made.
+4. **Removing the last speech model left 12 MB behind** (the shared speech runtime). It is now removed with the last model.
+5. **Touch targets under 44 px:** the Easy/Editor switch, sub-tabs (In/Out/Loop/Caption), chips, number boxes and timeline blocks (were 30 px tall).
+6. **Keyboard:**
+   - Groups of choices (looks, presets, fonts, font groups, animation tiles, where the words come from) were one Tab stop per item; the desktop Easy screen needed more than 60 Tab presses to reach **Export video**. Each group is now one Tab stop, with arrow keys, Home and End inside it.
+   - Focus now moves to the new heading after each step or screen change, instead of dropping to the top of the page.
+7. **Outdated wording:** "Export arrives in a later phase" was still shown after creating text subtitles.
+8. **Export file readers** were not released after use.
+
+**Added:**
+- **Browser regression suite** (`frontend/e2e/`, Playwright + axe-core) with small committed test videos (MP4, MOV, WebM, MKV, silent MP4, AVI) and a Tamil TXT file. Run with `pnpm --dir frontend e2e`. It runs in CI before every deploy, and a report is kept when it fails.
+- **Licence list:** a build step collects every npm package that reaches the site, including libraries compiled inside transformers.js and the speech runtime, and writes their full licence texts. For three packages that ship no licence file, the standard MIT/ISC text is generated with the copyright holder (onnxruntime: Microsoft Corporation).
+- **Settings → About and licences** links to the licence list and the font list.
 
 ## Checks run and results
 
 | Check | Command | Result |
 |---|---|---|
-| Lint | `pnpm lint` | Pass |
-| Types | `pnpm typecheck` | Pass |
-| Tests | `pnpm test` | Pass: frontend 218, backend 96 + 1 skipped |
+| Lint (frontend + backend) | `pnpm lint` | Pass |
+| Types (frontend + backend) | `pnpm typecheck` | Pass |
+| Unit tests | `pnpm test` | Pass: frontend 219, backend 96 + 1 skipped |
 | Audit | `pnpm --dir frontend audit` | No known vulnerabilities |
-| Production build | `SUBTITLE_STUDIO_BASE=/Subtitle-Studio/ pnpm --dir frontend build` | Pass |
-| Browser runs | Playwright + Chromium on the production build, 390×844 touch | Pass (below) |
-
-**Formats (browser):**
-
-| File | Result |
-|---|---|
-| QuickTime-branded MOV (VP9 + Opus), portrait | Opened, previewed with subtitles, exported 720×1280 6 s with sound |
-| MKV (VP9 + Opus) | Opened, previewed, exported 1280×720 8 s with sound |
-| WebM (VP9 + Opus) | Same |
-| Real H.264 + AAC MOV (this test browser cannot decode H.264) | Clear message: cannot be previewed or exported on this device, try another device or convert to MP4 (H.264) |
-| AVI | Refused before reading: "AVI videos cannot be opened in a browser. Convert it to MP4 first…" |
-
-All three exports decoded end to end in ffmpeg with no errors. There were no console errors and no sideways scrolling.
-
-**Presets (browser, phone size):**
-1. Edited the colour and font (Mukta Malar), then **Save as preset**. "My style 1" was suggested; renamed it "Wedding Tamil" and saved → "✓ Preset: Wedding Tamil".
-2. Switched to Neon → the bar offered saving again. Tapped the preset → the style came back (different pixels drawn) and "✓ Preset" showed.
-3. Reloaded the page → the preset was still there, and a new project started with it.
-4. Renamed it to "Wedding", then deleted it after the confirmation → "No presets yet".
-
-**Found and fixed during testing:**
-- The preset **⋯** button covered part of the preview text. It now sits beside the name.
-- The preset name boxes were unstyled.
-- The old "cannot play this format" message wrongly said export would still work.
+| Build | `SUBTITLE_STUDIO_BASE=/Subtitle-Studio/ pnpm --dir frontend build` | Pass |
+| Browser suite | `E2E_CHROMIUM=/opt/pw-browsers/chromium pnpm --dir frontend e2e` | Pass: 51 passed, 3 skipped (voice ×2 without model files; keyboard test at phone size, by design) |
+| Voice test | same, with `E2E_MODEL_DIR=<whisper-tiny files>` and a 58 s speech clip | Pass (desktop): download, cancel ("nothing changed"), recognise, remove model → storage empty |
+| Clean install | fresh `git clone`, then `pnpm --dir frontend install --frozen-lockfile`, lint, typecheck, test, build, e2e | Pass: install 17 s; 219 unit tests; 51 browser checks passed, 3 skipped |
 
 **Not run / limitations:**
-- Not tested on a real iPhone, Android tablet or in Safari. Real iPhone MOVs are H.264 or HEVC, which this test browser cannot decode, so real MOV playback and export need checking on her devices.
-- Whether a file plays depends on the device's decoders. HEVC (newer iPhones) plays in Safari, but on Android only where the device supports it.
-- Presets live in one browser on one device, like projects. There is no export or import of presets yet.
-- The SRT export does not include styles, so presets affect only the MP4 and the preview.
+- **Real devices.** Not tested on a real iPhone, Android tablet or in Safari. The suite uses desktop Chromium at phone size with touch.
+- **H.264, HEVC and AAC.** The test browser can't decode or encode these, so all automated video tests use VP9/Opus. Real iPhone MOVs and H.264 export need checking on the devices.
+- **Voice in CI.** The publish job skips the voice test, because it would need the model download.
+- **Legacy backend.** It has no new hardening; it is not used by the web app (still waiting on your decision about removing it).
 
 ## Decisions made (reversible)
 
-1. Supported formats: MP4, MOV, M4V, WebM, MKV, 3GP. MPEG-TS (.ts/.mts) is refused for now (common from camcorders but rarely from phones).
-2. Show "Save as preset" whenever the current style doesn't match a preset, even if it matches a ready-made look.
-3. Newest presets first.
-4. Deleting a preset never changes videos that already use its style.
+1. Browser checks run before every publish; a failure blocks the deploy.
+2. Timeline blocks must be 44 px tall, but may be narrower than 44 px, because their width shows the duration. The subtitle list gives every subtitle a full-size row.
+3. The licence list includes everything compiled into the shipped files, even where a library may not strictly need listing.
 
 ## Known limitations
 
-- Projects, models, added fonts and presets live in one browser on one device.
+- Projects, models, fonts and presets live in one browser on one device.
 - No undo yet.
-- Still open: may the Python backend be removed?; timing defaults OK?; delete `docs/Test.md`?; licence choice for the app itself.
+- Still open: may the Python backend be removed?; timing defaults OK?; delete `docs/Test.md` (it is empty)?; **licence choice for the app itself**.
 
 ## What I need from you
 
-On her iPhone, pick a video from the photo library (a MOV) and export it. On the Android tablet, try a video from the gallery. Then save a preset, open another video and apply it. Tell me what worked and what didn't (screenshots help).
+1. **On her devices:** run the checklist below on the iPhone and the Android tablet. This is the one acceptance step I can't automate.
+2. **Decisions:** the app's own licence, and whether to remove the Python backend. For a personal app that others may also use, the usual choices are MIT (anyone may reuse it) or "all rights reserved" (no licence file). Note that mediabunny's MPL-2.0 only requires that its own files stay open, which is already the case.
 
 ## Owner review checklist (phone-friendly)
 
-1. **Make subtitles** → **Pick a video** → choose an iPhone video (MOV) → words → look.
-2. Check the preview shows the subtitles, then **Export video** → **Make video** → save it to Photos.
-3. Tap **More styling**, change the font and a colour → **Save as preset** → type a name → **Save preset**.
-4. Start a new video: it begins with your preset. Tap a ready-made look, then your preset under **My presets** to switch back.
-5. Tap **⋯** on the preset: rename it, then try **Delete…** (it asks first).
-6. Optional: try an AVI file and check the message makes sense.
+1. Open the site → **Make subtitles** → pick a video from Photos (an iPhone MOV) → **Type or paste** → **Make subtitles**.
+2. Pick a look; **More styling** → change the font → **Save as preset**.
+3. **Export video** → **Make video** → tap **Cancel** once → **Try again** → **Share or save to Photos/Files**. Does it play in Photos?
+4. **Download SRT** and check it opens.
+5. Turn on airplane mode and open the app from the Home Screen: it should still open, with your project.
+6. Start again with **From the voice** (Base model, about 77 MB once), Tamil.
+7. **Settings → About and licences**: the licence list opens.
 
-PHASE GATE: I will not begin the next phase until you explicitly approve it. Reply "Approved. Proceed to Phase 6" to continue, or tell me what you want changed. If I need anything from you before continuing, I will state it explicitly.
+PHASE GATE: I will not begin the next phase until you explicitly approve it. Reply "Approved. Proceed to Phase 7" to continue, or tell me what you want changed. If I need anything from you before continuing, I will state it explicitly.

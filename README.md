@@ -18,7 +18,7 @@ The repository documentation describes the product and planned architecture; do 
 | 3 | Subtitle editor, timeline, styles and preview | Accepted (owner approved Phase 4) |
 | 4 | Local speech transcription | In the browser (stage 2) — awaiting owner review on real devices |
 | 5 | SRT and burned-in MP4 export | In the browser (export stage) — awaiting owner review on real devices |
-| 6 | Hardening and MVP acceptance | Not started |
+| 6 | Hardening and MVP acceptance | Done in the browser app ([acceptance scenarios](docs/ACCEPTANCE.md)) — awaiting owner review on real devices |
 | 7 | Optional post-MVP improvements | Deferred |
 
 **MVP:** both speech and TXT workflows, four timing modes, manual timing, font/style/placement controls, preview, project save/load, SRT export and burned-in MP4 export.
@@ -42,7 +42,7 @@ The repository documentation describes the product and planned architecture; do 
 
 Subtitle Studio runs entirely in the browser: open **https://davidrajpaul.github.io/Subtitle-Studio/** on a phone, tablet or computer. Videos and text stay on that device; projects are saved in that browser. On iPhone/iPad use Safari → Share → **Add to Home Screen**; on Android, the browser menu → **Add to Home screen / Install app**. See [docs/ADR-001-browser-only-web-app.md](docs/ADR-001-browser-only-web-app.md).
 
-Publishing is automatic: every push to `main` runs `.github/workflows/pages.yml` (lint, type-check, tests, build, deploy). One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+Publishing is automatic: every push to `main` runs `.github/workflows/pages.yml` (lint, type-check, unit tests, build, browser regression tests at phone and desktop size, deploy). A failing check stops the publish. One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
 Easy mode (the default) makes subtitles in three steps: choose a video (MP4, MOV, M4V, WebM, MKV or 3GP) → the words (voice, typed or pasted, or a TXT file) → pick a look; Editor mode keeps full control. Also in the web app: the text workflow (MP4 + TXT → timing → editor → saved projects) and speech recognition (MP4 audio or a separate MP3 → Whisper running on the device → editor). Styles can be saved as named presets and applied to any video. Export works in the browser too: an SRT file, or a new MP4 with the subtitles drawn into the picture (the original is never changed).
 
@@ -58,6 +58,8 @@ The web app needs only Node.js 22+ and pnpm 10+:
 pnpm --dir frontend install        # dependencies
 pnpm frontend                      # app on http://127.0.0.1:5173 (no backend needed)
 pnpm --dir frontend test           # includes the parity tests against the Python engine
+SUBTITLE_STUDIO_BASE=/Subtitle-Studio/ pnpm --dir frontend build
+pnpm --dir frontend e2e            # browser regression suite (Playwright), see docs/ACCEPTANCE.md
 ```
 
 The legacy Python backend (Python 3.11+, [uv](https://docs.astral.sh/uv/), FFmpeg/FFprobe) is kept for reference and for regenerating the parity fixtures (`uv run --directory backend python scripts/export_parity_fixtures.py`):
@@ -106,11 +108,11 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 - [x] Export UTF-8 SRT (export stage, awaiting owner review).
 - [x] Burn subtitles into a separate MP4 (export stage; H.264 where the device can encode it).
 - [x] Validate output; source remains untouched (the new file is re-opened and checked before it is offered).
-- [ ] Test progress, errors, cancellation and project save/reopen.
-- [ ] Review core flows on a phone and desktop viewport.
+- [x] Test progress, errors, cancellation and project save/reopen (Phase 6: [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md), run before every publish).
+- [x] Review core flows on a phone and desktop viewport (automated at 390×844 touch and 1400×900; real-device review pending).
 
 ## License
 
-Not yet selected. Review application, dependency, FFmpeg build, model and font licenses before distribution.
+The app's own licence is **not yet selected** (owner decision). Third-party licences were reviewed in Phase 6.
 
-Web app: 54 bundled fonts under the SIL Open Font License or Apache-2.0 (list in [docs/FONTS.md](docs/FONTS.md)), transformers.js (Apache-2.0), ONNX Runtime Web (MIT), mediabunny (MPL-2.0, used unmodified from npm; its source is at https://github.com/Vanilagy/mediabunny); speech models are OpenAI Whisper (MIT) in the Xenova/whisper-* conversions, downloaded by the user on demand from Hugging Face and never bundled. Legacy backend, reviewed in Phase 4: faster-whisper (MIT), CTranslate2 (MIT), PyAV (BSD-3-Clause; its wheels bundle FFmpeg libraries, to be checked in Phase 6), onnxruntime (MIT, used for voice-activity detection), huggingface_hub and tokenizers (Apache-2.0), NumPy (BSD-3-Clause and others), tqdm (MPL-2.0 and MIT). Speech models: Systran's faster-whisper conversions of OpenAI Whisper (MIT); downloaded by the user on demand, never bundled in the repository.
+Web app: every package that ships in the site is listed, with its full licence text, in `THIRD_PARTY_LICENSES.txt` (generated from the actual bundle at build time; linked from Settings → About and licences). Summary: 54 bundled fonts under the SIL Open Font License or Apache-2.0 (list in [docs/FONTS.md](docs/FONTS.md)), transformers.js (Apache-2.0), ONNX Runtime Web (MIT), mediabunny (MPL-2.0, used unmodified from npm; its source is at https://github.com/Vanilagy/mediabunny); speech models are OpenAI Whisper (MIT) in the Xenova/whisper-* conversions, downloaded by the user on demand from Hugging Face and never bundled. Legacy backend, reviewed in Phase 4: faster-whisper (MIT), CTranslate2 (MIT), PyAV (BSD-3-Clause; checked in Phase 6: the 19.0.1 wheel bundles FFmpeg built as LGPL-3.0-or-later plus the GPL x264/x265 libraries; the backend is not distributed, so this matters only if it were ever repackaged), onnxruntime (MIT, used for voice-activity detection), huggingface_hub and tokenizers (Apache-2.0), NumPy (BSD-3-Clause and others), tqdm (MPL-2.0 and MIT). Speech models: Systran's faster-whisper conversions of OpenAI Whisper (MIT); downloaded by the user on demand, never bundled in the repository.

@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import { licenses } from "./scripts/licenses-plugin";
 
 // ONNX Runtime references other WebAssembly builds that this app never loads (it serves
 // ort/ort-wasm-simd-threaded.wasm itself); leave them out of the published site.
@@ -24,10 +25,33 @@ const FRONTEND_HOST = process.env.SUBTITLE_STUDIO_FRONTEND_HOST ?? "127.0.0.1";
 // GitHub Pages serves the app from /<repository>/; the deploy workflow sets this.
 const BASE = process.env.SUBTITLE_STUDIO_BASE ?? "/";
 
+// Code that reaches the site without passing through the bundler as separate modules: the speech
+// runtime under /ort/ (copied from onnxruntime-web by scripts/copy-ort.mjs) and libraries that
+// transformers.js and onnxruntime-web compile into their own files.
+const thirdParty = licenses([
+  "onnxruntime-web",
+  "@huggingface/jinja",
+  "@huggingface/tokenizers",
+  "flatbuffers",
+  "guid-typescript",
+  "long",
+  "platform",
+  "protobufjs",
+  "@protobufjs/aspromise",
+  "@protobufjs/base64",
+  "@protobufjs/codegen",
+  "@protobufjs/eventemitter",
+  "@protobufjs/fetch",
+  "@protobufjs/float",
+  "@protobufjs/path",
+  "@protobufjs/pool",
+  "@protobufjs/utf8",
+]);
+
 export default defineConfig({
   base: BASE,
-  plugins: [react(), dropUnusedOrtWasm()],
-  worker: { format: "es", plugins: () => [dropUnusedOrtWasm()] },
+  plugins: [react(), dropUnusedOrtWasm(), thirdParty.collect(), thirdParty.write()],
+  worker: { format: "es", plugins: () => [dropUnusedOrtWasm(), thirdParty.collect()] },
   server: {
     host: FRONTEND_HOST,
     port: 5173,
@@ -44,5 +68,6 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}"],
   },
 });

@@ -35,3 +35,5 @@ tmp/
 frontend/public/ort/
 # Copied from @fontsource packages at build time (see frontend/scripts/build-fonts.mjs)
 frontend/public/fonts/
+frontend/test-results/
+frontend/playwright-report/

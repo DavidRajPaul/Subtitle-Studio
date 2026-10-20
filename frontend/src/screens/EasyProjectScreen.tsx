@@ -3,6 +3,7 @@ import { messageOf } from "../api/http";
 import { loadMediaUrl } from "../api/media";
 import { getProject, type LoadedProject, type Project, type SubtitleStyle } from "../api/projects";
 import { SaveStatus } from "../components/SaveStatus";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 import { ExportPanel } from "../components/ExportPanel";
 import { Sheet } from "../components/Sheet";
 import { SubtitleCanvas } from "../components/SubtitleCanvas";
@@ -101,9 +102,11 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
     showASubtitle(style);
   };
 
+  // If the latest change could not be saved, ask before leaving instead of losing it quietly.
+  const [leaveAsk, setLeaveAsk] = useState<(() => void) | null>(null);
   const leave = async (then: () => void) => {
-    await flush();
-    then();
+    if (await flush()) then();
+    else setLeaveAsk(() => then);
   };
 
   const studio = <StyleStudio style={project.style} onChange={setStyle} initialTab="font" />;
@@ -201,7 +204,7 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
         <button
           type="button"
           className="button"
-          disabled={mediaMissing || project.cues.length === 0}
+          disabled={project.cues.length === 0}
           onClick={() => {
             previewRef.current?.pause();
             void flush();
@@ -212,6 +215,24 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
         </button>
       </div>
 
+      {leaveAsk && (
+        <ConfirmDialog
+          title="Your latest changes were not saved"
+          confirmLabel="Leave anyway"
+          cancelLabel="Stay and retry"
+          destructive
+          onCancel={() => {
+            setLeaveAsk(null);
+            void retry();
+          }}
+          onConfirm={leaveAsk}
+        >
+          <p>
+            They could not be saved on this device ({status.kind === "error" ? status.message : "unknown reason"}). If you leave now, the changes since the last save will be lost.
+          </p>
+        </ConfirmDialog>
+      )}
+
       {exportOpen && (
         <Sheet
           title="Export"
@@ -219,7 +240,7 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
             setExportOpen(false);
           }}
         >
-          <ExportPanel project={project} />
+          <ExportPanel project={project} videoAvailable={!mediaMissing} />
         </Sheet>
       )}
 

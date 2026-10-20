@@ -20,7 +20,7 @@ export function SaveStatus({ state, onRetry }: Props) {
           <button type="button" className="button button--secondary" onClick={onRetry}>
             Retry
           </button>
-          <span className="visually-hidden">{state.message}</span>
+          <span className="save-status__reason">{state.message}</span>
         </>
       )}
     </div>
