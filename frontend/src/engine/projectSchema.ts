@@ -3,6 +3,7 @@
  * pydantic model did: missing optional fields get defaults, anything out of range is refused.
  */
 import type { Project, SubtitleStyle } from "../api/projects";
+import { partsProblem } from "../lib/cuts";
 import { DEFAULT_STYLE } from "../lib/style";
 import { MAX_SEGMENTS } from "./text";
 import { DEFAULT_SETTINGS } from "./timing";
@@ -136,6 +137,16 @@ export function checkProject(raw: unknown): Project {
     if (!isInt(c.start_ms, -BOUND, BOUND) || !isInt(c.end_ms, -BOUND, BOUND)) fail(`cues[${String(i)}]`);
     return { id: c.id, text: c.text, start_ms: c.start_ms, end_ms: c.end_ms };
   });
+  let parts: { start_ms: number; end_ms: number }[] | undefined;
+  if (raw.parts !== undefined) {
+    if (!Array.isArray(raw.parts) || raw.parts.length > 10_000) fail("parts");
+    parts = raw.parts.map((p: unknown, i) => {
+      if (!isRec(p) || !isInt(p.start_ms, 0, BOUND) || !isInt(p.end_ms, 0, BOUND)) fail(`parts[${String(i)}]`);
+      return { start_ms: p.start_ms, end_ms: p.end_ms };
+    });
+    const problem = partsProblem(parts, m.duration_ms);
+    if (problem) fail(`parts: ${problem}`);
+  }
   const t: Rec = isRec(raw.timing) ? raw.timing : {};
   const mode = t.mode ?? "readable";
   const segmentation = t.segmentation ?? "line";
@@ -161,6 +172,7 @@ export function checkProject(raw: unknown): Project {
       height: m.height,
       has_audio: m.has_audio,
     },
+    ...(parts ? { parts } : {}),
     cues,
     style: checkStyle(raw.style),
     timing: {

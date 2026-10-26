@@ -4,6 +4,7 @@ import { messageOf } from "../api/http";
 import { loadMediaBlob } from "../api/media";
 import type { Project } from "../api/projects";
 import { cuesToSrt } from "../engine/export/srt";
+import { cutLength, isUncut } from "../lib/cuts";
 import { validateCues } from "../engine/timing";
 import { canShareFile, downloadFile, exportName, shareFile } from "../lib/saveFile";
 
@@ -67,8 +68,8 @@ export function ExportPanel({ project, videoAvailable = true }: { project: Proje
   const controller = useRef<AbortController | null>(null);
   const supported = exportEngine().supported();
   const issues = useMemo(
-    () => validateCues(project.cues, project.media.duration_ms, project.timing.settings),
-    [project.cues, project.media.duration_ms, project.timing.settings],
+    () => validateCues(project.cues, cutLength({ parts: project.parts, media: project.media }), project.timing.settings),
+    [project.cues, project.parts, project.media, project.timing.settings],
   );
   const srt = useMemo(() => cuesToSrt(project.cues), [project.cues]);
   const srtFile = useMemo(
@@ -118,6 +119,7 @@ export function ExportPanel({ project, videoAvailable = true }: { project: Proje
         cues: project.cues,
         style: project.style,
         signal: abort.signal,
+        ...(project.parts && !isUncut(project.parts, project.media.duration_ms) ? { parts: project.parts } : {}),
         onProgress: (progress) => {
           setState((s) => (s.kind === "working" ? { ...s, progress } : s));
         },

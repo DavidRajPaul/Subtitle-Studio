@@ -13,6 +13,7 @@ import { generateTiming, type TimingIssue } from "../api/subtitles";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import { CueEditor, type BulkScope, type TimingEdit } from "../components/CueEditor";
 import { CueList } from "../components/CueList";
+import { CutPanel } from "../components/CutPanel";
 import { ExportPanel } from "../components/ExportPanel";
 import { SaveStatus } from "../components/SaveStatus";
 import { Sheet } from "../components/Sheet";
@@ -33,6 +34,7 @@ import {
   setText,
   type EditResult,
 } from "../lib/cueEdit";
+import { cutDuration, cutLength, keptParts, partStarts } from "../lib/cuts";
 import { formatTimecode } from "../lib/timecode";
 import { activeCues } from "../lib/timeline";
 import { VIDEO_ACCEPT } from "../lib/videoFormats";
@@ -40,7 +42,8 @@ import { VIDEO_ACCEPT } from "../lib/videoFormats";
 /** Validates the current cues with the same engine that generated them (debounced). */
 function useIssues(project: Project): TimingIssue[] {
   const [issues, setIssues] = useState<TimingIssue[]>([]);
-  const { cues, timing, media } = project;
+  const { cues, timing } = project;
+  const length = cutLength(project);
   useEffect(() => {
     if (cues.length === 0) {
       setIssues([]);
@@ -48,7 +51,7 @@ function useIssues(project: Project): TimingIssue[] {
     }
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      validateCues(cues, media.duration_ms, timing.settings, controller.signal)
+      validateCues(cues, length, timing.settings, controller.signal)
         .then(setIssues)
         .catch(() => {
           // Warnings are advisory; keep the last known set if the check cannot run.
@@ -58,11 +61,11 @@ function useIssues(project: Project): TimingIssue[] {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [cues, media.duration_ms, timing.settings]);
+  }, [cues, length, timing.settings]);
   return issues;
 }
 
-type Panel = "subtitle" | "style";
+type Panel = "subtitle" | "style" | "cut";
 
 function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => void }) {
   const { latest, status, markChanged, flush, retry } = useAutosave(initial);
@@ -136,7 +139,9 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
   }, [issues]);
 
   const { cues, media, style } = project;
-  const durationMs = media.duration_ms;
+  // Everything on screen uses the cut video's timeline (see lib/cuts.ts).
+  const parts = useMemo(() => keptParts(project), [project]);
+  const durationMs = cutDuration(parts);
   const selectedIndex = cues.findIndex((c) => c.id === selectedId);
   const selected = selectedIndex >= 0 ? cues[selectedIndex] : null;
   const activeIds = useMemo(
@@ -221,7 +226,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
       const result = await generateTiming({
         segments: current.cues.map((c) => c.text),
         mode,
-        duration_ms: current.media.duration_ms,
+        duration_ms: cutLength(current),
         settings: current.timing.settings,
       });
       update((p) => ({
@@ -305,6 +310,19 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
     />
   );
   const stylePanel = <StyleStudio style={style} onChange={setStyle} />;
+  const cutPanel = (
+    <CutPanel
+      parts={parts}
+      originalMs={media.duration_ms}
+      cues={cues}
+      currentMs={currentMs}
+      onSeek={seek}
+      onChange={(next) => {
+        update((p) => ({ ...p, parts: next.parts, cues: next.cues }));
+        if (selectedId && !next.cues.some((c) => c.id === selectedId)) setSelectedId(next.cues[0]?.id ?? null);
+      }}
+    />
+  );
 
   return (
     <div className={wide ? "editor editor--wide" : "editor"}>
@@ -388,6 +406,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
               ref={previewRef}
               src={videoUrl}
               durationMs={durationMs}
+              parts={parts}
               label={`Preview of ${media.filename}`}
               width={media.width}
               height={media.height}
@@ -418,6 +437,7 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
           onApply={(next) => {
             update((p) => ({ ...p, cues: next }));
           }}
+          joins={partStarts(parts).slice(1)}
         />
         <CueList
           cues={cues}
@@ -454,8 +474,18 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
             >
               Style
             </button>
+            <button
+              type="button"
+              className="button button--secondary toggle"
+              aria-pressed={panel === "cut"}
+              onClick={() => {
+                setPanel("cut");
+              }}
+            >
+              Cut video
+            </button>
           </div>
-          {panel === "subtitle" ? subtitlePanel : stylePanel}
+          {panel === "subtitle" ? subtitlePanel : panel === "style" ? stylePanel : cutPanel}
         </aside>
       ) : (
         <>
@@ -482,7 +512,26 @@ function Editor({ initial, onExit }: { initial: LoadedProject; onExit: () => voi
             >
               Style
             </button>
+            <button
+              type="button"
+              className="button"
+              onClick={() => {
+                setSheet("cut");
+              }}
+            >
+              Cut video
+            </button>
           </div>
+          {sheet === "cut" && (
+            <Sheet
+              title="Cut video"
+              onClose={() => {
+                setSheet(null);
+              }}
+            >
+              {cutPanel}
+            </Sheet>
+          )}
           {sheet === "subtitle" && (
             <Sheet
               title="Edit subtitle"

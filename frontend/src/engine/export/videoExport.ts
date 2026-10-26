@@ -19,7 +19,9 @@ import {
 import { ApiError } from "../../api/http";
 import type { ProjectCue, SubtitleStyle } from "../../api/projects";
 import { ensureFont } from "../fonts/fonts";
+import { cutDuration, type Range } from "../../lib/cuts";
 import { displayText, drawSubtitles } from "../render/draw";
+import { burnInCut } from "./cutExport";
 
 export interface ExportProgress {
   fraction: number | null;
@@ -45,6 +47,14 @@ const even = (n: number) => Math.max(2, Math.floor(n / 2) * 2);
 
 export const CODEC_NAMES: Record<string, string> = { avc: "H.264", hevc: "HEVC", vp9: "VP9", av1: "AV1" };
 
+function codecNotes(codec: VideoCodec): string[] {
+  return codec === "avc"
+    ? []
+    : [
+        `This browser could not use H.264, so the video uses ${CODEC_NAMES[codec] ?? codec}. It plays in Chrome and on Android, but some apps and older iPhones may not play it.`,
+      ];
+}
+
 export function exportSupported(): boolean {
   return typeof VideoEncoder !== "undefined" && typeof VideoDecoder !== "undefined";
 }
@@ -62,6 +72,8 @@ export interface ExportOptions {
   style: SubtitleStyle;
   onProgress: (p: ExportProgress) => void;
   signal: AbortSignal;
+  /** Kept parts of the original when the video was cut (see lib/cuts.ts); absent = the whole video. */
+  parts?: Range[];
 }
 
 export async function exportBurnedIn(options: ExportOptions): Promise<ExportResult> {
@@ -105,6 +117,14 @@ async function burnIn(options: ExportOptions, input: Input): Promise<ExportResul
   const canvas = typeof OffscreenCanvas !== "undefined" ? new OffscreenCanvas(width, height) : Object.assign(document.createElement("canvas"), { width, height });
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D | null;
   if (!ctx) throw new ApiError("no_canvas", "This browser cannot draw the subtitles for export.");
+
+  if (options.parts) {
+    const cut = await burnInCut({ ...options, parts: options.parts }, input, { width, height, codec, canvas, ctx });
+    onProgress({ fraction: 1, message: "Checking the new video…" });
+    const expected = cutDuration(options.parts) / 1000;
+    const durationMs = await checkOutput(cut.blob, expected, cut.hasAudio);
+    return { blob: cut.blob, codec, width, height, durationMs, hasAudio: cut.hasAudio, notes: codecNotes(codec) };
+  }
 
   const output = new Output({ format: new Mp4OutputFormat({ fastStart: "in-memory" }), target: new BufferTarget() });
   const conversion = await Conversion.init({
@@ -187,13 +207,7 @@ async function burnIn(options: ExportOptions, input: Input): Promise<ExportResul
 
   onProgress({ fraction: 1, message: "Checking the new video…" });
   const durationMs = await checkOutput(blob, sourceDuration, hasAudio);
-  const notes: string[] = [];
-  if (codec !== "avc") {
-    notes.push(
-      `This browser could not use H.264, so the video uses ${CODEC_NAMES[codec] ?? codec}. It plays in Chrome and on Android, but some apps and older iPhones may not play it.`,
-    );
-  }
-  return { blob, codec, width, height, durationMs, hasAudio, notes };
+  return { blob, codec, width, height, durationMs, hasAudio, notes: codecNotes(codec) };
 }
 
 /** Re-opens the new file and makes sure it is a complete video before calling it a success. */

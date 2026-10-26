@@ -551,3 +551,19 @@ select.text-input { padding-right: var(--space-6); }
 .link-list .button { display: inline-flex; align-items: center; text-decoration: none; }
 /* Headings receive focus on screen changes (for keyboard and screen-reader users); no ring for that. */
 h1[tabindex="-1"]:focus, main[tabindex="-1"]:focus { outline: none; }
+.timeline__join { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--color-error); pointer-events: none; }
+
+/* Cutting the video */
+.cut-panel { display: grid; gap: var(--space-3); }
+.cut-panel h3 { margin: 0; }
+.cut-trim { display: grid; gap: var(--space-2); }
+.cut-trim__row { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-2); }
+.cut-trim__row .field { flex: 1 1 10rem; }
+.cut-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.cut-actions .field__hint { flex-basis: 100%; margin: 0; }
+.cut-confirm { padding: var(--space-3); border: 1px solid var(--color-warn); border-radius: var(--radius-card); }
+.cut-confirm p { margin: 0 0 var(--space-2); }
+.cut-subhead { margin: 0; font-size: 15px; }
+.cut-list { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--space-2); }
+.cut-gap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.cut-list .link-button { min-height: 44px; }

@@ -12,6 +12,8 @@ export interface ExportEngine {
     style: SubtitleStyle;
     onProgress: (p: ExportProgress) => void;
     signal: AbortSignal;
+    /** Kept parts when the video was cut; absent = the whole video. */
+    parts?: { start_ms: number; end_ms: number }[];
   }) => Promise<ExportResult>;
 }
 

@@ -93,6 +93,11 @@ export interface Project {
   created_at?: string | null;
   updated_at?: string | null;
   media: MediaRef;
+  /**
+   * Parts of the original video to keep, in order (integer ms of the original). Absent = the
+   * whole video. Subtitle times are on the cut timeline these parts make. See lib/cuts.ts.
+   */
+  parts?: { start_ms: number; end_ms: number }[];
   cues: ProjectCue[];
   style: SubtitleStyle;
   timing: { mode: TimingMode; segmentation: Segmentation; settings: TimingSettings };

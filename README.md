@@ -111,6 +111,115 @@ Implement one phase at a time. Each phase needs tests, actual command results, h
 - [x] Test progress, errors, cancellation and project save/reopen (Phase 6: [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md), run before every publish).
 - [x] Review core flows on a phone and desktop viewport (automated at 390×844 touch and 1400×900; real-device review pending).
 
+## Implementation cycle (video editor roadmap)
+
+The full feature list, with notes and feasibility, is in [docs/FEATURE_ROADMAP.md](docs/FEATURE_ROADMAP.md). Phases are ordered from the most-used features. Each phase runs the same cycle, and a box is ticked only after its tests pass and it is published:
+
+1. **Scope:** the phase's tasks and acceptance criteria are stated.
+2. **Build:** written from scratch for this app, with no code or assets taken from other products.
+3. **Test:** unit tests, plus browser tests at phone and desktop size (`pnpm --dir frontend e2e`).
+4. **Document:** this checklist, [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md), and [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md).
+5. **Publish:** push to `main`. The publish job re-runs every check and deploys only if all pass.
+6. **Review:** the owner tries it on a phone and a tablet.
+7. **Approve:** then the next phase begins.
+
+Feasibility: ● on the device · ◐ on the device with limits · ○ not planned (needs servers or licensed content). Phase F12 lists the ○ items.
+
+**F1 · Cut the video (most used)** — done, awaiting review on her devices
+
+- [x] F1.1 Trim the start and end of the video, by typing exact times or setting them from the playhead (drag handles come with the multi-clip timeline, F5) ●
+- [x] F1.2 Split at the playhead and delete a part ●
+- [x] F1.3 Delete left / delete right of the playhead ●
+- [x] F1.4 Restore a deleted part ●
+- [x] F1.5 Preview plays the cut version, skipping deleted parts ●
+- [x] F1.6 Export the cut version: picture re-encoded, sound copied as is ●
+
+**F2 · Music and sound**
+
+- [ ] F2.1 Add background music from her own files (MP3, M4A, WAV) ●
+- [ ] F2.2 Volume for the video's own sound and for the music; mute the original ●
+- [ ] F2.3 Fade in / fade out ●
+- [ ] F2.4 Trim and move the music ●
+- [ ] F2.5 Record a voice-over with the microphone ●
+- [ ] F2.6 Save the sound only (extract audio) ◐
+- [ ] F2.7 Sound effects from her own files ●
+- [ ] F2.8 Simple voice effects: echo, deep, high, robot ●
+
+**F3 · Frame size and canvas**
+
+- [ ] F3.1 Aspect ratio: 9:16, 16:9, 1:1, 4:5, 4:3, original ●
+- [ ] F3.2 Fit or fill; position and zoom the video in the frame ●
+- [ ] F3.3 Background for empty space: colour, blurred video, image ●
+- [ ] F3.4 Crop, rotate 90°, flip (mirror) ●
+- [ ] F3.5 Social presets (Shorts, Reels, Status, YouTube) on export ●
+
+**F4 · Speed**
+
+- [ ] F4.1 Constant speed 0.1× to 10×, slow motion ◐
+- [ ] F4.2 Reverse a part ◐
+- [ ] F4.3 Freeze frame ●
+- [ ] F4.4 Speed curves (ramp presets: montage, hero, bullet, flash in/out) ●
+
+**F5 · Several clips and photos**
+
+- [ ] F5.1 Add more videos and photos to one project; photo duration ●
+- [ ] F5.2 Reorder, duplicate, replace and delete clips ●
+- [ ] F5.3 Transitions between clips: fade, dissolve, slide, zoom, wipe, blur, spin ●
+- [ ] F5.4 Undo and redo for every edit ●
+- [ ] F5.5 Markers on the timeline ●
+
+**F6 · Text layers and stickers**
+
+- [ ] F6.1 Free text layers (titles), separate from subtitles, placed anywhere ●
+- [ ] F6.2 Text templates (our own designs) ●
+- [ ] F6.3 Stickers: emoji, shapes, her own images/PNGs, lower thirds, countdowns, progress bar ●
+- [ ] F6.4 Draw on the video ●
+- [ ] F6.5 Text-to-speech voice-over ◐
+
+**F7 · Filters, colour and effects**
+
+- [ ] F7.1 Adjust: brightness, contrast, saturation, warmth, tint, fade, sharpen, vignette ●
+- [ ] F7.2 Filters: our own presets (warm, cool, cinematic, B&W, vintage …) ●
+- [ ] F7.3 Advanced colour: HSL, curves, colour wheels ●
+- [ ] F7.4 Video effects: blur, glitch, VHS, film grain, shake, zoom pulse, light leaks ●
+- [ ] F7.5 Auto adjust (balance lighting and colour) ◐
+
+**F8 · Overlays and green screen**
+
+- [ ] F8.1 Picture-in-picture: a second video or image on top, moved and resized ●
+- [ ] F8.2 Opacity and blend modes (multiply, screen, overlay …) ●
+- [ ] F8.3 Masks: line, mirror, circle, rectangle, heart, star; feather ●
+- [ ] F8.4 Green screen (chroma key) ●
+- [ ] F8.5 Split screen layouts ●
+
+**F9 · Keyframes and animation**
+
+- [ ] F9.1 Keyframes for position, size, rotation, opacity and volume ●
+- [ ] F9.2 Easing curves ●
+- [ ] F9.3 Clip in/out/combo animations (zoom, slide, rotate, bounce) ●
+
+**F10 · Workflow, templates and export**
+
+- [ ] F10.1 Export settings: resolution (480p to 4K), frame rate (24/25/30/50/60), quality ◐
+- [ ] F10.2 Save a frame as a picture; choose a cover image ●
+- [ ] F10.3 Project templates: save a project's look and structure, reuse it with new media ●
+- [ ] F10.4 Keyboard shortcuts on computers ●
+- [ ] F10.5 Duplicate a project; back up and restore projects as a file ●
+- [ ] F10.6 Share to apps through the phone's share sheet ◐
+
+**F11 · Smart tools on the device**
+
+- [ ] F11.1 Remove silences and filler words (from the speech recogniser's word times) ●
+- [ ] F11.2 Edit the video by editing its transcript ●
+- [ ] F11.3 Beat detection: markers on the music's beats, cut to the beat ●
+- [ ] F11.4 Noise reduction and loudness normalisation ◐
+- [ ] F11.5 Background removal for people (no green screen) ◐
+- [ ] F11.6 Auto reframe (keep the face in frame when changing aspect ratio) ◐
+- [ ] F11.7 Scene detection / auto cut ●
+- [ ] F11.8 Caption translation ◐
+- [ ] F11.9 Stabilisation ◐
+- [ ] F11.10 Vocal isolation, enhance voice ◐
+
 ## License
 
 The app's own licence is **not yet selected** (owner decision). Third-party licences were reviewed in Phase 6.

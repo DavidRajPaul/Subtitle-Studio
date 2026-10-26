@@ -56,6 +56,8 @@ export function EasyFlow({ onBack, onCreated }: Props) {
       firstStep.current = false;
       return;
     }
+    const active = document.activeElement;
+    if (active && active !== document.body && document.contains(active)) return; // focus was not lost
     document.getElementById(`${id}-${step === 1 ? "video" : "words"}`)?.focus();
   }, [step, id]);
   const [source, setSource] = useState<Source | null>(null);

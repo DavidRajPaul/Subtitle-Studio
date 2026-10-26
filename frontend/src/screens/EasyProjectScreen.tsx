@@ -4,6 +4,7 @@ import { loadMediaUrl } from "../api/media";
 import { getProject, type LoadedProject, type Project, type SubtitleStyle } from "../api/projects";
 import { SaveStatus } from "../components/SaveStatus";
 import { ConfirmDialog } from "../components/ConfirmDialog";
+import { CutPanel } from "../components/CutPanel";
 import { ExportPanel } from "../components/ExportPanel";
 import { Sheet } from "../components/Sheet";
 import { SubtitleCanvas } from "../components/SubtitleCanvas";
@@ -15,6 +16,7 @@ import { LOOKS } from "../engine/looks";
 import { useAutosave } from "../hooks/useAutosave";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { setText } from "../lib/cueEdit";
+import { cutDuration, keptParts } from "../lib/cuts";
 import { rememberLook } from "../lib/prefs";
 import { activeCues } from "../lib/timeline";
 
@@ -37,6 +39,7 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
   const playingRef = useRef(false);
   const [studioOpen, setStudioOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
+  const [trimOpen, setTrimOpen] = useState(false);
   const previewRef = useRef<VideoPreviewHandle>(null);
   const wide = useMediaQuery("(min-width: 1000px)");
 
@@ -138,7 +141,8 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
         <VideoPreview
           ref={previewRef}
           src={url}
-          durationMs={project.media.duration_ms}
+          durationMs={cutDuration(keptParts(project))}
+          parts={keptParts(project)}
           label={`Preview of ${project.media.filename}`}
           width={project.media.width}
           height={project.media.height}
@@ -198,6 +202,17 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
         <button type="button" className="button button--big" onClick={() => void leave(onDone)}>
           Done
         </button>
+        <button
+          type="button"
+          className="button button--secondary"
+          disabled={mediaMissing}
+          onClick={() => {
+            previewRef.current?.pause();
+            setTrimOpen(true);
+          }}
+        >
+          Trim video
+        </button>
         <button type="button" className="button button--secondary" onClick={() => void leave(() => { onOpenInEditor(initial.id); })}>
           Edit timing in Editor mode
         </button>
@@ -231,6 +246,27 @@ function Inner({ initial, fresh, onDone, onOpenInEditor }: Omit<Props, "projectI
             They could not be saved on this device ({status.kind === "error" ? status.message : "unknown reason"}). If you leave now, the changes since the last save will be lost.
           </p>
         </ConfirmDialog>
+      )}
+
+      {trimOpen && (
+        <Sheet
+          title="Trim video"
+          onClose={() => {
+            setTrimOpen(false);
+          }}
+        >
+          <CutPanel
+            simple
+            parts={keptParts(project)}
+            originalMs={project.media.duration_ms}
+            cues={project.cues}
+            currentMs={currentMs}
+            onSeek={(ms) => previewRef.current?.seekTo(ms)}
+            onChange={(next) => {
+              update((p) => ({ ...p, parts: next.parts, cues: next.cues }));
+            }}
+          />
+        </Sheet>
       )}
 
       {exportOpen && (

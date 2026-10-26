@@ -29,6 +29,8 @@ interface Props {
   onSelect: (id: string) => void;
   /** Called with the full new list while dragging or nudging. */
   onApply: (cues: ProjectCue[]) => void;
+  /** Where kept parts of the video join (cuts and splits), on the cut timeline. */
+  joins?: number[];
 }
 
 /**
@@ -46,6 +48,7 @@ export function Timeline({
   onSeek,
   onSelect,
   onApply,
+  joins = [],
 }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
@@ -235,6 +238,9 @@ export function Timeline({
               </button>
             );
           })}
+          {joins.map((t) => (
+            <div key={`join-${String(t)}`} className="timeline__join" style={{ left: msToPx(t, pxPerSec) }} aria-hidden="true" title={`Cut at ${formatTimecode(t)}`} />
+          ))}
           <div
             className="timeline__playhead"
             style={{ left: msToPx(Math.min(currentMs, durationMs), pxPerSec) }}

@@ -97,6 +97,25 @@ describe("projects saved in the browser", () => {
     expect(await listProjects()).toEqual([]);
   });
 
+  it("keeps the cut parts of the video, and refuses impossible ones", async () => {
+    const media = await importMedia(videoFile());
+    const parts = [
+      { start_ms: 0, end_ms: 400 },
+      { start_ms: 700, end_ms: 1200 },
+    ];
+    await saveProject(project(media.id, { parts, cues: [{ id: "a", text: "x", start_ms: 0, end_ms: 500 }] }));
+    expect((await getProject(PID)).parts).toEqual(parts);
+    for (const bad of [[], [{ start_ms: 0, end_ms: 5000 }], [{ start_ms: 500, end_ms: 900 }, { start_ms: 100, end_ms: 300 }]]) {
+      await expect(saveProject(project(media.id, { id: "33333333-3333-4333-8333-333333333333", parts: bad }))).rejects.toBeInstanceOf(ApiError);
+    }
+  });
+
+  it("opens older projects without cuts as the whole video", async () => {
+    const media = await importMedia(videoFile());
+    await saveProject(project(media.id));
+    expect((await getProject(PID)).parts).toBeUndefined();
+  });
+
   it("skips a damaged entry in the list and explains it when opened, without deleting it", async () => {
     await putOne(PROJECTS, { id: PID, version: 2, name: "From the future" });
     expect(await listProjects()).toEqual([]);

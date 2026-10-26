@@ -9,6 +9,7 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
+import { nextPlayable, toSource, type Range } from "../lib/cuts";
 import type { StageSize } from "../lib/style";
 import { formatTimecode, parseTimecode } from "../lib/timecode";
 
@@ -19,7 +20,10 @@ export interface VideoPreviewHandle {
 
 interface Props {
   src: string;
+  /** Length of the (cut) video shown, in ms. */
   durationMs: number;
+  /** Kept parts of the original (see lib/cuts.ts). Times shown and reported are on the cut timeline. */
+  parts?: Range[];
   label: string;
   /** Pixel size of the video, used to size the stage so overlays line up with the picture. */
   width?: number;
@@ -35,6 +39,7 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
     {
       src,
       durationMs,
+      parts,
       label,
       width,
       height,
@@ -62,6 +67,31 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
       setCurrentMs(ms);
       timeCallback.current?.(ms);
     }, []);
+
+    const partsRef = useRef(parts);
+    partsRef.current = parts;
+    const durationRef = useRef(durationMs);
+    durationRef.current = durationMs;
+
+    /**
+     * Turns the video element's own time (the original's) into cut-timeline time. While playing,
+     * it also jumps over parts that were cut away and stops at the end of the last kept part.
+     */
+    const follow = useCallback(
+      (video: HTMLVideoElement, jump: boolean): number => {
+        const src = Math.round(video.currentTime * 1000);
+        const kept = partsRef.current;
+        if (!kept) return src;
+        const next = nextPlayable(kept, src);
+        if (next === null) {
+          if (jump && !video.paused) video.pause();
+          return durationRef.current;
+        }
+        if (jump && next.sourceMs > src + 1) video.currentTime = next.sourceMs / 1000;
+        return next.cutMs;
+      },
+      [],
+    );
 
     const setPlayingState = useCallback((value: boolean) => {
       setPlaying(value);
@@ -98,9 +128,13 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
       let last = 0;
       const tick = (now: number) => {
         const video = videoRef.current;
-        if (video && now - last >= 33) {
-          last = now;
-          reportTime(Math.round(video.currentTime * 1000));
+        if (video) {
+          // Jump over cut-away parts on every frame; report the time ~30 times a second.
+          const at = follow(video, true);
+          if (now - last >= 33) {
+            last = now;
+            reportTime(at);
+          }
         }
         raf = requestAnimationFrame(tick);
       };
@@ -108,13 +142,14 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
       return () => {
         cancelAnimationFrame(raf);
       };
-    }, [playing, reportTime]);
+    }, [playing, reportTime, follow]);
 
     const seekTo = useCallback(
       (ms: number) => {
         const clamped = Math.min(Math.max(0, Math.round(ms)), durationMs);
         const video = videoRef.current;
-        if (video) video.currentTime = clamped / 1000;
+        const kept = partsRef.current;
+        if (video) video.currentTime = (kept ? toSource(kept, clamped) : clamped) / 1000;
         reportTime(clamped);
       },
       [durationMs, reportTime],
@@ -136,6 +171,8 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
       const video = videoRef.current;
       if (!video) return;
       if (video.paused) {
+        // At the end of the cut video, play from the start again.
+        if (partsRef.current && currentMs >= durationMs - 40) seekTo(0);
         video.play().catch(() => {
           // Keep a more specific format error from onError if one is already shown.
           setPlaybackError(
@@ -181,11 +218,10 @@ export const VideoPreview = forwardRef<VideoPreviewHandle, Props>(
               playsInline
               aria-label={label}
               onTimeUpdate={(e) => {
-                if (!playing)
-                  reportTime(Math.round(e.currentTarget.currentTime * 1000));
+                if (!playing) reportTime(follow(e.currentTarget, false));
               }}
               onSeeked={(e) => {
-                reportTime(Math.round(e.currentTarget.currentTime * 1000));
+                reportTime(follow(e.currentTarget, false));
               }}
               onPlay={() => {
                 setPlayingState(true);

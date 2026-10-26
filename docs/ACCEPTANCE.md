@@ -36,6 +36,9 @@ Two rules are applied on every screen the tests visit:
 | G1 | Export can be cancelled ("nothing was saved"). The MP4 is checked before it is offered. The SRT is UTF-8 with Tamil intact. The stored original is unchanged (SHA-256 before and after). | `export.spec.ts` |
 | G2 | Leaving the page while a video is being made asks first | `export.spec.ts` |
 | G3 | Editor mode exports through the same panel | `export.spec.ts` |
+| **F1. Cutting the video** | | |
+| F1.1 | Easy mode trim: the preview length, the SRT times and the exported video all use the trimmed length | `cut.spec.ts`; exact SRT checked |
+| F1.2–F1.5 | Editor: split twice and delete the middle part (asking first if subtitles would go). Playback never shows the cut-away time. Export works. The part can be put back. | `cut.spec.ts`; cut logic in `src/lib/cuts.test.ts`, panel in `CutPanel.test.tsx` |
 | **H. Storage** | | |
 | H1 | Deleting a project also deletes its stored video | `editor.spec.ts` |
 | **K. Keyboard** | | |

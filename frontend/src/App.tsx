@@ -33,9 +33,12 @@ export function App() {
       return;
     }
     const timer = setTimeout(() => {
+      // Only when focus was lost (the pressed button disappeared): never take it from where the person is.
+      const active = document.activeElement;
+      if (active && active !== document.body && document.contains(active)) return;
       const main = document.getElementById("main");
       const target = main?.querySelector<HTMLElement>("h1") ?? main;
-      if (!target || target.contains(document.activeElement)) return;
+      if (!target) return;
       if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: false });
     }, 50);
